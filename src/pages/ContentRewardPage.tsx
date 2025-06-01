@@ -132,7 +132,7 @@ const ContentRewardPage: React.FC = () => {
       details.push({
         name: '골드',
         count: reward.gold,
-        image: '/images/items/gold.png',
+        image: '/images/items/GOLD.png',
         goldValue: reward.gold
       });
     }
