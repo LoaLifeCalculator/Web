@@ -1,9 +1,8 @@
-import React from 'react';
-import { Box, Typography, Checkbox, FormControlLabel, Radio, RadioGroup, Button, OutlinedInput, List, ListItem } from '@mui/material';
+import React, { useState, useRef } from 'react';
+import { Box, Typography, FormControlLabel, Radio, RadioGroup, TextField, Button, Card, CardContent } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 interface FilterAndToolsTabProps {
-  showTradableOnly: boolean;
-  onShowTradableOnlyChange: (checked: boolean) => void;
   chaosOption: number;
   onChaosOptionChange: (value: number) => void;
   guardianOption: number;
@@ -11,15 +10,12 @@ interface FilterAndToolsTabProps {
   batchExcludeLevel: string;
   onBatchExcludeLevelChange: (value: string) => void;
   onBatchExcludeByLevel: (level: number) => void;
-  sortedServers: string[];
-  disabledServers: string[];
-  onDisabledServerChange: (server: string, checked: boolean) => void;
-  onClose: () => void;
+  batchRaidLevel: string;
+  onBatchRaidLevelChange: (value: string) => void;
+  onBatchRaidByLevel: (level: number) => void;
 }
 
 const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
-  showTradableOnly,
-  onShowTradableOnlyChange,
   chaosOption,
   onChaosOptionChange,
   guardianOption,
@@ -27,64 +23,163 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
   batchExcludeLevel,
   onBatchExcludeLevelChange,
   onBatchExcludeByLevel,
-  sortedServers,
-  disabledServers,
-  onDisabledServerChange,
-  onClose,
+  batchRaidLevel,
+  onBatchRaidLevelChange,
+  onBatchRaidByLevel
 }) => {
+  const [excludeButtonVariant, setExcludeButtonVariant] = useState<'contained' | 'outlined'>('contained');
+  const [raidButtonVariant, setRaidButtonVariant] = useState<'contained' | 'outlined'>('contained');
+  const theme = useTheme();
+  const excludeInputRef = useRef<HTMLInputElement>(null);
+  const raidInputRef = useRef<HTMLInputElement>(null);
+
+  const handleBatchExclude = () => {
+    const level = parseInt(batchExcludeLevel);
+    if (!isNaN(level)) {
+      onBatchExcludeByLevel(level);
+      setExcludeButtonVariant('outlined');
+      setTimeout(() => setExcludeButtonVariant('contained'), 1000);
+      onBatchExcludeLevelChange('');
+    }
+  };
+
+  const handleBatchRaid = () => {
+    const level = Number(batchRaidLevel);
+    if (!isNaN(level)) {
+      onBatchRaidByLevel(level);
+      setRaidButtonVariant('outlined');
+      setTimeout(() => setRaidButtonVariant('contained'), 1000);
+      onBatchRaidLevelChange('');
+    }
+  };
+
   return (
     <Box sx={{ p: 2 }}>
-      <FormControlLabel
-        control={<Checkbox checked={showTradableOnly} onChange={e => onShowTradableOnlyChange(e.target.checked)} />}
-        label="거래 가능만 보기"
-      />
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle1">카오스 던전</Typography>
-        <RadioGroup row value={chaosOption} onChange={e => onChaosOptionChange(Number(e.target.value))}>
-          <FormControlLabel value={0} control={<Radio />} label="매일" />
-          <FormControlLabel value={1} control={<Radio />} label="휴게만" />
-          <FormControlLabel value={2} control={<Radio />} label="계산 X" />
-        </RadioGroup>
-      </Box>
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle1">가디언 토벌</Typography>
-        <RadioGroup row value={guardianOption} onChange={e => onGuardianOptionChange(Number(e.target.value))}>
-          <FormControlLabel value={0} control={<Radio />} label="매일" />
-          <FormControlLabel value={1} control={<Radio />} label="휴게만" />
-          <FormControlLabel value={2} control={<Radio />} label="계산 X" />
-        </RadioGroup>
-      </Box>
-      <Box sx={{ mt: 3, display: 'flex', alignItems: 'center' }}>
-        <OutlinedInput
-          value={batchExcludeLevel}
-          onChange={e => onBatchExcludeLevelChange(e.target.value.replace(/[^0-9]/g, ''))}
-          placeholder="해당 레벨 미만 캐릭터 전체 제외"
-          sx={{ width: 200, mr: 2 }}
-        />
-        <Button
-          variant="contained"
-          onClick={() => batchExcludeLevel && onBatchExcludeByLevel(Number(batchExcludeLevel))}
-          disabled={!batchExcludeLevel}
+      <Box sx={{ 
+        display: 'grid', 
+        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+        gap: 2 
+      }}>
+        {/* 카오스 던전 */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+              카오스 던전
+            </Typography>
+            <RadioGroup
+              row
+              value={chaosOption}
+              onChange={(e) => onChaosOptionChange(Number(e.target.value))}
+            >
+              <FormControlLabel value={0} control={<Radio />} label="매일" />
+              <FormControlLabel value={1} control={<Radio />} label="휴게만" />
+              <FormControlLabel value={2} control={<Radio />} label="계산 X" />
+            </RadioGroup>
+          </CardContent>
+        </Card>
+
+        {/* 가디언 토벌 */}
+        <Card>
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+              가디언 토벌
+            </Typography>
+            <RadioGroup
+              row
+              value={guardianOption}
+              onChange={(e) => onGuardianOptionChange(Number(e.target.value))}
+            >
+              <FormControlLabel value={0} control={<Radio />} label="매일" />
+              <FormControlLabel value={1} control={<Radio />} label="휴게만" />
+              <FormControlLabel value={2} control={<Radio />} label="계산 X" />
+            </RadioGroup>
+          </CardContent>
+        </Card>
+
+        {/* 일괄 제외 */}
+        <Card 
+          sx={{ cursor: 'pointer' }}
+          onClick={() => excludeInputRef.current?.focus()}
         >
-          일괄 제외
-        </Button>
-      </Box>
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle1">서버 비활성화</Typography>
-        <List dense>
-          {sortedServers.map(server => (
-            <ListItem key={server} sx={{ pl: 0 }}>
-              <FormControlLabel
-                control={<Checkbox checked={disabledServers.includes(server)} onChange={e => onDisabledServerChange(server, e.target.checked)} />}
-                label={server}
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+              일정 레벨 미만 캐릭터 일괄 제외
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <TextField
+                inputRef={excludeInputRef}
+                size="small"
+                value={batchExcludeLevel}
+                onChange={(e) => onBatchExcludeLevelChange(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleBatchExclude();
+                  }
+                }}
+                placeholder="레벨 입력"
+                type="number"
+                sx={{ width: 200 }}
               />
-            </ListItem>
-          ))}
-        </List>
+              <Button
+                variant={excludeButtonVariant}
+                onClick={handleBatchExclude}
+                sx={{
+                  '&.MuiButton-contained': {
+                    backgroundColor: 'primary.main',
+                    '&:hover': {
+                      backgroundColor: 'primary.dark',
+                    },
+                  },
+                }}
+              >
+                적용
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+
+        {/* 일괄 레이드 입장 기능 */}
+        <Card 
+          sx={{ cursor: 'pointer' }}
+          onClick={() => raidInputRef.current?.focus()}
+        >
+          <CardContent>
+            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+              일정 레벨 이상 캐릭터 레이드 입장
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <TextField
+                inputRef={raidInputRef}
+                size="small"
+                value={batchRaidLevel}
+                onChange={(e) => onBatchRaidLevelChange(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleBatchRaid();
+                  }
+                }}
+                placeholder="레벨 입력"
+                type="number"
+                sx={{ width: 200 }}
+              />
+              <Button
+                variant={raidButtonVariant}
+                onClick={handleBatchRaid}
+                sx={{
+                  '&.MuiButton-contained': {
+                    backgroundColor: 'primary.main',
+                    '&:hover': {
+                      backgroundColor: 'primary.dark',
+                    },
+                  },
+                }}
+              >
+                적용
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
       </Box>
-      <Button variant="outlined" color="primary" sx={{ mt: 4 }} onClick={onClose} fullWidth>
-        닫기
-      </Button>
     </Box>
   );
 };

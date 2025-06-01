@@ -11,12 +11,10 @@ const MainPage: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const errorMsg = searchParams.get('error');
-    if (errorMsg) {
-      setError(errorMsg);
+    if (location.state?.error) {
+      setError(location.state.error);
     }
-  }, [location.search]);
+  }, [location.state]);
 
   const handleSearch = () => {
     if (!nickname.trim()) {
@@ -32,12 +30,6 @@ const MainPage: React.FC = () => {
 
   return (
     <Box sx={{ position: 'relative', minHeight: '100vh', width: '100vw' }}>
-      {/* 상단 고정 제목 */}
-      <Box sx={{ position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 10, bgcolor: 'background.default', py: 3, boxShadow: 0, textAlign: 'center' }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          로생 계산기
-        </Typography>
-      </Box>
       {/* 중앙 검색창 */}
       <Box
         sx={{
@@ -48,8 +40,42 @@ const MainPage: React.FC = () => {
           width: '100%',
           maxWidth: 600,
           px: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
         }}
       >
+        <Box sx={{ mb: 4 }}>
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              gap: 1
+            }}
+          >
+            <img 
+              src="/images/common/calculate_mokoko.png" 
+              alt="로생계산기" 
+              style={{ 
+                height: 64,
+                width: 'auto',
+                display: 'block'
+              }}
+            />
+            <Typography 
+              variant="h2" 
+              component="h1" 
+              sx={{ 
+                color: 'primary.main',
+                fontWeight: 'bold',
+                lineHeight: 1
+              }}
+            >
+              로생 계산기
+            </Typography>
+          </Box>
+        </Box>
         <TextField
           fullWidth
           label="닉네임을 입력해주세요"
@@ -66,8 +92,17 @@ const MainPage: React.FC = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={handleSearch} edge="end">
-                  <SearchIcon />
+                <IconButton 
+                  onClick={handleSearch} 
+                  edge="end"
+                  sx={{
+                    p: 2,
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)'
+                    }
+                  }}
+                >
+                  <SearchIcon sx={{ fontSize: '2rem' }} />
                 </IconButton>
               </InputAdornment>
             ),
@@ -76,6 +111,8 @@ const MainPage: React.FC = () => {
             mb: 2,
             '& .MuiOutlinedInput-root': {
               borderRadius: '28px',
+              height: '64px',
+              fontSize: '1.4rem',
               '& fieldset': {
                 borderColor: 'rgba(0, 0, 0, 0.23)',
               },
@@ -86,13 +123,25 @@ const MainPage: React.FC = () => {
                 borderColor: 'primary.main',
               },
             },
+            '& .MuiInputLabel-root': {
+              fontSize: '1.3rem'
+            },
+            '& .MuiInputBase-input': {
+              fontSize: '1.4rem'
+            }
           }}
         />
         <Button
-          fullWidth
           variant="outlined"
           startIcon={<CardGiftcardIcon />}
           onClick={handleContentReward}
+          sx={{
+            height: 56,
+            fontSize: '1.1rem',
+            borderRadius: '28px',
+            px: 3,
+            py: 1.5
+          }}
         >
           컨텐츠 보상 보기
         </Button>

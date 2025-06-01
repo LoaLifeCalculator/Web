@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CharacterResponseDto, SearchResponseDto } from '../types';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
 
@@ -13,6 +14,8 @@ export interface Resource {
   item: string;
   avgPrice: number;
   id: number;
+  name: string;
+  image: string;
 }
 
 export interface SearchResponse {
@@ -35,6 +38,13 @@ export interface ContentSection {
   rewards: ContentReward[];
 }
 
+export const api = {
+  getResourcePrices: async () => {
+    const response = await axios.get(`${API_BASE_URL}/resource`);
+    return response.data;
+  },
+};
+
 export const searchCharacter = async (name: string): Promise<SearchResponse> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/search`, {
@@ -46,22 +56,3 @@ export const searchCharacter = async (name: string): Promise<SearchResponse> => 
     throw error;
   }
 };
-
-export const getContentRewards = async (): Promise<ContentSection[]> => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/api/content-rewards`);
-    return response.data;
-  } catch (error) {
-    console.error('컨텐츠 보상 정보 조회 중 오류 발생:', error);
-    throw error;
-  }
-};
-
-export const updateResourcePrice = async (resourceId: string, price: number): Promise<void> => {
-  try {
-    await axios.put(`${API_BASE_URL}/api/resources/${resourceId}/price`, { price });
-  } catch (error) {
-    console.error('재화 시세 업데이트 중 오류 발생:', error);
-    throw error;
-  }
-}; 
