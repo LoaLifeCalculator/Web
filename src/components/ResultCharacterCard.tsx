@@ -353,7 +353,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
             <Box sx={{ flex: 1 }}>
               {/* 카오스 던전 보상 */}
               <Box sx={{ p: 1, bgcolor: 'reward.background', borderRadius: 1 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>카오스 던전 보상</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>주간 카오스 던전 보상</Typography>
                 {!isExcluded && chaosReward && chaosOption !== 2 && (
                   <>
                     {calcChaosTradableGold(chaosReward, priceMap, chaosOption === 1) > 0 && (
@@ -374,7 +374,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
 
               {/* 가디언 토벌 보상 */}
               <Box sx={{ mt: 1, p: 1, bgcolor: 'reward.background', borderRadius: 1 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>가디언 토벌 보상</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>주간 가디언 토벌 보상</Typography>
                 {!isExcluded && guardianReward && guardianOption !== 2 && (
                   <>
                     {calcGuardianTradableGold(guardianReward, priceMap, guardianOption === 1) > 0 && (
@@ -395,7 +395,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
 
               {/* 레이드 보상 */}
               <Box sx={{ mt: 1, p: 1, bgcolor: 'reward.background', borderRadius: 1 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>레이드 보상</Typography>
+                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>주간 레이드 보상</Typography>
                 {!isExcluded && (() => {
                   const tradableGold = raids.reduce((sum, raid) => 
                     selectedRaids.includes(raid.name) ? 

@@ -166,7 +166,7 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
         <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
             <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-              총 보상
+              주간 총 보상
             </Typography>
             <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
               {Math.floor(totalReward.totalTradableGold) > 0 && (
@@ -221,7 +221,7 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
             <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
                 <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-                  레이드 보상
+                  주간 레이드 보상
                 </Typography>
                 <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
                   {Math.floor(raidReward.totalTradableGold) > 0 && (
@@ -276,7 +276,7 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
             <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
                 <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-                  카오스 던전 보상
+                  주간 카오스 던전 보상
                 </Typography>
                 <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
                   {Math.floor(chaosReward.totalTradableGold) > 0 && (
@@ -330,7 +330,7 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
             <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
                 <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-                  가디언 토벌 보상
+                  주간 가디언 토벌 보상
                 </Typography>
                 <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
                   {Math.floor(guardianReward.totalTradableGold) > 0 && (
