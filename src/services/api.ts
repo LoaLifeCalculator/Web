@@ -21,10 +21,11 @@ export interface Resource {
 export interface SearchResponse {
   expeditions: {
     expeditions: {
-      [server: string]: Character[];
+      [key: string]: Character[];
     };
   };
   resources: Resource[];
+  [key: string]: any;
 }
 
 export interface ContentReward {

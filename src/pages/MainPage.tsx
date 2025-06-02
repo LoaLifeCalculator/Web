@@ -45,40 +45,42 @@ const MainPage: React.FC = () => {
           alignItems: 'center'
         }}
       >
-        <Box sx={{ mb: 4 }}>
-          <Box 
+        {/* 제목 */}
+        <Box sx={{ 
+          position: 'absolute',
+          bottom: '100%',
+          mb: 4,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 1
+        }}>
+          <img 
+            src="/images/common/calculate_mokoko.png" 
+            alt="로생계산기" 
+            style={{ 
+              height: 64,
+              width: 'auto',
+              display: 'block'
+            }}
+          />
+          <Typography 
+            variant="h2" 
+            component="h1" 
             sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              gap: 1
+              color: 'primary.main',
+              fontWeight: 'bold',
+              lineHeight: 1
             }}
           >
-            <img 
-              src="/images/common/calculate_mokoko.png" 
-              alt="로생계산기" 
-              style={{ 
-                height: 64,
-                width: 'auto',
-                display: 'block'
-              }}
-            />
-            <Typography 
-              variant="h2" 
-              component="h1" 
-              sx={{ 
-                color: 'primary.main',
-                fontWeight: 'bold',
-                lineHeight: 1
-              }}
-            >
-              로생 계산기
-            </Typography>
-          </Box>
+            로생 계산기
+          </Typography>
         </Box>
+
+        {/* 검색창 */}
         <TextField
           fullWidth
-          label="닉네임을 입력해주세요"
+          label="닉네임을 적어주시면 계산해 드릴게요!"
           variant="outlined"
           value={nickname}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
@@ -108,7 +110,6 @@ const MainPage: React.FC = () => {
             ),
           }}
           sx={{
-            mb: 2,
             '& .MuiOutlinedInput-root': {
               borderRadius: '28px',
               height: '64px',
@@ -117,25 +118,34 @@ const MainPage: React.FC = () => {
                 borderColor: 'rgba(0, 0, 0, 0.23)',
               },
               '&:hover fieldset': {
-                borderColor: 'rgba(0, 0, 0, 0.5)',
+                borderColor: 'primary.main',
               },
               '&.Mui-focused fieldset': {
                 borderColor: 'primary.main',
               },
             },
             '& .MuiInputLabel-root': {
-              fontSize: '1.3rem'
+              fontSize: '1rem',
+              transform: 'translate(14px, 20px) scale(1)',
+              '&.Mui-focused, &.MuiFormLabel-filled': {
+                transform: 'translate(14px, -9px) scale(0.75)'
+              }
             },
             '& .MuiInputBase-input': {
               fontSize: '1.4rem'
             }
           }}
         />
+
+        {/* 컨텐츠 보상 보기 버튼 */}
         <Button
           variant="outlined"
           startIcon={<CardGiftcardIcon />}
           onClick={handleContentReward}
           sx={{
+            position: 'absolute',
+            top: '100%',
+            mt: 4,
             height: 56,
             fontSize: '1.1rem',
             borderRadius: '28px',

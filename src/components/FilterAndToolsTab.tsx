@@ -105,6 +105,9 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
             <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
               일정 레벨 미만 캐릭터 일괄 제외
             </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+              해당 레벨 미만의 모든 캐릭터를 계산에서 제외하고, 이상인 캐릭터는 계산에 포함합니다.
+            </Typography>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField
                 inputRef={excludeInputRef}
@@ -146,6 +149,9 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
           <CardContent>
             <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
               일정 레벨 이상 캐릭터 레이드 입장
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+              해당 레벨 이상의 캐릭터의 레이드 항목을 체크하고, 미만인 캐릭터는 체크 해제합니다.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField

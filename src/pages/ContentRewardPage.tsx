@@ -242,7 +242,7 @@ const ContentRewardPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <Box sx={{
         position: 'fixed',
         top: 0,
@@ -326,7 +326,7 @@ const ContentRewardPage: React.FC = () => {
           </Button>
         </Box>
       </Box>
-      <Box sx={{ pt: '84px' }}>
+      <Box sx={{ pt: '84px', overflow: 'auto', '&::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
         <Box sx={{ maxWidth: '1200px', mx: 'auto', width: '100%' }}>
           <>
             <Accordion 
@@ -381,7 +381,7 @@ const ContentRewardPage: React.FC = () => {
                       <CardContent>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <Typography variant="h6" sx={{ color: 'text.primary' }}>
-                            {raid.name} (레벨 {raid.minLevel})
+                            {raid.name}
                           </Typography>
                           <Typography 
                             variant="subtitle1" 

@@ -284,7 +284,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
               display: 'flex', 
               alignItems: 'center',
               width: isSmallScreen ? '100%' : 'auto',
-              justifyContent: isSmallScreen ? 'flex-start' : 'flex-start'
+              justifyContent: isSmallScreen ? 'flex-start' : 'flex-end',
+              gap: 1
             }}
           >
             <FormControlLabel

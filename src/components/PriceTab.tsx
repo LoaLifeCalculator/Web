@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
-import { Box, Typography, OutlinedInput, List, ListItem, Avatar, Card, CardContent, Button, IconButton } from '@mui/material';
+import { Box, Typography, OutlinedInput, List, ListItem, Avatar, Card, CardContent, Button, IconButton, useTheme, useMediaQuery } from '@mui/material';
 import { ITEM_TRANSLATIONS } from '../types';
 import CloseIcon from '@mui/icons-material/Close';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -119,6 +119,8 @@ const ResourceList = React.memo<{
 ResourceList.displayName = 'ResourceList';
 
 const PriceTab = React.memo<PriceTabProps>(({ resources, priceMap, onPriceChange }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery('(max-width:800px)');
   const midPoint = Math.ceil(resources.length / 2);
   const leftResources = resources.slice(0, midPoint);
   const rightResources = resources.slice(midPoint);
@@ -162,22 +164,32 @@ const PriceTab = React.memo<PriceTabProps>(({ resources, priceMap, onPriceChange
           초기화
         </Button>
       </Box>
-      <Box sx={{ display: 'flex', gap: 6 }}>
-        <Box sx={{ flex: 1 }}>
+      {isMobile ? (
+        <Box>
           <ResourceList 
-            resources={leftResources} 
+            resources={resources} 
             priceMap={priceMap}
             onPriceChange={handlePriceChange}
           />
         </Box>
-        <Box sx={{ flex: 1 }}>
-          <ResourceList 
-            resources={rightResources} 
-            priceMap={priceMap}
-            onPriceChange={handlePriceChange}
-          />
+      ) : (
+        <Box sx={{ display: 'flex', gap: 6 }}>
+          <Box sx={{ flex: 1 }}>
+            <ResourceList 
+              resources={leftResources} 
+              priceMap={priceMap}
+              onPriceChange={handlePriceChange}
+            />
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <ResourceList 
+              resources={rightResources} 
+              priceMap={priceMap}
+              onPriceChange={handlePriceChange}
+            />
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   );
 });
