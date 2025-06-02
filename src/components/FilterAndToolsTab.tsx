@@ -64,7 +64,7 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
         <Card>
           <CardContent>
             <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
-              카오스 던전
+              카오스 던전 보상 계산
             </Typography>
             <RadioGroup
               row
@@ -82,7 +82,7 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
         <Card>
           <CardContent>
             <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
-              가디언 토벌
+              가디언 토벌 보상 계산
             </Typography>
             <RadioGroup
               row
@@ -103,10 +103,10 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
         >
           <CardContent>
             <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
-              일정 레벨 미만 캐릭터 일괄 제외
+              일정 레벨 이상 캐릭터만 계산
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-              해당 레벨 미만의 모든 캐릭터를 계산에서 제외하고, 이상인 캐릭터는 계산에 포함합니다.
+              해당 레벨 이상의 캐릭터를 계산에 포함하고, 미만인 캐릭터는 제외합니다.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField
