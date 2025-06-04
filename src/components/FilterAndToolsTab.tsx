@@ -106,7 +106,7 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
               일정 레벨 이상 캐릭터만 계산
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-              해당 레벨 이상의 캐릭터를 계산에 포함하고, 미만인 캐릭터는 제외합니다.
+              해당 레벨 이상의 캐릭터를 계산에 포함하고, 나머지 캐릭터는 제외합니다.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField
@@ -151,7 +151,7 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
               일정 레벨 이상 캐릭터 레이드 입장
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-              해당 레벨 이상의 캐릭터의 레이드 항목을 체크하고, 미만인 캐릭터는 체크 해제합니다.
+              해당 레벨 이상의 캐릭터의 레이드 항목을 체크하고, 나머지 캐릭터는 체크 해제합니다.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <TextField
