@@ -1,5 +1,5 @@
 {
-  "short_name": "로산기",
+  "short_name": "로생계산기",
   "name": "로생계산기",
   "icons": [
     {
@@ -18,8 +18,13 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#063211",
+  "background_color": "#ffffff",
+  "description": "로생계산기 - 로스트아크 주간 수급량 계산 서비스",
+  "lang": "ko-KR",
+  "orientation": "portrait-primary",
+  "categories": ["utilities", "games"]
 }
