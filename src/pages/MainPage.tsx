@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Container, Typography, TextField, Button, Box, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
+import PhoneIcon from '@mui/icons-material/Phone';
 
 const MainPage: React.FC = () => {
   const [nickname, setNickname] = useState('');
@@ -26,6 +27,10 @@ const MainPage: React.FC = () => {
 
   const handleContentReward = () => {
     navigate('/content-reward');
+  };
+
+  const handleMobileGuide = () => {
+    navigate('/mobile-guide');
   };
 
   return (
@@ -137,6 +142,25 @@ const MainPage: React.FC = () => {
           }}
         />
 
+        {/* 모바일 가이드 링크 */}
+        <Typography
+          onClick={handleMobileGuide}
+          sx={{
+            mt: 2,
+            ml: 1.5,
+            alignSelf: 'flex-start',
+            color: 'primary.main',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            '&:hover': {
+              color: 'primary.dark'
+            }
+          }}
+        >
+          모바일 사용자이신가요?
+        </Typography>
+
         {/* 컨텐츠 보상 보기 버튼 */}
         <Button
           variant="outlined"
@@ -145,7 +169,7 @@ const MainPage: React.FC = () => {
           sx={{
             position: 'absolute',
             top: '100%',
-            mt: 4,
+            mt: 12,
             height: 56,
             fontSize: '1.1rem',
             borderRadius: '28px',
