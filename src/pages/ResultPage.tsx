@@ -166,8 +166,26 @@ const ResultPage: React.FC = () => {
 
             // 서버 정렬 (골드 많은 순)
             const sortedServers = Object.keys(filteredExpeditions.expeditions.expeditions).sort((a, b) => {
-                const aGold = calculateServerTotalRewardForPage(a).totalTradableGold;
-                const bGold = calculateServerTotalRewardForPage(b).totalTradableGold;
+                const aGold = calculateServerTotalReward(
+                    a,
+                    filteredExpeditions.expeditions.expeditions[a],
+                    selectedRaids,
+                    goldRewardStates,
+                    excludeStates,
+                    customPriceMap,
+                    chaosOption,
+                    guardianOption
+                ).totalTradableGold;
+                const bGold = calculateServerTotalReward(
+                    b,
+                    filteredExpeditions.expeditions.expeditions[b],
+                    selectedRaids,
+                    goldRewardStates,
+                    excludeStates,
+                    customPriceMap,
+                    chaosOption,
+                    guardianOption
+                ).totalTradableGold;
                 return bGold - aGold;
             });
 
@@ -231,8 +249,26 @@ const ResultPage: React.FC = () => {
 
             // 서버 정렬 (골드 많은 순)
             const sortedServers = Object.keys(filteredExpeditions.expeditions.expeditions).sort((a, b) => {
-                const aGold = calculateServerTotalRewardForPage(a).totalTradableGold;
-                const bGold = calculateServerTotalRewardForPage(b).totalTradableGold;
+                const aGold = calculateServerTotalReward(
+                    a,
+                    filteredExpeditions.expeditions.expeditions[a],
+                    selectedRaids,
+                    goldRewardStates,
+                    excludeStates,
+                    customPriceMap,
+                    chaosOption,
+                    guardianOption
+                ).totalTradableGold;
+                const bGold = calculateServerTotalReward(
+                    b,
+                    filteredExpeditions.expeditions.expeditions[b],
+                    selectedRaids,
+                    goldRewardStates,
+                    excludeStates,
+                    customPriceMap,
+                    chaosOption,
+                    guardianOption
+                ).totalTradableGold;
                 return bGold - aGold;
             });
 
@@ -452,6 +488,24 @@ const ResultPage: React.FC = () => {
             guardianOption
         );
     }, [data, sortedServers, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
+
+    // 서버별 총 보상 계산
+    const calculateServerTotalRewardForPage = React.useCallback((server: string) => {
+        if (!data?.expeditions?.expeditions || !data.expeditions.expeditions[server] || excludedServers[server]) {
+            return { totalTradableGold: 0, totalBoundGold: 0 };
+        }
+
+        return calculateServerTotalReward(
+            server,
+            data.expeditions.expeditions[server],
+            selectedRaids,
+            goldRewardStates,
+            excludeStates,
+            customPriceMap,
+            chaosOption,
+            guardianOption
+        );
+    }, [data, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
 
     const calculateRaidReward = React.useCallback(() => {
         let totalTradableGold = 0;
@@ -739,24 +793,6 @@ const ResultPage: React.FC = () => {
         return {totalTradableGold, totalBoundGold, tradableResourceRewards, boundResourceRewards};
     }, [data, sortedServers, excludedServers, excludeStates, guardianOption, customPriceMap]);
 
-    // 서버별 총 보상 계산
-    const calculateServerTotalRewardForPage = React.useCallback((server: string) => {
-        if (!data?.expeditions?.expeditions || !data.expeditions.expeditions[server] || excludedServers[server]) {
-            return { totalTradableGold: 0, totalBoundGold: 0 };
-        }
-
-        return calculateServerTotalReward(
-            server,
-            data.expeditions.expeditions[server],
-            selectedRaids,
-            goldRewardStates,
-            excludeStates,
-            customPriceMap,
-            chaosOption,
-            guardianOption
-        );
-    }, [data, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
-
     // 일괄 제외 핸들러
     const handleBatchExcludeByLevel = (level: number) => {
         if (!data?.expeditions?.expeditions) return;
@@ -806,47 +842,15 @@ const ResultPage: React.FC = () => {
         }));
     };
 
-    if (loading) {
         return (
-            <Box sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100vh',
-                flexDirection: 'column',
-                gap: 2
-            }}>
-                <img
-                    src="/images/common/laptop_mokoko.png"
-                    alt="로딩중"
-                    style={{
-                        width: 'auto',
-                        height: 200,
-                        display: 'block'
-                    }}
-                />
-                <Typography
-                    variant="h6"
-                    sx={{
-                        color: 'primary.main',
-                        fontWeight: 'bold'
-                    }}
-                >
-                    데이터를 불러오는 중입니다...
-                </Typography>
-            </Box>
-        );
-    }
-
-    if (error) {
-        navigate('/', {state: {error}});
-        return null;
-    }
-
-    return (
-        <>
+        <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
             <GlobalStyles
                 styles={{
+                    body: {
+                        backgroundColor: theme.palette.background.default,
+                        margin: 0,
+                        padding: 0,
+                    },
                     '*': {
                         '&::-webkit-scrollbar': {
                             display: 'none'
@@ -856,36 +860,23 @@ const ResultPage: React.FC = () => {
                     }
                 }}
             />
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh',
-                pt: isMobile ? '180px' : '120px',
-                overflow: 'hidden',
-                '&::-webkit-scrollbar': {
-                    display: 'none'
-                },
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
-            }}>
                 <SearchHeader
                     searchQuery={searchParams.get('name') || ''}
-                    setSearchQuery={handleSearch}
-                    totalTradableGold={calculateTotalRewardForPage().totalTradableGold}
-                    totalBoundGold={calculateTotalRewardForPage().totalBoundGold}
-                    tab={tab}
-                    setTab={setTab}
-                    onHome={handleHome}
-                />
-                <Box
-                    sx={{
-                        mt: 2,
-                        p: 2,
-                        flex: 1,
-                        overflow: 'auto',
-                        maxWidth: '1200px',
-                        mx: 'auto',
-                        width: '100%',
+                setSearchQuery={(query) => {
+                    const params = new URLSearchParams(searchParams);
+                    params.set('name', query);
+                    navigate(`/result?${params.toString()}`);
+                }}
+                totalTradableGold={data ? calculateTotalRewardForPage().totalTradableGold : 0}
+                totalBoundGold={data ? calculateTotalRewardForPage().totalBoundGold : 0}
+                tab={tab}
+                setTab={setTab}
+                onHome={handleHome}
+            />
+            <Container maxWidth="xl" sx={{ 
+                pt: isMobile ? '180px' : '120px', 
+                pb: 4,
+                overflow: 'hidden',
                         '&::-webkit-scrollbar': {
                             display: 'none'
                         },
@@ -899,15 +890,47 @@ const ResultPage: React.FC = () => {
                             scrollbarWidth: 'none',
                             msOverflowStyle: 'none'
                         }
-                    }}
-                >
-                    {tab === 0 && data?.expeditions?.expeditions && (
-                        <Box sx={{display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: 2}}>
-                            {Object.entries(data.expeditions.expeditions).map(([server, characters]) => (
+            }}>
+                {loading ? (
+                    <Box sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        height: 'calc(100vh - 120px)',
+                        flexDirection: 'column',
+                        gap: 2
+                    }}>
+                        <img 
+                            src="/images/common/laptop_mokoko.png" 
+                            alt="로딩중" 
+                            style={{ 
+                                width: 'auto',
+                                height: 200,
+                                display: 'block'
+                            }}
+                        />
+                        <Typography 
+                            variant="h6" 
+                            sx={{ 
+                                color: 'primary.main',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            데이터를 불러오는 중입니다...
+                        </Typography>
+                    </Box>
+                ) : error ? (
+                    <Typography color="error" align="center">{error}</Typography>
+                ) : data ? (
+                    <>
+                        {tab === 0 && (
+                            <Box sx={{ mt: 2 }}>
+                                {sortedServers.map((server) => (
+                                    !excludedServers[server] && (
                                 <ServerCard
                                     key={server}
                                     server={server}
-                                    characters={characters}
+                                            characters={data.expeditions.expeditions[server]}
                                     expanded={expandedServers[server] || false}
                                     onToggle={() => handleServerToggle(server)}
                                     selectedRaids={selectedRaids}
@@ -924,24 +947,25 @@ const ResultPage: React.FC = () => {
                                     guardianOption={guardianOption}
                                     expandedCharacters={expandedCharacters}
                                     onCharacterToggle={handleCharacterToggle}
-                                    calculateServerTotalReward={calculateServerTotalRewardForPage}
+                                            calculateServerTotalReward={calculateServerTotalRewardForPage}
                                     isServerExcluded={excludedServers[server] || false}
                                     onServerExcludeChange={handleServerExcludeChange}
                                 />
+                                    )
                             ))}
                         </Box>
                     )}
-
-                    {tab === 1 && data?.expeditions?.expeditions && (
+                        {tab === 1 && (
+                            <Box sx={{ mt: 2 }}>
                         <TotalRewardCard
-                            calculateTotalReward={calculateTotalRewardForPage}
+                                    calculateTotalReward={calculateTotalRewardForPage}
                             calculateRaidReward={calculateRaidReward}
                             calculateChaosReward={calculateChaosReward}
                             calculateGuardianReward={calculateGuardianReward}
                             resources={resources}
                         />
+                            </Box>
                     )}
-
                     {tab === 2 && (
                         <FilterAndToolsTab
                             chaosOption={chaosOption}
@@ -956,19 +980,20 @@ const ResultPage: React.FC = () => {
                             onBatchRaidByLevel={handleBatchRaidByLevel}
                         />
                     )}
-
                     {tab === 3 && (
+                            <Box sx={{ mt: 2 }}>
                         <PriceTab
                             resources={resources}
                             priceMap={customPriceMap}
                             onPriceChange={handlePriceChange}
-                            onClose={() => {
-                            }}
+                                    onClose={() => {}}
                         />
-                    )}
                 </Box>
-            </Box>
+                        )}
         </>
+                ) : null}
+            </Container>
+        </Box>
     );
 };
 

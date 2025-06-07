@@ -10,7 +10,7 @@ interface SearchHeaderProps {
     totalTradableGold: number;
     totalBoundGold: number;
     tab: number;
-    setTab: (value: number) => void;
+    setTab: (tab: number) => void;
     onHome: () => void;
 }
 
@@ -38,8 +38,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                 borderBottom: 1,
                 borderColor: 'divider',
                 boxShadow: 1,
-                pt: 1,
-                pb: 1
+                pt: 2
             }}
         >
             <Box sx={{
@@ -47,15 +46,13 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                 px: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                py: 1
+                justifyContent: 'space-between'
             }}>
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     height: '48px',
-                    mb: isMobile ? 1 : 1.5,
                     gap: 2
                 }}>
                     {!isMobile && (
@@ -76,7 +73,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                             sx={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: 1,
+                                gap: 1, 
                                 cursor: 'pointer',
                                 flexShrink: 0
                             }}
@@ -88,9 +85,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                                 style={{ 
                                     height: 32,
                                     width: 'auto'
-                                }}
+                                }} 
                             />
-                            <Typography
+                            <Typography 
                                 variant="h5"
                                 component="div"
                                 sx={{whiteSpace: 'nowrap'}}
@@ -104,18 +101,20 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                         />
                     </Box>
                 </Box>
-                {isMobile && (
-                    <Box sx={{ mb: 1 }}>
+                <Box>
+                    {isMobile ? (
                         <NavigationTabs
                             tab={tab}
                             setTab={setTab}
                         />
-                    </Box>
-                )}
-                <TotalRewardDisplay
-                    totalTradableGold={totalTradableGold}
-                    totalBoundGold={totalBoundGold}
-                />
+                    ) : (
+                        <TotalRewardDisplay
+                            totalTradableGold={totalTradableGold}
+                            totalBoundGold={totalBoundGold}
+                            name={searchQuery}
+                        />
+                    )}
+                </Box>
             </Box>
         </Box>
     );

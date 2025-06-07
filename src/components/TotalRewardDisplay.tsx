@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
-import { Box, Typography, IconButton, Fade, Paper, useTheme, useMediaQuery } from '@mui/material';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Box, Typography, useMediaQuery, useTheme, Button, CircularProgress } from '@mui/material';
+import { renewExpeditionCharacters } from '../services/api';
 
 interface TotalRewardDisplayProps {
     totalTradableGold: number;
     totalBoundGold: number;
+    name: string;
 }
 
-const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGold, totalBoundGold }) => {
+const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGold, totalBoundGold, name }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:800px)');
-    const [showTip, setShowTip] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
-    const handleTipClick = () => {
-        setShowTip(true);
-        setTimeout(() => {
-            setShowTip(false);
-        }, 5000);
+    const handleRefresh = async () => {
+        try {
+            setIsRefreshing(true);
+            await renewExpeditionCharacters(name);
+            // 갱신 성공 후 페이지 새로고침
+            window.location.reload();
+        } catch (error) {
+            console.error('원정대 캐릭터 정보 갱신 실패:', error);
+            alert('원정대 캐릭터 정보 갱신에 실패했습니다.');
+        } finally {
+            setIsRefreshing(false);
+        }
     };
 
     return (
@@ -46,56 +54,29 @@ const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGo
                     </Typography>
                 )}
             </Box>
-            <Box sx={{ position: 'relative' }}>
-                <IconButton 
-                    onClick={handleTipClick}
-                    sx={{ 
-                        color: theme.palette.primary.main,
-                        '&:hover': {
-                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                        },
-                    }}
-                >
-                    <HelpOutlineIcon />
-                </IconButton>
-                <Fade in={showTip} timeout={300}>
-                    <Paper
-                        elevation={3}
-                        sx={{
-                            position: 'absolute',
-                            right: 0,
-                            top: '100%',
-                            mt: 1,
-                            p: 2,
-                            backgroundColor: 'white',
-                            borderRadius: 1,
-                            zIndex: 1000,
-                            maxWidth: isMobile ? '280px' : '500px',
-                            width: 'max-content',
-                            '&::before': {
-                                content: '""',
-                                position: 'absolute',
-                                top: -8,
-                                right: 20,
-                                width: 0,
-                                height: 0,
-                                borderLeft: '8px solid transparent',
-                                borderRight: '8px solid transparent',
-                                borderBottom: '8px solid white',
-                            }
-                        }}
-                    >
-                        <Typography variant="body2">
-                            <Typography>
-                                카드를 클릭하면 상세 정보를 확인할 수 있습니다.
-                            </Typography>
-                            <Typography>
-                                도구 탭을 클릭하시면 다양한 설정을 적용할 수 있습니다.
-                            </Typography>
-                        </Typography>
-                    </Paper>
-                </Fade>
-            </Box>
+            <Button
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                variant="outlined"
+                size="small"
+                sx={{
+                    color: theme.palette.primary.main,
+                    borderColor: theme.palette.primary.main,
+                    minWidth: '60px',
+                    height: '32px',
+                    '&:hover': {
+                        backgroundColor: theme.palette.primary.main,
+                        color: 'white',
+                        borderColor: theme.palette.primary.main
+                    }
+                }}
+            >
+                {isRefreshing ? (
+                    <CircularProgress size={20} color="inherit" />
+                ) : (
+                    '갱신'
+                )}
+            </Button>
         </Box>
     );
 };

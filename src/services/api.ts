@@ -39,6 +39,16 @@ export interface ContentSection {
   rewards: ContentReward[];
 }
 
+export interface ExpeditionResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    expeditions: {
+      [key: string]: Character[];
+    };
+  };
+}
+
 export const api = {
   getResourcePrices: async () => {
     const response = await axios.get(`${API_BASE_URL}/resource`);
@@ -54,6 +64,23 @@ export const searchCharacter = async (name: string): Promise<SearchResponse> => 
     return response.data;
   } catch (error) {
     console.error('캐릭터 검색 중 오류 발생:', error);
+    throw error;
+  }
+};
+
+// 원정대 캐릭터 정보 갱신
+export const renewExpeditionCharacters = async (name: string): Promise<ExpeditionResponse> => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/renewal`, {
+      params: { name },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('원정대 캐릭터 정보 갱신 중 오류 발생:', error);
     throw error;
   }
 };
