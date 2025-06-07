@@ -236,7 +236,7 @@ const ContentRewardPage: React.FC = () => {
         }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <img
-              src="/images/common/gold_mokoko.png"
+              src="/images/mokoko/gold_mokoko.png"
               alt="로생계산기"
               style={{
                 height: 48,
@@ -277,7 +277,7 @@ const ContentRewardPage: React.FC = () => {
             }}
           >
             <img 
-              src="/images/common/hello_mokoko.png"
+              src="/images/mokoko/hello_mokoko.png"
               alt="로생계산기" 
               style={{ 
                 height: 32,
@@ -310,7 +310,7 @@ const ContentRewardPage: React.FC = () => {
             gap: 2
           }}>
             <img 
-              src="/images/common/laptop_mokoko.png" 
+              src="/images/mokoko/laptop_mokoko.png"
               alt="로딩중" 
               style={{ 
                 width: 'auto',

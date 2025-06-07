@@ -80,7 +80,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                             onClick={onHome}
                         >
                             <img 
-                                src="/images/common/calculate_mokoko.png" 
+                                src="/images/mokoko/calculate_mokoko.png"
                                 alt="로생계산기" 
                                 style={{ 
                                     height: 32,

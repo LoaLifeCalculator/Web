@@ -97,7 +97,7 @@ const MobileGuidePage: React.FC = () => {
         <Paper elevation={3} sx={{ p: 3, mb: 3, mx: 0 }}>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', mb: 3 }}>
             <img 
-              src="/images/common/phone_mokoko.png" 
+              src="/images/mokoko/phone_mokoko.png"
               alt="모코코" 
               style={{ 
                 height: 64,

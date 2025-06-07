@@ -33,6 +33,10 @@ const MainPage: React.FC = () => {
     navigate('/mobile-guide');
   };
 
+  const handleLevelReward = () => {
+    navigate('/level-reward');
+  };
+
   return (
     <Box sx={{ position: 'relative', minHeight: '100vh', width: '100vw' }}>
       {/* 중앙 검색창 */}
@@ -61,7 +65,7 @@ const MainPage: React.FC = () => {
           gap: 1
         }}>
           <img 
-            src="/images/common/calculate_mokoko.png" 
+            src="/images/mokoko/calculate_mokoko.png"
             alt="로생계산기" 
             style={{ 
               height: 64,
@@ -162,23 +166,42 @@ const MainPage: React.FC = () => {
         </Typography>
 
         {/* 컨텐츠 보상 보기 버튼 */}
-        <Button
-          variant="outlined"
-          startIcon={<CardGiftcardIcon />}
-          onClick={handleContentReward}
-          sx={{
-            position: 'absolute',
-            top: '100%',
-            mt: 12,
-            height: 56,
-            fontSize: '1.1rem',
-            borderRadius: '28px',
-            px: 3,
-            py: 1.5
-          }}
-        >
-          컨텐츠 보상 보기
-        </Button>
+        <Box sx={{ 
+          position: 'absolute',
+          top: '100%',
+          mt: 12,
+          display: 'flex',
+          gap: 2
+        }}>
+          <Button
+            variant="outlined"
+            startIcon={<CardGiftcardIcon />}
+            onClick={handleContentReward}
+            sx={{
+              height: 56,
+              fontSize: '1.1rem',
+              borderRadius: '28px',
+              px: 3,
+              py: 1.5
+            }}
+          >
+            컨텐츠 보상 보기
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<PhoneIcon />}
+            onClick={handleLevelReward}
+            sx={{
+              height: 56,
+              fontSize: '1.1rem',
+              borderRadius: '28px',
+              px: 3,
+              py: 1.5
+            }}
+          >
+            레벨별 수급량 보기
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
