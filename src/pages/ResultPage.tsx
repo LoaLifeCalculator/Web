@@ -37,7 +37,9 @@ import {
     calcGuardianTradableGold,
     calcGuardianBoundGold,
     calcRaidTradableGold,
-    calcRaidBoundGold
+    calcRaidBoundGold,
+    calculateTotalReward,
+    calculateServerTotalReward
 } from '../utils/rewardCalculator';
 import ResultCharacterCard from '../components/ResultCharacterCard';
 import FilterAndToolsTab from '../components/FilterAndToolsTab';
@@ -164,8 +166,8 @@ const ResultPage: React.FC = () => {
 
             // 서버 정렬 (골드 많은 순)
             const sortedServers = Object.keys(filteredExpeditions.expeditions.expeditions).sort((a, b) => {
-                const aGold = calculateServerTotalReward(a).totalTradableGold;
-                const bGold = calculateServerTotalReward(b).totalTradableGold;
+                const aGold = calculateServerTotalRewardForPage(a).totalTradableGold;
+                const bGold = calculateServerTotalRewardForPage(b).totalTradableGold;
                 return bGold - aGold;
             });
 
@@ -229,8 +231,8 @@ const ResultPage: React.FC = () => {
 
             // 서버 정렬 (골드 많은 순)
             const sortedServers = Object.keys(filteredExpeditions.expeditions.expeditions).sort((a, b) => {
-                const aGold = calculateServerTotalReward(a).totalTradableGold;
-                const bGold = calculateServerTotalReward(b).totalTradableGold;
+                const aGold = calculateServerTotalRewardForPage(a).totalTradableGold;
+                const bGold = calculateServerTotalRewardForPage(b).totalTradableGold;
                 return bGold - aGold;
             });
 
@@ -422,245 +424,34 @@ const ResultPage: React.FC = () => {
     };
 
     // 보상 계산 함수들
-    const calculateTotalReward = React.useCallback(() => {
-        let totalTradableGold = 0;
-        let totalBoundGold = 0;
-        const tradableResourceRewards: Record<string, { count: number, goldValue: number }> = {};
-        const boundResourceRewards: Record<string, { count: number, goldValue: number }> = {};
-
+    const calculateTotalRewardForPage = React.useCallback(() => {
         if (!data?.expeditions?.expeditions || !sortedServers) {
-            return {totalTradableGold, totalBoundGold, tradableResourceRewards, boundResourceRewards};
+            return {
+                totalTradableGold: 0,
+                totalBoundGold: 0,
+                tradableResourceRewards: {},
+                boundResourceRewards: {}
+            };
         }
 
+        let allCharacters: Character[] = [];
         sortedServers.forEach(server => {
             if (excludedServers[server]) return;
             const characters = data.expeditions.expeditions[server] || [];
             if (!characters) return;
-
-            characters.forEach((character: Character) => {
-                if (!character || excludeStates[character.characterName]) return;
-
-                // 카오스 던전 보상
-                if (chaosOption !== 2) {
-                    const chaosReward = getSuitableChaosReward(character.level);
-                    if (chaosReward) {
-                        totalTradableGold += calcChaosTradableGold(chaosReward, customPriceMap, chaosOption === 1);
-                        totalBoundGold += calcChaosBoundGold(chaosReward, customPriceMap, chaosOption === 1);
-
-                        // 거래 가능 재화 집계
-                        if (chaosReward.gold) {
-                            if (!tradableResourceRewards['GOLD']) tradableResourceRewards['GOLD'] = {
-                                count: 0,
-                                goldValue: 0
-                            };
-                            tradableResourceRewards['GOLD'].count += chaosReward.gold;
-                            tradableResourceRewards['GOLD'].goldValue += chaosReward.gold;
-                        }
-                        if (chaosReward.weaponStones) {
-                            Object.entries(chaosReward.weaponStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (chaosReward.armorStones) {
-                            Object.entries(chaosReward.armorStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (chaosReward.gems) {
-                            Object.entries(chaosReward.gems).forEach(([grade, count]) => {
-                                const resource = `GEM_TIER_${grade}`;
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        // 귀속 재화 집계
-                        if (chaosReward.shards) {
-                            Object.entries(chaosReward.shards).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (chaosReward.leapStones) {
-                            Object.entries(chaosReward.leapStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                    }
-                }
-
-                // 가디언 토벌 보상
-                if (guardianOption !== 2) {
-                    const guardianReward = getSuitableGuardianReward(character.level);
-                    if (guardianReward) {
-                        totalTradableGold += calcGuardianTradableGold(guardianReward, customPriceMap, guardianOption === 1);
-                        totalBoundGold += calcGuardianBoundGold(guardianReward, customPriceMap, guardianOption === 1);
-
-                        // 거래 가능 재화 집계
-                        if (guardianReward.gold) {
-                            if (!tradableResourceRewards['GOLD']) tradableResourceRewards['GOLD'] = {
-                                count: 0,
-                                goldValue: 0
-                            };
-                            tradableResourceRewards['GOLD'].count += guardianReward.gold;
-                            tradableResourceRewards['GOLD'].goldValue += guardianReward.gold;
-                        }
-                        if (guardianReward.weaponStones) {
-                            Object.entries(guardianReward.weaponStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (guardianReward.armorStones) {
-                            Object.entries(guardianReward.armorStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (guardianReward.leapStones) {
-                            Object.entries(guardianReward.leapStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (guardianReward.gems) {
-                            Object.entries(guardianReward.gems).forEach(([grade, count]) => {
-                                const resource = `GEM_TIER_${grade}`;
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        // 귀속 재화 집계
-                        if (guardianReward.shards) {
-                            Object.entries(guardianReward.shards).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                    }
-                }
-
-                // 레이드 보상
-                const availableRaids = getAvailableRaids(character.level);
-                const checkedRaids = selectedRaids[character.characterName] || [];
-                const isGoldReward = goldRewardStates[character.characterName] || false;
-
-                availableRaids.forEach(raid => {
-                    if (checkedRaids.includes(raid.name)) {
-                        const reward: Reward = isGoldReward ? raid.goldReward : raid.nonGoldReward;
-                        totalTradableGold += calcRaidTradableGold(reward, customPriceMap);
-                        totalBoundGold += calcRaidBoundGold(reward, customPriceMap);
-
-                        // 거래 가능 재화 집계
-                        if (reward.gold) {
-                            if (!tradableResourceRewards['GOLD']) tradableResourceRewards['GOLD'] = {
-                                count: 0,
-                                goldValue: 0
-                            };
-                            tradableResourceRewards['GOLD'].count += reward.gold;
-                            tradableResourceRewards['GOLD'].goldValue += reward.gold;
-                        }
-                        if (reward.gems) {
-                            Object.entries(reward.gems).forEach(([grade, count]) => {
-                                const resource = `GEM_TIER_${grade}`;
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        // 귀속 재화 집계
-                        if (reward.shards) {
-                            Object.entries(reward.shards).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (reward.weaponStones) {
-                            Object.entries(reward.weaponStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (reward.armorStones) {
-                            Object.entries(reward.armorStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (reward.leapStones) {
-                            Object.entries(reward.leapStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
-                            });
-                        }
-                    }
-                });
-            });
+            allCharacters = [...allCharacters, ...characters];
         });
 
-        return {totalTradableGold, totalBoundGold, tradableResourceRewards, boundResourceRewards};
-    }, [data, sortedServers, excludedServers, excludeStates, chaosOption, guardianOption, selectedRaids, goldRewardStates, customPriceMap]);
+        return calculateTotalReward(
+            allCharacters,
+            selectedRaids,
+            goldRewardStates,
+            excludeStates,
+            customPriceMap,
+            chaosOption,
+            guardianOption
+        );
+    }, [data, sortedServers, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
 
     const calculateRaidReward = React.useCallback(() => {
         let totalTradableGold = 0;
@@ -949,47 +740,22 @@ const ResultPage: React.FC = () => {
     }, [data, sortedServers, excludedServers, excludeStates, guardianOption, customPriceMap]);
 
     // 서버별 총 보상 계산
-    const calculateServerTotalReward = React.useCallback((server: string) => {
+    const calculateServerTotalRewardForPage = React.useCallback((server: string) => {
         if (!data?.expeditions?.expeditions || !data.expeditions.expeditions[server] || excludedServers[server]) {
-            return {totalTradableGold: 0, totalBoundGold: 0};
+            return { totalTradableGold: 0, totalBoundGold: 0 };
         }
 
-        let totalTradableGold = 0;
-        let totalBoundGold = 0;
-
-        data.expeditions.expeditions[server].forEach((character: Character) => {
-            if (!character || excludeStates[character.characterName]) return;
-
-            // 카오스 던전 보상
-            const chaosReward = getSuitableChaosReward(character.level);
-            if (chaosReward && chaosOption !== 2) {
-                const isRest = chaosOption === 1;
-                totalTradableGold += calcChaosTradableGold(chaosReward, customPriceMap, isRest);
-                totalBoundGold += calcChaosBoundGold(chaosReward, customPriceMap, isRest);
-            }
-
-            // 가디언 토벌 보상
-            const guardianReward = getSuitableGuardianReward(character.level);
-            if (guardianReward && guardianOption !== 2) {
-                const isRest = guardianOption === 1;
-                totalTradableGold += calcGuardianTradableGold(guardianReward, customPriceMap, isRest);
-                totalBoundGold += calcGuardianBoundGold(guardianReward, customPriceMap, isRest);
-            }
-
-            // 레이드 보상
-            const availableRaids = getAvailableRaids(character.level);
-            const checkedRaids = selectedRaids[character.characterName] || [];
-            availableRaids.forEach(raid => {
-                if (checkedRaids.includes(raid.name)) {
-                    const reward = goldRewardStates[character.characterName] ? raid.goldReward : raid.nonGoldReward;
-                    totalTradableGold += calcRaidTradableGold(reward, customPriceMap);
-                    totalBoundGold += calcRaidBoundGold(reward, customPriceMap);
-                }
-            });
-        });
-
-        return {totalTradableGold, totalBoundGold};
-    }, [data, excludedServers, excludeStates, chaosOption, guardianOption, selectedRaids, goldRewardStates, customPriceMap]);
+        return calculateServerTotalReward(
+            server,
+            data.expeditions.expeditions[server],
+            selectedRaids,
+            goldRewardStates,
+            excludeStates,
+            customPriceMap,
+            chaosOption,
+            guardianOption
+        );
+    }, [data, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
 
     // 일괄 제외 핸들러
     const handleBatchExcludeByLevel = (level: number) => {
@@ -1103,12 +869,13 @@ const ResultPage: React.FC = () => {
                 msOverflowStyle: 'none'
             }}>
                 <SearchHeader
-                    tab={tab}
-                    onTabChange={(_, newValue) => setTab(newValue)}
                     searchQuery={searchParams.get('name') || ''}
                     setSearchQuery={handleSearch}
-                    totalTradableGold={calculateTotalReward().totalTradableGold}
-                    totalBoundGold={calculateTotalReward().totalBoundGold}
+                    totalTradableGold={calculateTotalRewardForPage().totalTradableGold}
+                    totalBoundGold={calculateTotalRewardForPage().totalBoundGold}
+                    tab={tab}
+                    setTab={setTab}
+                    onHome={handleHome}
                 />
                 <Box
                     sx={{
@@ -1157,7 +924,7 @@ const ResultPage: React.FC = () => {
                                     guardianOption={guardianOption}
                                     expandedCharacters={expandedCharacters}
                                     onCharacterToggle={handleCharacterToggle}
-                                    calculateServerTotalReward={calculateServerTotalReward}
+                                    calculateServerTotalReward={calculateServerTotalRewardForPage}
                                     isServerExcluded={excludedServers[server] || false}
                                     onServerExcludeChange={handleServerExcludeChange}
                                 />
@@ -1167,7 +934,7 @@ const ResultPage: React.FC = () => {
 
                     {tab === 1 && data?.expeditions?.expeditions && (
                         <TotalRewardCard
-                            calculateTotalReward={calculateTotalReward}
+                            calculateTotalReward={calculateTotalRewardForPage}
                             calculateRaidReward={calculateRaidReward}
                             calculateChaosReward={calculateChaosReward}
                             calculateGuardianReward={calculateGuardianReward}

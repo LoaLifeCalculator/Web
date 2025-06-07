@@ -1,58 +1,29 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {Box, Typography, Tabs, Tab, OutlinedInput, InputAdornment, IconButton, Fade, Paper, useTheme, useMediaQuery} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
-import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
-import {useNavigate} from 'react-router-dom';
+import React from 'react';
+import { Box, Typography, useMediaQuery } from '@mui/material';
+import SearchInput from './SearchInput';
+import TotalRewardDisplay from './TotalRewardDisplay';
+import NavigationTabs from './NavigationTabs';
 
 interface SearchHeaderProps {
-    tab: number;
-    onTabChange: (event: React.SyntheticEvent, newValue: number) => void;
     searchQuery: string;
-    setSearchQuery: (value: string) => void;
+    setSearchQuery: (query: string) => void;
     totalTradableGold: number;
     totalBoundGold: number;
+    tab: number;
+    setTab: (value: number) => void;
+    onHome: () => void;
 }
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({
-    tab,
-    onTabChange,
     searchQuery,
     setSearchQuery,
     totalTradableGold,
-    totalBoundGold
+    totalBoundGold,
+    tab,
+    setTab,
+    onHome
 }) => {
-    const navigate = useNavigate();
-    const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:800px)');
-    const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
-    const [showTip, setShowTip] = useState(false);
-    const searchInputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        setLocalSearchQuery(searchQuery);
-    }, [searchQuery]);
-
-    const handleSearch = () => {
-        if (localSearchQuery.trim()) {
-            setSearchQuery(localSearchQuery);
-            window.dispatchEvent(new CustomEvent('searchQueryChanged', { 
-                detail: { query: localSearchQuery }
-            }));
-        }
-    };
-
-    const handleClearSearch = () => {
-        setLocalSearchQuery('');
-        searchInputRef.current?.focus();
-    };
-
-    const handleTipClick = () => {
-        setShowTip(true);
-        setTimeout(() => {
-            setShowTip(false);
-        }, 5000);
-    };
 
     return (
         <Box
@@ -88,26 +59,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                     gap: 2
                 }}>
                     {!isMobile && (
-                        <Tabs
-                            value={tab}
-                            onChange={(_, v) => onTabChange(_, v)}
-                            sx={{
-                                minHeight: '48px',
-                                flex: 1,
-                                '& .MuiTabs-indicator': {
-                                    bottom: 0
-                                },
-                                '& .MuiTab-root': {
-                                    minWidth: '80px',
-                                    padding: '6px 16px'
-                                }
-                            }}
-                        >
-                            <Tab label="원정대"/>
-                            <Tab label="자세히"/>
-                            <Tab label="도구"/>
-                            <Tab label="시세 수정"/>
-                        </Tabs>
+                        <NavigationTabs
+                            tab={tab}
+                            setTab={setTab}
+                        />
                     )}
                     <Box sx={{
                         display: 'flex', 
@@ -125,7 +80,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                                 cursor: 'pointer',
                                 flexShrink: 0
                             }}
-                            onClick={() => navigate('/')}
+                            onClick={onHome}
                         >
                             <img 
                                 src="/images/common/calculate_mokoko.png" 
@@ -143,155 +98,24 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                                 로생계산기
                             </Typography>
                         </Box>
-                        <OutlinedInput
-                            inputRef={searchInputRef}
-                            placeholder="캐릭터명 검색"
-                            value={localSearchQuery}
-                            onChange={(e) => setLocalSearchQuery(e.target.value)}
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleSearch();
-                                }
-                            }}
-                            endAdornment={
-                                <InputAdornment position="end" sx={{ display: 'flex', gap: 1 }}>
-                                    <IconButton
-                                        edge="end"
-                                        onClick={handleClearSearch}
-                                        sx={{ 
-                                            visibility: localSearchQuery ? 'visible' : 'hidden',
-                                            '&:hover': {
-                                                color: theme.palette.primary.main
-                                            }
-                                        }}
-                                    >
-                                        <ClearIcon />
-                                    </IconButton>
-                                    <SearchIcon 
-                                        color="action" 
-                                        sx={{ cursor: 'pointer' }}
-                                        onClick={handleSearch}
-                                    />
-                                </InputAdornment>
-                            }
-                            sx={{
-                                minWidth: 200,
-                                maxWidth: 275,
-                                flexGrow: 1,
-                                width: '100%',
-                                '& .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: 'divider'
-                                },
-                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: 'primary.main'
-                                },
-                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: 'primary.main'
-                                }
-                            }}
+                        <SearchInput
+                            searchQuery={searchQuery}
+                            setSearchQuery={setSearchQuery}
                         />
                     </Box>
                 </Box>
                 {isMobile && (
                     <Box sx={{ mb: 1 }}>
-                        <Tabs
-                            value={tab}
-                            onChange={(_, v) => onTabChange(_, v)}
-                            sx={{
-                                minHeight: '48px',
-                                '& .MuiTabs-indicator': {
-                                    bottom: 0
-                                },
-                                '& .MuiTab-root': {
-                                    minWidth: '80px',
-                                    padding: '6px 16px'
-                                }
-                            }}
-                        >
-                            <Tab label="원정대"/>
-                            <Tab label="자세히"/>
-                            <Tab label="도구"/>
-                            <Tab label="시세 수정"/>
-                        </Tabs>
+                        <NavigationTabs
+                            tab={tab}
+                            setTab={setTab}
+                        />
                     </Box>
                 )}
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 2,
-                    px: 1,
-                    height: '48px'
-                }}>
-                    <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4 }}>
-                        {totalTradableGold > 0 && (
-                            <Typography variant={isMobile ? "body1" : "h6"} sx={{ color: 'text.primary' }}>
-                                거래 가능: <span style={{
-                                    color: theme.palette.primary.main,
-                                    fontWeight: 'bold'
-                                }}>{Math.floor(totalTradableGold).toLocaleString()}G</span>
-                            </Typography>
-                        )}
-                        {totalBoundGold > 0 && (
-                            <Typography variant={isMobile ? "body1" : "h6"} sx={{ color: 'text.primary' }}>
-                                귀속: <span style={{
-                                    color: theme.palette.primary.main,
-                                    fontWeight: 'bold'
-                                }}>{Math.floor(totalBoundGold).toLocaleString()}G</span>
-                            </Typography>
-                        )}
-                    </Box>
-                    <Box sx={{ position: 'relative' }}>
-                        <IconButton 
-                            onClick={handleTipClick}
-                            sx={{ 
-                                color: theme.palette.primary.main,
-                                '&:hover': {
-                                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                                },
-                            }}
-                        >
-                            <HelpOutlineIcon />
-                        </IconButton>
-                        <Fade in={showTip} timeout={300}>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    position: 'absolute',
-                                    right: 0,
-                                    top: '100%',
-                                    mt: 1,
-                                    p: 2,
-                                    backgroundColor: 'white',
-                                    borderRadius: 1,
-                                    zIndex: 1000,
-                                    maxWidth: isMobile ? '280px' : '500px',
-                                    width: 'max-content',
-                                    '&::before': {
-                                        content: '""',
-                                        position: 'absolute',
-                                        top: -8,
-                                        right: 20,
-                                        width: 0,
-                                        height: 0,
-                                        borderLeft: '8px solid transparent',
-                                        borderRight: '8px solid transparent',
-                                        borderBottom: '8px solid white',
-                                    }
-                                }}
-                            >
-                                <Typography variant="body2">
-                                    <Typography>
-                                        카드를 클릭하면 상세 정보를 확인할 수 있습니다.
-                                    </Typography>
-                                    <Typography>
-                                        도구 탭을 클릭하시면 다양한 설정을 적용할 수 있습니다.
-                                    </Typography>
-                                </Typography>
-                            </Paper>
-                        </Fade>
-                    </Box>
-                </Box>
+                <TotalRewardDisplay
+                    totalTradableGold={totalTradableGold}
+                    totalBoundGold={totalBoundGold}
+                />
             </Box>
         </Box>
     );
