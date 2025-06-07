@@ -14,9 +14,11 @@ import {
   Avatar,
   CircularProgress,
   Collapse,
-  Button
+  Button,
+  GlobalStyles
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import HomeIcon from '@mui/icons-material/Home';
 import EditIcon from '@mui/icons-material/Edit';
 import { raidRewards } from '../utils/raidTable';
@@ -242,452 +244,481 @@ const ContentRewardPage: React.FC = () => {
   }
 
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      <Box sx={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        zIndex: 1200,
-        backgroundColor: 'background.paper',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-        py: 2,
-        px: { xs: 2, sm: 4 },
+    <>
+      <GlobalStyles
+        styles={{
+          '*': {
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            },
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }
+        }}
+      />
+      <Box sx={{ 
+        minHeight: '100vh',
+        display: 'flex', 
+        flexDirection: 'column',
+        pb: 20
       }}>
         <Box sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          maxWidth: '1200px',
-          mx: 'auto',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          zIndex: 1200,
+          backgroundColor: 'background.paper',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          py: 2,
+          px: { xs: 2, sm: 4 },
         }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <img
-              src="/images/common/gold_mokoko.png"
-              alt="로생계산기"
-              style={{
-                height: 48,
-                width: 'auto',
-                display: 'block',
-              }}
-            />
-            <Typography
-              variant="h3"
-              component="h1"
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            maxWidth: '1200px',
+            mx: 'auto',
+          }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <img
+                src="/images/common/gold_mokoko.png"
+                alt="로생계산기"
+                style={{
+                  height: 48,
+                  width: 'auto',
+                  display: 'block',
+                }}
+              />
+              <Typography 
+                variant="h3"
+                component="h1"
+                sx={{ 
+                  color: 'primary.main',
+                  fontWeight: 'bold',
+                  lineHeight: 1,
+                  fontSize: { xs: '1.5rem', sm: '2rem' },
+                }}
+              >
+                컨텐츠 보상
+              </Typography>
+            </Box>
+            <Button
+              variant="outlined"
+              onClick={() => navigate('/')} 
               sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
                 color: 'primary.main',
-                fontWeight: 'bold',
-                lineHeight: 1,
-                fontSize: { xs: '1.5rem', sm: '2rem' },
-              }}
-            >
-              컨텐츠 보상
-            </Typography>
-          </Box>
-          <Button
-            variant="outlined"
-            onClick={() => navigate('/')} 
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1,
-              color: 'primary.main',
-              borderColor: 'primary.main',
-              backgroundColor: 'white',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              padding: '8px 16px',
-              '&:hover': {
-                borderColor: 'primary.dark',
+                borderColor: 'primary.main',
                 backgroundColor: 'white',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
-              }
-            }}
-          >
-            <img 
-              src="/images/common/hello_mokoko.png"
-              alt="로생계산기" 
-              style={{ 
-                height: 32,
-                width: 'auto',
-                display: 'block'
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                padding: '8px 16px',
+                '&:hover': {
+                  borderColor: 'primary.dark',
+                  backgroundColor: 'white',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+                }
               }}
-            />
+            >
+              <img 
+                src="/images/common/hello_mokoko.png"
+                alt="로생계산기" 
+                style={{ 
+                  height: 32,
+                  width: 'auto',
+                  display: 'block'
+                }}
+              />
+              <Typography 
+                variant="h5" 
+                component="div" 
+                sx={{ 
+                  color: 'primary.main',
+                  fontWeight: 'bold',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                돌아가기
+              </Typography>
+            </Button>
+          </Box>
+        </Box>
+        <Box sx={{ pt: '84px', overflow: 'auto' }}>
+          <Box sx={{ maxWidth: '1200px', mx: 'auto', width: '100%' }}>
             <Typography 
-              variant="h5" 
-              component="div" 
+              variant="body2" 
               sx={{ 
-                color: 'primary.main',
-                fontWeight: 'bold',
-                whiteSpace: 'nowrap'
+                color: 'text.secondary',
+                mb: 2,
+                textAlign: 'left',
+                fontStyle: 'italic',
+                px: 2
               }}
             >
-              돌아가기
+              가디언 토벌과 카오스 던전 보상은 추정치이며, 지속적으로 업데이트중입니다.
             </Typography>
-          </Button>
-        </Box>
-      </Box>
-      <Box sx={{ pt: '84px', overflow: 'auto', '&::-webkit-scrollbar': { display: 'none' }, scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        <Box sx={{ maxWidth: '1200px', mx: 'auto', width: '100%' }}>
-          <>
-            <Accordion 
-              defaultExpanded
-              sx={{
-                mb: 2,
-                '&:before': {
-                  display: 'none',
-                },
-              }}
-            >
-              <AccordionSummary 
-                expandIcon={<ExpandMoreIcon />}
+            <Box sx={{ p: 2 }}>
+              <Accordion 
                 sx={{
-                  backgroundColor: 'background.paper',
-                  '&:hover': {
-                    backgroundColor: 'background.paper',
+                  mb: 2,
+                  '&:before': {
+                    display: 'none',
                   },
                 }}
               >
-                <Typography 
-                  variant="h5" 
-                  sx={{ 
-                    color: 'primary.main',
-                    fontWeight: 'bold',
-                    fontSize: '1.5rem'
+                <AccordionSummary 
+                  expandIcon={<ExpandLessIcon />}
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '&:hover': {
+                      backgroundColor: 'background.paper',
+                    },
                   }}
                 >
-                  레이드 보상
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ p: 0 }}>
-                {raidRewards.map((raid, index) => {
-                  const cardId = `raid-${index}`;
-                  const isExpanded = expandedCards[cardId];
-                  return (
-                    <Card
-                      key={index}
-                      elevation={2}
-                      sx={{
-                        mb: 2,
-                        mx: 2,
-                        backgroundColor: index % 2 === 0 ? 'background.paper' : 'action.hover',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease-in-out',
-                        '&:hover': {
-                          elevation: 4,
-                        },
-                      }}
-                      onClick={() => toggleCard(cardId)}
-                    >
-                      <CardContent>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Typography variant="h6" sx={{ color: 'text.primary' }}>
-                            {raid.name}
-                          </Typography>
-                          <Typography 
-                            variant="subtitle1" 
-                            sx={{ 
-                              color: 'primary.main',
-                              fontWeight: 'bold'
-                            }}
-                          >
-                            총 골드 가치: {Math.floor(calculateGoldValue(raid.goldReward) + calculateGoldValue(raid.nonGoldReward)).toLocaleString()}G
-                          </Typography>
-                        </Box>
-                        <Collapse in={isExpanded} timeout={300}>
-                          <Box sx={{ mt: 2 }}>
+                  <Typography 
+                    variant="h5" 
+                    sx={{ 
+                      color: 'primary.main',
+                      fontWeight: 'bold',
+                      fontSize: '1.5rem'
+                    }}
+                  >
+                    레이드 보상
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ p: 0 }}>
+                  {raidRewards.map((raid, index) => {
+                    const cardId = `raid-${index}`;
+                    const isExpanded = expandedCards[cardId];
+                    return (
+                      <Card
+                        key={index}
+                        elevation={2}
+                        sx={{
+                          mb: 2,
+                          mx: 2,
+                          backgroundColor: index % 2 === 0 ? 'background.paper' : 'action.hover',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease-in-out',
+                          '&:hover': {
+                            elevation: 4,
+                          },
+                        }}
+                        onClick={() => toggleCard(cardId)}
+                      >
+                        <CardContent>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="h6" sx={{ color: 'text.primary' }}>
+                              {raid.name}
+                            </Typography>
                             <Typography 
                               variant="subtitle1" 
                               sx={{ 
                                 color: 'primary.main',
-                                fontWeight: 'bold',
-                                mb: 1
+                                fontWeight: 'bold'
                               }}
                             >
-                              골드 보상
+                              총 골드 가치: {Math.floor(calculateGoldValue(raid.goldReward)).toLocaleString()}G
                             </Typography>
-                            {formatReward(raid.goldReward).map((detail, detailIndex) => (
-                              <Box 
-                                key={detailIndex} 
+                          </Box>
+                          <Collapse in={isExpanded} timeout={300}>
+                            <Box sx={{ mt: 2 }}>
+                              <Typography 
+                                variant="subtitle1" 
                                 sx={{ 
-                                  display: 'flex', 
-                                  alignItems: 'center', 
-                                  mb: 0.5 
+                                  color: 'primary.main',
+                                  fontWeight: 'bold',
+                                  mb: 1
                                 }}
                               >
-                                <Avatar
-                                  src={detail.image}
-                                  alt={detail.name}
-                                  sx={{ width: 24, height: 24, mr: 1 }}
-                                  variant="rounded"
-                                />
-                                <Typography 
-                                  variant="body2" 
-                                  color="text.secondary"
+                                골드 보상
+                              </Typography>
+                              {formatReward(raid.goldReward).map((detail, detailIndex) => (
+                                <Box 
+                                  key={detailIndex} 
+                                  sx={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    mb: 0.5 
+                                  }}
                                 >
-                                  {detail.name}: {detail.count.toLocaleString()}
-                                  {detail.goldValue !== undefined && (
-                                    <span style={{ color: 'primary.main', marginLeft: '4px' }}>
-                                      ({Math.floor(detail.goldValue).toLocaleString()}G)
-                                    </span>
-                                  )}
-                                </Typography>
-                              </Box>
-                            ))}
+                                  <Avatar
+                                    src={detail.image}
+                                    alt={detail.name}
+                                    sx={{ width: 24, height: 24, mr: 1 }}
+                                    variant="rounded"
+                                  />
+                                  <Typography 
+                                    variant="body2" 
+                                    color="text.secondary"
+                                  >
+                                    {detail.name}: {detail.count.toLocaleString()}
+                                    {detail.goldValue !== undefined && (
+                                      <span style={{ color: 'primary.main', marginLeft: '4px' }}>
+                                        ({Math.floor(detail.goldValue).toLocaleString()}G)
+                                      </span>
+                                    )}
+                                  </Typography>
+                                </Box>
+                              ))}
+                              <Typography 
+                                variant="subtitle1" 
+                                sx={{ 
+                                  color: 'primary.main',
+                                  fontWeight: 'bold',
+                                  mt: 2,
+                                  mb: 1
+                                }}
+                              >
+                                더보기할 경우 재화 수급량
+                              </Typography>
+                              {formatReward(raid.nonGoldReward).map((detail, detailIndex) => (
+                                <Box 
+                                  key={detailIndex} 
+                                  sx={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    mb: 0.5 
+                                  }}
+                                >
+                                  <Avatar
+                                    src={detail.image}
+                                    alt={detail.name}
+                                    sx={{ width: 24, height: 24, mr: 1 }}
+                                    variant="rounded"
+                                  />
+                                  <Typography 
+                                    variant="body2" 
+                                    color="text.secondary"
+                                  >
+                                    {detail.name}: {detail.count.toLocaleString()}
+                                    {detail.goldValue !== undefined && (
+                                      <span style={{ color: 'primary.main', marginLeft: '4px' }}>
+                                        ({Math.floor(detail.goldValue).toLocaleString()}G)
+                                      </span>
+                                    )}
+                                  </Typography>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Collapse>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion 
+                sx={{
+                  mb: 2,
+                  '&:before': {
+                    display: 'none',
+                  },
+                }}
+              >
+                <AccordionSummary 
+                  expandIcon={<ExpandLessIcon />}
+                  sx={{
+                    backgroundColor: 'background.paper',
+                    '&:hover': {
+                      backgroundColor: 'background.paper',
+                    },
+                  }}
+                >
+                  <Typography 
+                    variant="h5" 
+                    sx={{ 
+                      color: 'primary.main',
+                      fontWeight: 'bold',
+                      fontSize: '1.5rem'
+                    }}
+                  >
+                    카오스 던전 보상
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ p: 0 }}>
+                  {chaosDungeonRewards.map((chaos, index) => {
+                    const cardId = `chaos-${index}`;
+                    const isExpanded = expandedCards[cardId];
+                    return (
+                      <Card
+                        key={index}
+                        elevation={2}
+                        sx={{
+                          mb: 2,
+                          mx: 2,
+                          backgroundColor: index % 2 === 0 ? 'background.paper' : 'action.hover',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease-in-out',
+                          '&:hover': {
+                            elevation: 4,
+                          },
+                        }}
+                        onClick={() => toggleCard(cardId)}
+                      >
+                        <CardContent>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="h6" sx={{ color: 'text.primary' }}>
+                              레벨 {chaos.minLevel}
+                            </Typography>
                             <Typography 
                               variant="subtitle1" 
                               sx={{ 
                                 color: 'primary.main',
-                                fontWeight: 'bold',
-                                mt: 2,
-                                mb: 1
+                                fontWeight: 'bold'
                               }}
                             >
-                              더보기 포함 보상(골드 수급 X)
+                              총 골드 가치: {Math.floor(calculateGoldValue(chaos.reward)).toLocaleString()}G
                             </Typography>
-                            {formatReward(raid.nonGoldReward).map((detail, detailIndex) => (
-                              <Box 
-                                key={detailIndex} 
-                                sx={{ 
-                                  display: 'flex', 
-                                  alignItems: 'center', 
-                                  mb: 0.5 
-                                }}
-                              >
-                                <Avatar
-                                  src={detail.image}
-                                  alt={detail.name}
-                                  sx={{ width: 24, height: 24, mr: 1 }}
-                                  variant="rounded"
-                                />
-                                <Typography 
-                                  variant="body2" 
-                                  color="text.secondary"
-                                >
-                                  {detail.name}: {detail.count.toLocaleString()}
-                                  {detail.goldValue !== undefined && (
-                                    <span style={{ color: 'primary.main', marginLeft: '4px' }}>
-                                      ({Math.floor(detail.goldValue).toLocaleString()}G)
-                                    </span>
-                                  )}
-                                </Typography>
-                              </Box>
-                            ))}
                           </Box>
-                        </Collapse>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </AccordionDetails>
-            </Accordion>
+                          <Collapse in={isExpanded} timeout={300}>
+                            <Box sx={{ mt: 2 }}>
+                              {formatReward(chaos.reward).map((detail, detailIndex) => (
+                                <Box 
+                                  key={detailIndex} 
+                                  sx={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    mb: 0.5 
+                                  }}
+                                >
+                                  <Avatar
+                                    src={detail.image}
+                                    alt={detail.name}
+                                    sx={{ width: 24, height: 24, mr: 1 }}
+                                    variant="rounded"
+                                  />
+                                  <Typography 
+                                    variant="body2" 
+                                    color="text.secondary"
+                                  >
+                                    {detail.name}: {detail.count.toLocaleString()}
+                                    {detail.goldValue !== undefined && (
+                                      <span style={{ color: 'primary.main', marginLeft: '4px' }}>
+                                        ({Math.floor(detail.goldValue).toLocaleString()}G)
+                                      </span>
+                                    )}
+                                  </Typography>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Collapse>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </AccordionDetails>
+              </Accordion>
 
-            <Accordion 
-              sx={{
-                mb: 2,
-                '&:before': {
-                  display: 'none',
-                },
-              }}
-            >
-              <AccordionSummary 
-                expandIcon={<ExpandMoreIcon />}
+              <Accordion 
                 sx={{
-                  backgroundColor: 'background.paper',
-                  '&:hover': {
-                    backgroundColor: 'background.paper',
+                  mb: 2,
+                  '&:before': {
+                    display: 'none',
                   },
                 }}
               >
-                <Typography 
-                  variant="h5" 
-                  sx={{ 
-                    color: 'primary.main',
-                    fontWeight: 'bold',
-                    fontSize: '1.5rem'
-                  }}
-                >
-                  카오스 던전 보상
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ p: 0 }}>
-                {chaosDungeonRewards.map((chaos, index) => {
-                  const cardId = `chaos-${index}`;
-                  const isExpanded = expandedCards[cardId];
-                  return (
-                    <Card
-                      key={index}
-                      elevation={2}
-                      sx={{
-                        mb: 2,
-                        mx: 2,
-                        backgroundColor: index % 2 === 0 ? 'background.paper' : 'action.hover',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease-in-out',
-                        '&:hover': {
-                          elevation: 4,
-                        },
-                      }}
-                      onClick={() => toggleCard(cardId)}
-                    >
-                      <CardContent>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Typography variant="h6" sx={{ color: 'text.primary' }}>
-                            레벨 {chaos.minLevel}
-                          </Typography>
-                          <Typography 
-                            variant="subtitle1" 
-                            sx={{ 
-                              color: 'primary.main',
-                              fontWeight: 'bold'
-                            }}
-                          >
-                            총 골드 가치: {Math.floor(calculateGoldValue(chaos.reward)).toLocaleString()}G
-                          </Typography>
-                        </Box>
-                        <Collapse in={isExpanded} timeout={300}>
-                          <Box sx={{ mt: 2 }}>
-                            {formatReward(chaos.reward).map((detail, detailIndex) => (
-                              <Box 
-                                key={detailIndex} 
-                                sx={{ 
-                                  display: 'flex', 
-                                  alignItems: 'center', 
-                                  mb: 0.5 
-                                }}
-                              >
-                                <Avatar
-                                  src={detail.image}
-                                  alt={detail.name}
-                                  sx={{ width: 24, height: 24, mr: 1 }}
-                                  variant="rounded"
-                                />
-                                <Typography 
-                                  variant="body2" 
-                                  color="text.secondary"
-                                >
-                                  {detail.name}: {detail.count.toLocaleString()}
-                                  {detail.goldValue !== undefined && (
-                                    <span style={{ color: 'primary.main', marginLeft: '4px' }}>
-                                      ({Math.floor(detail.goldValue).toLocaleString()}G)
-                                    </span>
-                                  )}
-                                </Typography>
-                              </Box>
-                            ))}
-                          </Box>
-                        </Collapse>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </AccordionDetails>
-            </Accordion>
-
-            <Accordion 
-              sx={{
-                mb: 2,
-                '&:before': {
-                  display: 'none',
-                },
-              }}
-            >
-              <AccordionSummary 
-                expandIcon={<ExpandMoreIcon />}
-                sx={{
-                  backgroundColor: 'background.paper',
-                  '&:hover': {
+                <AccordionSummary 
+                  expandIcon={<ExpandLessIcon />}
+                  sx={{
                     backgroundColor: 'background.paper',
-                  },
-                }}
-              >
-                <Typography 
-                  variant="h5" 
-                  sx={{ 
-                    color: 'primary.main',
-                    fontWeight: 'bold',
-                    fontSize: '1.5rem'
+                    '&:hover': {
+                      backgroundColor: 'background.paper',
+                    },
                   }}
                 >
-                  가디언 토벌 보상
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ p: 0 }}>
-                {guardianRewards.map((guardian, index) => {
-                  const cardId = `guardian-${index}`;
-                  const isExpanded = expandedCards[cardId];
-                  return (
-                    <Card
-                      key={index}
-                      elevation={2}
-                      sx={{
-                        mb: 2,
-                        mx: 2,
-                        backgroundColor: index % 2 === 0 ? 'background.paper' : 'action.hover',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease-in-out',
-                        '&:hover': {
-                          elevation: 4,
-                        },
-                      }}
-                      onClick={() => toggleCard(cardId)}
-                    >
-                      <CardContent>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                          <Typography variant="h6" sx={{ color: 'text.primary' }}>
-                            {guardian.name} ({guardian.minLevel})
-                          </Typography>
-                          <Typography 
-                            variant="subtitle1" 
-                            sx={{ 
-                              color: 'primary.main',
-                              fontWeight: 'bold'
-                            }}
-                          >
-                            총 골드 가치: {Math.floor(calculateGoldValue(guardian.reward)).toLocaleString()}G
-                          </Typography>
-                        </Box>
-                        <Collapse in={isExpanded} timeout={300}>
-                          <Box sx={{ mt: 2 }}>
-                            {formatReward(guardian.reward).map((detail, detailIndex) => (
-                              <Box 
-                                key={detailIndex} 
-                                sx={{ 
-                                  display: 'flex', 
-                                  alignItems: 'center', 
-                                  mb: 0.5 
-                                }}
-                              >
-                                <Avatar
-                                  src={detail.image}
-                                  alt={detail.name}
-                                  sx={{ width: 24, height: 24, mr: 1 }}
-                                  variant="rounded"
-                                />
-                                <Typography 
-                                  variant="body2" 
-                                  color="text.secondary"
-                                >
-                                  {detail.name}: {detail.count.toLocaleString()}
-                                  {detail.goldValue !== undefined && (
-                                    <span style={{ color: 'primary.main', marginLeft: '4px' }}>
-                                      ({Math.floor(detail.goldValue).toLocaleString()}G)
-                                    </span>
-                                  )}
-                                </Typography>
-                              </Box>
-                            ))}
+                  <Typography 
+                    variant="h5" 
+                    sx={{ 
+                      color: 'primary.main',
+                      fontWeight: 'bold',
+                      fontSize: '1.5rem'
+                    }}
+                  >
+                    가디언 토벌 보상
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails sx={{ p: 0 }}>
+                  {guardianRewards.map((guardian, index) => {
+                    const cardId = `guardian-${index}`;
+                    const isExpanded = expandedCards[cardId];
+                    return (
+                      <Card
+                        key={index}
+                        elevation={2}
+                        sx={{
+                          mb: 2,
+                          mx: 2,
+                          backgroundColor: index % 2 === 0 ? 'background.paper' : 'action.hover',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease-in-out',
+                          '&:hover': {
+                            elevation: 4,
+                          },
+                        }}
+                        onClick={() => toggleCard(cardId)}
+                      >
+                        <CardContent>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Typography variant="h6" sx={{ color: 'text.primary' }}>
+                              {guardian.name} ({guardian.minLevel})
+                            </Typography>
+                            <Typography 
+                              variant="subtitle1" 
+                              sx={{ 
+                                color: 'primary.main',
+                                fontWeight: 'bold'
+                              }}
+                            >
+                              총 골드 가치: {Math.floor(calculateGoldValue(guardian.reward)).toLocaleString()}G
+                            </Typography>
                           </Box>
-                        </Collapse>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </AccordionDetails>
-            </Accordion>
-          </>
+                          <Collapse in={isExpanded} timeout={300}>
+                            <Box sx={{ mt: 2 }}>
+                              {formatReward(guardian.reward).map((detail, detailIndex) => (
+                                <Box 
+                                  key={detailIndex} 
+                                  sx={{ 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    mb: 0.5 
+                                  }}
+                                >
+                                  <Avatar
+                                    src={detail.image}
+                                    alt={detail.name}
+                                    sx={{ width: 24, height: 24, mr: 1 }}
+                                    variant="rounded"
+                                  />
+                                  <Typography 
+                                    variant="body2" 
+                                    color="text.secondary"
+                                  >
+                                    {detail.name}: {detail.count.toLocaleString()}
+                                    {detail.goldValue !== undefined && (
+                                      <span style={{ color: 'primary.main', marginLeft: '4px' }}>
+                                        ({Math.floor(detail.goldValue).toLocaleString()}G)
+                                      </span>
+                                    )}
+                                  </Typography>
+                                </Box>
+                              ))}
+                            </Box>
+                          </Collapse>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </AccordionDetails>
+              </Accordion>
+            </Box>
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

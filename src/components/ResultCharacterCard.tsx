@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Box, Switch, FormControlLabel, IconButton, Tooltip, Collapse, Divider, List, ListItem, Checkbox, useMediaQuery, useTheme } from '@mui/material';
+import { Card, CardContent, Typography, Box, Switch, FormControlLabel, IconButton, Tooltip, Collapse, Divider, List, ListItem, Checkbox, useMediaQuery, useTheme, Button, Avatar } from '@mui/material';
 import { Character } from '../services/api';
 import { RaidReward } from '../utils/raidTable';
 import { Reward } from '../utils/rewardCalculator';
@@ -7,6 +7,8 @@ import { getSuitableChaosReward, getSuitableGuardianReward, calcChaosTradableGol
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { getClassImage } from '../utils/classImages';
+import { ITEM_TRANSLATIONS } from '../types';
+import { alpha } from '@mui/material/styles';
 
 interface ResultCharacterCardProps {
   character: Character;
@@ -24,6 +26,8 @@ interface ResultCharacterCardProps {
   guardianOption: number;
   isExpanded: boolean;
   onToggle: () => void;
+  showResources: boolean;
+  onResourcesToggle: () => void;
 }
 
 const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
@@ -42,9 +46,12 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
   guardianOption,
   isExpanded,
   onToggle,
+  showResources,
+  onResourcesToggle,
 }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery('(max-width:1300px)');
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // 보상 계산
   let totalTradableGold = 0;
@@ -61,8 +68,18 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
     // 카오스 던전 보상
     if (chaosReward && chaosOption !== 2) {
       const isRest = chaosOption === 1;
+      const multiplier = isRest ? 14/3 : 7;
       totalTradableGold += calcChaosTradableGold(chaosReward, priceMap, isRest);
       totalBoundGold += calcChaosBoundGold(chaosReward, priceMap, isRest);
+
+      // 순수 골드 추가
+      if (chaosReward.gold) {
+        if (!tradableResources['GOLD']) {
+          tradableResources['GOLD'] = { count: 0, goldValue: 0 };
+        }
+        tradableResources['GOLD'].count += chaosReward.gold * multiplier;
+        tradableResources['GOLD'].goldValue += chaosReward.gold * multiplier;
+      }
 
       // 재화 수급량 계산
       if (chaosReward.weaponStones) {
@@ -70,8 +87,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!tradableResources[resource]) {
             tradableResources[resource] = { count: 0, goldValue: 0 };
           }
-          tradableResources[resource].count += count;
-          tradableResources[resource].goldValue += count * (priceMap[resource] || 0);
+          tradableResources[resource].count += count * multiplier;
+          tradableResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (chaosReward.armorStones) {
@@ -79,8 +96,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!tradableResources[resource]) {
             tradableResources[resource] = { count: 0, goldValue: 0 };
           }
-          tradableResources[resource].count += count;
-          tradableResources[resource].goldValue += count * (priceMap[resource] || 0);
+          tradableResources[resource].count += count * multiplier;
+          tradableResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (chaosReward.shards) {
@@ -88,8 +105,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!boundResources[resource]) {
             boundResources[resource] = { count: 0, goldValue: 0 };
           }
-          boundResources[resource].count += count;
-          boundResources[resource].goldValue += count * (priceMap[resource] || 0);
+          boundResources[resource].count += count * multiplier;
+          boundResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (chaosReward.gems) {
@@ -98,8 +115,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!tradableResources[resource]) {
             tradableResources[resource] = { count: 0, goldValue: 0 };
           }
-          tradableResources[resource].count += count;
-          tradableResources[resource].goldValue += count * (priceMap[resource] || 0);
+          tradableResources[resource].count += count * multiplier;
+          tradableResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (chaosReward.leapStones) {
@@ -107,8 +124,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!boundResources[resource]) {
             boundResources[resource] = { count: 0, goldValue: 0 };
           }
-          boundResources[resource].count += count;
-          boundResources[resource].goldValue += count * (priceMap[resource] || 0);
+          boundResources[resource].count += count * multiplier;
+          boundResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
     }
@@ -116,8 +133,18 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
     // 가디언 토벌 보상
     if (guardianReward && guardianOption !== 2) {
       const isRest = guardianOption === 1;
+      const multiplier = isRest ? 14/3 : 7;
       totalTradableGold += calcGuardianTradableGold(guardianReward, priceMap, isRest);
       totalBoundGold += calcGuardianBoundGold(guardianReward, priceMap, isRest);
+
+      // 순수 골드 추가
+      if (guardianReward.gold) {
+        if (!tradableResources['GOLD']) {
+          tradableResources['GOLD'] = { count: 0, goldValue: 0 };
+        }
+        tradableResources['GOLD'].count += guardianReward.gold * multiplier;
+        tradableResources['GOLD'].goldValue += guardianReward.gold * multiplier;
+      }
 
       // 재화 수급량 계산
       if (guardianReward.weaponStones) {
@@ -125,8 +152,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!tradableResources[resource]) {
             tradableResources[resource] = { count: 0, goldValue: 0 };
           }
-          tradableResources[resource].count += count;
-          tradableResources[resource].goldValue += count * (priceMap[resource] || 0);
+          tradableResources[resource].count += count * multiplier;
+          tradableResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (guardianReward.armorStones) {
@@ -134,8 +161,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!tradableResources[resource]) {
             tradableResources[resource] = { count: 0, goldValue: 0 };
           }
-          tradableResources[resource].count += count;
-          tradableResources[resource].goldValue += count * (priceMap[resource] || 0);
+          tradableResources[resource].count += count * multiplier;
+          tradableResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (guardianReward.shards) {
@@ -143,8 +170,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!boundResources[resource]) {
             boundResources[resource] = { count: 0, goldValue: 0 };
           }
-          boundResources[resource].count += count;
-          boundResources[resource].goldValue += count * (priceMap[resource] || 0);
+          boundResources[resource].count += count * multiplier;
+          boundResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (guardianReward.leapStones) {
@@ -152,8 +179,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!tradableResources[resource]) {
             tradableResources[resource] = { count: 0, goldValue: 0 };
           }
-          tradableResources[resource].count += count;
-          tradableResources[resource].goldValue += count * (priceMap[resource] || 0);
+          tradableResources[resource].count += count * multiplier;
+          tradableResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
       if (guardianReward.gems) {
@@ -162,8 +189,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           if (!tradableResources[resource]) {
             tradableResources[resource] = { count: 0, goldValue: 0 };
           }
-          tradableResources[resource].count += count;
-          tradableResources[resource].goldValue += count * (priceMap[resource] || 0);
+          tradableResources[resource].count += count * multiplier;
+          tradableResources[resource].goldValue += count * multiplier * (priceMap[resource] || 0);
         });
       }
     }
@@ -174,6 +201,15 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
         const reward = isGoldReward ? raid.goldReward : raid.nonGoldReward;
         totalTradableGold += calcRaidTradableGold(reward, priceMap);
         totalBoundGold += calcRaidBoundGold(reward, priceMap);
+
+        // 순수 골드 추가
+        if (reward.gold) {
+          if (!tradableResources['GOLD']) {
+            tradableResources['GOLD'] = { count: 0, goldValue: 0 };
+          }
+          tradableResources['GOLD'].count += reward.gold;
+          tradableResources['GOLD'].goldValue += reward.gold;
+        }
 
         // 재화 수급량 계산
         if (reward.weaponStones) {
@@ -226,12 +262,63 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
     });
   }
 
+  const renderResourceRewards = (rewards: Record<string, { count: number; goldValue: number }> | undefined) => {
+    if (!rewards) return null;
+    
+    let entries = Object.entries(rewards).filter(([_, value]) => value.count > 0);
+    if (entries.length === 0) return null;
+    
+    // GOLD를 맨 앞으로, 나머지는 goldValue 내림차순 정렬
+    entries = entries.sort((a, b) => {
+      if (a[0] === 'GOLD') return -1;
+      if (b[0] === 'GOLD') return 1;
+      return b[1].goldValue - a[1].goldValue;
+    });
+    
+    return (
+      <Box sx={{ mt: 1, fontSize: '0.95rem' }}>
+        {entries.map(([resource, { count, goldValue }]) => (
+          <Box key={resource} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+            <Avatar
+              src={`/images/items/${resource}.png`}
+              alt={ITEM_TRANSLATIONS[resource] || resource}
+              sx={{ width: 25, height: 25 }}
+              variant="rounded"
+            />
+            {resource === 'GOLD' ? (
+              <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '0.85rem' }}>
+                골드: <span style={{ color: theme.palette.primary.main }}>{Math.floor(goldValue).toLocaleString()}G</span>
+              </Typography>
+            ) : (
+              <Typography variant="body1" sx={{ fontSize: '0.85rem' }}>
+                {ITEM_TRANSLATIONS[resource] || resource}: {Math.floor(count).toLocaleString()}개 <span style={{ color: theme.palette.primary.main }}>{Math.floor(goldValue).toLocaleString()}G</span>
+              </Typography>
+            )}
+          </Box>
+        ))}
+      </Box>
+    );
+  };
+
+  const handleExcludeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newExcluded = event.target.checked;
+    onExcludeChange();
+    
+    // 모바일에서 "제외" 활성화 시 카드 토글 닫기
+    if (isMobile && newExcluded) {
+      onToggle();
+    }
+  };
+
   return (
     <Card 
       sx={{ 
-        mb: 2, 
+        mb: 2,
+        cursor: 'pointer',
         position: 'relative',
-        cursor: 'pointer'
+        width: '100%',
+        maxWidth: '100%',
+        boxSizing: 'border-box'
       }}
       onClick={onToggle}
     >
@@ -305,7 +392,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
               control={
                 <Switch
                   checked={isExcluded}
-                  onChange={onExcludeChange}
+                  onChange={handleExcludeChange}
                   size="small"
                   onClick={(e) => e.stopPropagation()}
                 />
@@ -357,7 +444,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
                 {!isExcluded && chaosReward && chaosOption !== 2 && (
                   <>
                     {calcChaosTradableGold(chaosReward, priceMap, chaosOption === 1) > 0 && (
-                      <Typography sx={{ color: theme.palette.primary.main }}>거래 가능: {Math.floor(calcChaosTradableGold(chaosReward, priceMap, chaosOption === 1)).toLocaleString()} G</Typography>
+                      <Typography sx={{ color: theme.palette.primary.main }}>거래가능: {Math.floor(calcChaosTradableGold(chaosReward, priceMap, chaosOption === 1)).toLocaleString()} G</Typography>
                     )}
                     {calcChaosBoundGold(chaosReward, priceMap, chaosOption === 1) > 0 && (
                       <Typography sx={{ color: theme.palette.primary.main }}>귀속: {Math.floor(calcChaosBoundGold(chaosReward, priceMap, chaosOption === 1)).toLocaleString()} G</Typography>
@@ -378,7 +465,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
                 {!isExcluded && guardianReward && guardianOption !== 2 && (
                   <>
                     {calcGuardianTradableGold(guardianReward, priceMap, guardianOption === 1) > 0 && (
-                      <Typography sx={{ color: theme.palette.primary.main }}>거래 가능: {Math.floor(calcGuardianTradableGold(guardianReward, priceMap, guardianOption === 1)).toLocaleString()} G</Typography>
+                      <Typography sx={{ color: theme.palette.primary.main }}>거래가능: {Math.floor(calcGuardianTradableGold(guardianReward, priceMap, guardianOption === 1)).toLocaleString()} G</Typography>
                     )}
                     {calcGuardianBoundGold(guardianReward, priceMap, guardianOption === 1) > 0 && (
                       <Typography sx={{ color: theme.palette.primary.main }}>귀속: {Math.floor(calcGuardianBoundGold(guardianReward, priceMap, guardianOption === 1)).toLocaleString()} G</Typography>
@@ -410,7 +497,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
                   return (
                     <>
                       {tradableGold > 0 && (
-                        <Typography sx={{ color: theme.palette.primary.main }}>거래 가능: {Math.floor(tradableGold).toLocaleString()} G</Typography>
+                        <Typography sx={{ color: theme.palette.primary.main }}>거래가능: {Math.floor(tradableGold).toLocaleString()} G</Typography>
                       )}
                       {boundGold > 0 && (
                         <Typography sx={{ color: theme.palette.primary.main }}>귀속: {Math.floor(boundGold).toLocaleString()} G</Typography>
@@ -466,6 +553,63 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
                 ))}
               </List>
             </Box>
+          </Box>
+
+          {/* 재화 수급량 영역 */}
+          <Box 
+            sx={{ 
+              mt: 2,
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 1,
+              overflow: 'hidden'
+            }}
+          >
+            <Button
+              fullWidth
+              variant="text"
+              onClick={(e) => {
+                e.stopPropagation();
+                onResourcesToggle();
+              }}
+              sx={{
+                justifyContent: 'space-between',
+                px: 2,
+                py: 1,
+                color: theme.palette.text.primary,
+                backgroundColor: alpha(theme.palette.primary.main, 0.04),
+                '&:hover': {
+                  backgroundColor: alpha(theme.palette.primary.main, 0.08),
+                },
+                borderRadius: 0,
+              }}
+            >
+              <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+                재화 수급량
+              </Typography>
+              {showResources ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+            </Button>
+
+            <Collapse in={showResources} timeout={300}>
+              <Box sx={{ p: 2, bgcolor: 'background.paper' }}>
+                {Object.keys(tradableResources).length > 0 && (
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+                      거래가능
+                    </Typography>
+                    {renderResourceRewards(tradableResources)}
+                  </Box>
+                )}
+                {Object.keys(boundResources).length > 0 && (
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+                      귀속
+                    </Typography>
+                    {renderResourceRewards(boundResources)}
+                  </Box>
+                )}
+              </Box>
+            </Collapse>
           </Box>
         </Collapse>
       </CardContent>

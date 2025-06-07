@@ -56,6 +56,42 @@ const ServerCard: React.FC<ServerCardProps> = ({
   const theme = useTheme();
   const isMobile = useMediaQuery('(max-width:800px)');
   const [isHoveringCharacters, setIsHoveringCharacters] = useState(false);
+  const [showResourcesStates, setShowResourcesStates] = useState<Record<string, boolean>>({});
+
+  const handleResourcesToggle = (characterName: string) => {
+    if (isMobile) {
+      // 모바일 화면에서는 클릭된 캐릭터만 토글
+      setShowResourcesStates(prev => ({
+        ...prev,
+        [characterName]: !prev[characterName]
+      }));
+    } else {
+      // 데스크톱 화면에서는 같은 행의 캐릭터도 함께 토글
+      const characterIndex = characters.findIndex(char => char.characterName === characterName);
+      if (characterIndex === -1) return;
+
+      const isEvenIndex = characterIndex % 2 === 0;
+      const pairIndex = isEvenIndex ? characterIndex + 1 : characterIndex - 1;
+
+      // 같은 행의 캐릭터가 있는 경우에만 토글
+      if (pairIndex >= 0 && pairIndex < characters.length) {
+        const pairCharacter = characters[pairIndex];
+        const isCurrentlyExpanded = showResourcesStates[characterName];
+
+        setShowResourcesStates(prev => ({
+          ...prev,
+          [characterName]: !isCurrentlyExpanded,
+          [pairCharacter.characterName]: !isCurrentlyExpanded
+        }));
+      } else {
+        // 짝이 없는 경우 해당 캐릭터만 토글
+        setShowResourcesStates(prev => ({
+          ...prev,
+          [characterName]: !prev[characterName]
+        }));
+      }
+    }
+  };
 
   return (
     <Card 
@@ -148,14 +184,26 @@ const ServerCard: React.FC<ServerCardProps> = ({
               display: 'grid', 
               gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
               gap: isMobile ? 0.5 : 2, 
-              mt: 2 
+              mt: 2,
+              width: '100%',
+              boxSizing: 'border-box',
+              justifyContent: 'center'
             }}
             onClick={(e) => e.stopPropagation()}
             onMouseEnter={() => setIsHoveringCharacters(true)}
             onMouseLeave={() => setIsHoveringCharacters(false)}
           >
             {characters.map(character => (
-              <Box key={character.characterName}>
+              <Box 
+                key={character.characterName}
+                sx={{
+                  width: '100%',
+                  maxWidth: isMobile ? '100%' : '100%',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  justifyContent: 'center'
+                }}
+              >
                 <ResultCharacterCard
                   character={character}
                   selectedRaids={selectedRaids[character.characterName] || []}
@@ -172,6 +220,8 @@ const ServerCard: React.FC<ServerCardProps> = ({
                   guardianOption={guardianOption}
                   isExpanded={expandedCharacters[character.characterName] || false}
                   onToggle={() => onCharacterToggle(server, character.characterName)}
+                  showResources={showResourcesStates[character.characterName] || false}
+                  onResourcesToggle={() => handleResourcesToggle(character.characterName)}
                 />
               </Box>
             ))}

@@ -1033,13 +1033,11 @@ const ResultPage: React.FC = () => {
             [server]: !prev[server]
         }));
 
-        // 서버가 제외되면 해당 서버 카드를 접음
-        if (!excludedServers[server]) {
-            setExpandedServers(prev => ({
-                ...prev,
-                [server]: false
-            }));
-        }
+        // 서버가 제외되면 해당 서버 카드를 접고, 제외 해제되면 펼침
+        setExpandedServers(prev => ({
+            ...prev,
+            [server]: excludedServers[server]
+        }));
     };
 
     if (loading) {

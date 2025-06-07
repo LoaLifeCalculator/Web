@@ -51,10 +51,16 @@ const renderResourceRewards = (
     return b[1].goldValue - a[1].goldValue;
   });
   
-  // 2개씩 한 행에 배치 (PC 버전)
+  // 모바일 버전은 1열, PC 버전은 2열 레이아웃
   const rows = [];
-  for (let i = 0; i < entries.length; i += 2) {
-    rows.push(entries.slice(i, i + 2));
+  if (isMobile) {
+    // 모바일: 1열 레이아웃
+    entries.forEach(entry => rows.push([entry]));
+  } else {
+    // PC: 2열 레이아웃
+    for (let i = 0; i < entries.length; i += 2) {
+      rows.push(entries.slice(i, i + 2));
+    }
   }
   
   return (
@@ -64,16 +70,14 @@ const renderResourceRewards = (
           {row.map(([resource, { count, goldValue }]) => (
             <Box key={resource} sx={{ flex: 1, display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', fontSize: '0.95rem' }}>
               {isMobile ? (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%' }}>
-                      <Avatar
-                        src={`/images/items/${resource}.png`}
-                        alt={ITEM_TRANSLATIONS[resource] || resource}
-                        sx={{ width: 25, height: 25 }}
-                        variant="rounded"
-                      />
-                    </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, width: '100%' }}>
+                  <Avatar
+                    src={`/images/items/${resource}.png`}
+                    alt={ITEM_TRANSLATIONS[resource] || resource}
+                    sx={{ width: 25, height: 25 }}
+                    variant="rounded"
+                  />
+                  <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, flex: 1 }}>
                     {resource === 'GOLD' ? (
                       <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '0.85rem' }}>
                         골드
@@ -83,10 +87,7 @@ const renderResourceRewards = (
                         {ITEM_TRANSLATIONS[resource] || resource}: {count.toLocaleString()}개
                       </Typography>
                     )}
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Box sx={{ width: 25, height: 25 }} />
-                    <Typography variant="body1" sx={{ fontSize: '0.85rem', color: theme.palette.primary.main }}>
+                    <Typography variant="body1" sx={{ fontSize: '0.85rem', color: theme.palette.primary.main, ml: 'auto' }}>
                       {Math.floor(goldValue).toLocaleString()}G
                     </Typography>
                   </Box>
@@ -112,8 +113,8 @@ const renderResourceRewards = (
               )}
             </Box>
           ))}
-          {/* row가 1개만 있을 때 오른쪽 칸 비우기 */}
-          {row.length === 1 && <Box sx={{ flex: 1, fontSize: '0.95rem' }} />}
+          {/* row가 1개만 있을 때 오른쪽 칸 비우기 (PC 버전에서만) */}
+          {!isMobile && row.length === 1 && <Box sx={{ flex: 1, fontSize: '0.95rem' }} />}
         </Box>
       ))}
     </Box>

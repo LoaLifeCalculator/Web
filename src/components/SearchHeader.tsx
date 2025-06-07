@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {Box, Typography, Tabs, Tab, OutlinedInput, InputAdornment, IconButton, Fade, Paper, useTheme, useMediaQuery} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -27,6 +27,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     const isMobile = useMediaQuery('(max-width:800px)');
     const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
     const [showTip, setShowTip] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         setLocalSearchQuery(searchQuery);
@@ -43,6 +44,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 
     const handleClearSearch = () => {
         setLocalSearchQuery('');
+        searchInputRef.current?.focus();
     };
 
     const handleTipClick = () => {
@@ -142,6 +144,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                             </Typography>
                         </Box>
                         <OutlinedInput
+                            inputRef={searchInputRef}
                             placeholder="캐릭터명 검색"
                             value={localSearchQuery}
                             onChange={(e) => setLocalSearchQuery(e.target.value)}
@@ -262,7 +265,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                                     backgroundColor: 'white',
                                     borderRadius: 1,
                                     zIndex: 1000,
-                                    minWidth: 400,
+                                    maxWidth: isMobile ? '280px' : '500px',
+                                    width: 'max-content',
                                     '&::before': {
                                         content: '""',
                                         position: 'absolute',
