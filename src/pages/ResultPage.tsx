@@ -873,23 +873,24 @@ const ResultPage: React.FC = () => {
                 setTab={setTab}
                 onHome={handleHome}
             />
-            <Container maxWidth="xl" sx={{ 
+            <Container maxWidth={false} sx={{ 
                 pt: isMobile ? '180px' : '120px', 
                 pb: 4,
+                maxWidth: '850px !important',
                 overflow: 'hidden',
-                        '&::-webkit-scrollbar': {
-                            display: 'none'
-                        },
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none',
-                        WebkitOverflowScrolling: 'touch',
-                        '& > *': {
-                            '&::-webkit-scrollbar': {
-                                display: 'none'
-                            },
-                            scrollbarWidth: 'none',
-                            msOverflowStyle: 'none'
-                        }
+                '&::-webkit-scrollbar': {
+                    display: 'none'
+                },
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                WebkitOverflowScrolling: 'touch',
+                '& > *': {
+                    '&::-webkit-scrollbar': {
+                        display: 'none'
+                    },
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none'
+                }
             }}>
                 {loading ? (
                     <Box sx={{ 

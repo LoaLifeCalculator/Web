@@ -31,6 +31,12 @@ interface Resource {
   item: string;
   avgPrice: number;
   id: number;
+  name: string;
+  image: string;
+}
+
+interface ResourceResponse {
+  data: Resource[];
 }
 
 const ContentRewardPage: React.FC = () => {
@@ -49,7 +55,8 @@ const ContentRewardPage: React.FC = () => {
         setLoading(false);
       } catch (error) {
         console.error('시세 데이터 로딩 중 오류 발생:', error);
-        navigate('/', { state: { error: '시세 데이터를 불러오는 중 오류가 발생했습니다.' } });
+        setError('시세 데이터를 불러오는데 실패했습니다.');
+        setLoading(false);
       }
     };
 
@@ -299,7 +306,7 @@ const ContentRewardPage: React.FC = () => {
           </Button>
         </Box>
       </Box>
-      <Container maxWidth="lg" sx={{ py: 2 }}>
+      <Container maxWidth={false} sx={{ py: 2, maxWidth: '850px !important' }}>
         {loading ? (
           <Box sx={{ 
             display: 'flex', 

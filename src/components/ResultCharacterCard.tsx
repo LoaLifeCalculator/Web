@@ -326,10 +326,10 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
         <Box 
           sx={{ 
             display: 'flex', 
-            flexDirection: isSmallScreen ? 'column' : 'row',
-            alignItems: isSmallScreen ? 'flex-start' : 'center',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
             justifyContent: 'space-between',
-            gap: isSmallScreen ? 1 : 0
+            gap: 1
           }}
         >
           <Box 
@@ -370,8 +370,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
             sx={{ 
               display: 'flex', 
               alignItems: 'center',
-              width: isSmallScreen ? '100%' : 'auto',
-              justifyContent: isSmallScreen ? 'flex-start' : 'flex-end',
+              width: '100%',
+              justifyContent: 'flex-start',
               gap: 1
             }}
           >
@@ -406,9 +406,9 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           sx={{ 
             mt: 1, 
             display: 'flex', 
-            justifyContent: isSmallScreen ? 'flex-start' : 'flex-end',
+            justifyContent: 'flex-start',
             flexDirection: 'column',
-            alignItems: isSmallScreen ? 'flex-start' : 'flex-end',
+            alignItems: 'flex-start',
             gap: 1
           }}
         >
