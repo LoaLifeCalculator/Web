@@ -869,138 +869,138 @@ const ResultPage: React.FC = () => {
     };
 
     return (
-        <Container maxWidth={false} sx={{ 
-            pt: isMobile ? '180px' : '120px', 
-            pb: 4,
-            maxWidth: '850px !important',
-            overflow: 'hidden',
-            '&::-webkit-scrollbar': {
-                display: 'none'
-            },
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            WebkitOverflowScrolling: 'touch',
-            '& > *': {
-                '&::-webkit-scrollbar': {
-                    display: 'none'
-                },
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
-            }
-        }}>
-            <SearchHeader
-                searchQuery={searchParams.get('name') || ''}
-                setSearchQuery={(query) => {
-                    const params = new URLSearchParams(searchParams);
-                    params.set('name', query);
-                    navigate(`/result?${params.toString()}`);
+        <>
+            <GlobalStyles
+                styles={{
+                    '*::-webkit-scrollbar': {
+                        display: 'none'
+                    },
+                    '*': {
+                        msOverflowStyle: 'none',
+                        scrollbarWidth: 'none'
+                    }
                 }}
-                totalTradableGold={data ? calculateTotalRewardForPage().totalTradableGold : 0}
-                totalBoundGold={data ? calculateTotalRewardForPage().totalBoundGold : 0}
-                tab={tab}
-                setTab={setTab}
-                onHome={handleHome}
             />
-            {loading ? (
-                <Box sx={{ 
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
-                    height: 'calc(100vh - 120px)',
-                    flexDirection: 'column',
-                    gap: 2
-                }}>
-                    <img 
-                        src="/images/mokoko/laptop_mokoko.png"
-                        alt="로딩중" 
-                        style={{ 
-                            width: 'auto',
-                            height: 200,
-                            display: 'block'
-                        }}
-                    />
-                    <Typography 
-                        variant="h6" 
-                        sx={{ 
-                            color: 'primary.main',
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        데이터를 불러오는 중입니다...
-                    </Typography>
-                </Box>
-            ) : error ? (
-                <Typography color="error" align="center">{error}</Typography>
-            ) : data ? (
-                <>
-                    {tab === 0 && (
-                        <Box sx={{ mt: 2 }}>
-                            {sortedServers.map((server) => (
-                                <ServerCard
-                                    key={server}
-                                    server={server}
-                                    characters={data.expeditions.expeditions[server]}
-                                    expanded={expandedServers[server] || false}
-                                    onToggle={() => handleServerToggle(server)}
-                                    selectedRaids={selectedRaids}
-                                    goldRewardStates={goldRewardStates}
-                                    excludeStates={excludeStates}
-                                    onRaidCheck={handleRaidCheck}
-                                    onGoldRewardChange={handleGoldRewardChange}
-                                    onExcludeChange={handleExcludeChange}
-                                    priceMap={customPriceMap}
-                                    getAvailableRaids={getAvailableRaids}
-                                    getSuitableChaosReward={getSuitableChaosReward}
-                                    getSuitableGuardianReward={getSuitableGuardianReward}
-                                    chaosOption={chaosOption}
-                                    guardianOption={guardianOption}
-                                    expandedCharacters={expandedCharacters}
-                                    onCharacterToggle={handleCharacterToggle}
-                                    calculateServerTotalReward={calculateServerTotalRewardForPage}
-                                    isServerExcluded={excludedServers[server] || false}
-                                    onServerExcludeChange={handleServerExcludeChange}
-                                />
-                            ))}
-                        </Box>
-                    )}
-                    {tab === 1 && (
-                        <Box sx={{ mt: 2 }}>
-                            <TotalRewardCard
-                                calculateTotalReward={calculateTotalRewardForPage}
-                                calculateRaidReward={calculateRaidReward}
-                                calculateChaosReward={calculateChaosReward}
-                                calculateGuardianReward={calculateGuardianReward}
-                                resources={resources}
-                            />
-                        </Box>
-                    )}
-                    {tab === 2 && (
-                        <FilterAndToolsTab
-                            chaosOption={chaosOption}
-                            onChaosOptionChange={handleChaosOptionChange}
-                            guardianOption={guardianOption}
-                            onGuardianOptionChange={handleGuardianOptionChange}
-                            batchExcludeLevel={batchExcludeLevel}
-                            onBatchExcludeLevelChange={setBatchExcludeLevel}
-                            onBatchExcludeByLevel={handleBatchExcludeByLevel}
-                            batchRaidLevel={batchRaidLevel}
-                            onBatchRaidLevelChange={setBatchRaidLevel}
-                            onBatchRaidByLevel={handleBatchRaidByLevel}
+            <Container maxWidth={false} sx={{ 
+                pt: isMobile ? '180px' : '120px', 
+                pb: 4,
+                maxWidth: '850px !important',
+                overflow: 'auto'
+            }}>
+                <SearchHeader
+                    searchQuery={searchParams.get('name') || ''}
+                    setSearchQuery={(query) => {
+                        const params = new URLSearchParams(searchParams);
+                        params.set('name', query);
+                        navigate(`/result?${params.toString()}`);
+                    }}
+                    totalTradableGold={data ? calculateTotalRewardForPage().totalTradableGold : 0}
+                    totalBoundGold={data ? calculateTotalRewardForPage().totalBoundGold : 0}
+                    tab={tab}
+                    setTab={setTab}
+                    onHome={handleHome}
+                />
+                {loading ? (
+                    <Box sx={{ 
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        height: 'calc(100vh - 120px)',
+                        flexDirection: 'column',
+                        gap: 2
+                    }}>
+                        <img 
+                            src="/images/mokoko/laptop_mokoko.png"
+                            alt="로딩중" 
+                            style={{ 
+                                width: 'auto',
+                                height: 200,
+                                display: 'block'
+                            }}
                         />
-                    )}
-                    {tab === 3 && (
-                        <Box sx={{ mt: 2 }}>
-                            <PriceTab
-                                resources={resources}
-                                priceMap={customPriceMap}
-                                onPriceChange={handlePriceChange}
-                                onClose={() => {}}
+                        <Typography 
+                            variant="h6" 
+                            sx={{ 
+                                color: 'primary.main',
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            데이터를 불러오는 중입니다...
+                        </Typography>
+                    </Box>
+                ) : error ? (
+                    <Typography color="error" align="center">{error}</Typography>
+                ) : data ? (
+                    <>
+                        {tab === 0 && (
+                            <Box sx={{ mt: 2 }}>
+                                {sortedServers.map((server) => (
+                                    <ServerCard
+                                        key={server}
+                                        server={server}
+                                        characters={data.expeditions.expeditions[server]}
+                                        expanded={expandedServers[server] || false}
+                                        onToggle={() => handleServerToggle(server)}
+                                        selectedRaids={selectedRaids}
+                                        goldRewardStates={goldRewardStates}
+                                        excludeStates={excludeStates}
+                                        onRaidCheck={handleRaidCheck}
+                                        onGoldRewardChange={handleGoldRewardChange}
+                                        onExcludeChange={handleExcludeChange}
+                                        priceMap={customPriceMap}
+                                        getAvailableRaids={getAvailableRaids}
+                                        getSuitableChaosReward={getSuitableChaosReward}
+                                        getSuitableGuardianReward={getSuitableGuardianReward}
+                                        chaosOption={chaosOption}
+                                        guardianOption={guardianOption}
+                                        expandedCharacters={expandedCharacters}
+                                        onCharacterToggle={handleCharacterToggle}
+                                        calculateServerTotalReward={calculateServerTotalRewardForPage}
+                                        isServerExcluded={excludedServers[server] || false}
+                                        onServerExcludeChange={handleServerExcludeChange}
+                                    />
+                                ))}
+                            </Box>
+                        )}
+                        {tab === 1 && (
+                            <Box sx={{ mt: 2 }}>
+                                <TotalRewardCard
+                                    calculateTotalReward={calculateTotalRewardForPage}
+                                    calculateRaidReward={calculateRaidReward}
+                                    calculateChaosReward={calculateChaosReward}
+                                    calculateGuardianReward={calculateGuardianReward}
+                                    resources={resources}
+                                />
+                            </Box>
+                        )}
+                        {tab === 2 && (
+                            <FilterAndToolsTab
+                                chaosOption={chaosOption}
+                                onChaosOptionChange={handleChaosOptionChange}
+                                guardianOption={guardianOption}
+                                onGuardianOptionChange={handleGuardianOptionChange}
+                                batchExcludeLevel={batchExcludeLevel}
+                                onBatchExcludeLevelChange={setBatchExcludeLevel}
+                                onBatchExcludeByLevel={handleBatchExcludeByLevel}
+                                batchRaidLevel={batchRaidLevel}
+                                onBatchRaidLevelChange={setBatchRaidLevel}
+                                onBatchRaidByLevel={handleBatchRaidByLevel}
                             />
-                        </Box>
-                    )}
-                </>
-            ) : null}
-        </Container>
+                        )}
+                        {tab === 3 && (
+                            <Box sx={{ mt: 2 }}>
+                                <PriceTab
+                                    resources={resources}
+                                    priceMap={customPriceMap}
+                                    onPriceChange={handlePriceChange}
+                                    onClose={() => {}}
+                                />
+                            </Box>
+                        )}
+                    </>
+                ) : null}
+            </Container>
+        </>
     );
 };
 
