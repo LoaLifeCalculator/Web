@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import { Box, Container, Typography, Card } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useTheme, useMediaQuery } from '@mui/material';
@@ -14,6 +14,7 @@ import {
 } from '../utils/rewardCalculator';
 import { GlobalStyles } from '@mui/material';
 import ComparisonCard from '../components/ComparisonCard';
+import {useHead} from "../hooks/useHead";
 
 interface LevelReward {
   totalTradableGold: number;
@@ -35,6 +36,27 @@ interface LevelReward {
 }
 
 const LevelRewardPage: React.FC = () => {
+  const headConfig = useMemo(() => ({
+    title: '레벨로 계산 | 로생계산기',
+    canonical: 'https://www.loalife.co.kr/level-reward',
+    metas: [
+      { name: 'description', content: '레벨별 주간 주급량을 확인해보세요.' },
+      { name: 'robots',      content: 'noindex,follow' },
+    ],
+    scripts: [
+      {
+        innerHTML: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://www.loalife.co.kr/level-reward",
+          "name": "레벨로 계산 | 로생계산기",
+          "description": "레벨별 주간 주급량을 확인해보세요."
+        })
+      }
+    ],
+  }), [])
+  useHead(headConfig);
+
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery('(max-width:800px)');

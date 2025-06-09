@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useLocation, useNavigate, useSearchParams} from 'react-router-dom';
 import {
     Container,
@@ -47,6 +47,7 @@ import PriceTab from '../components/PriceTab';
 import TotalRewardCard from '../components/TotalRewardCard';
 import ServerCard from '../components/ServerCard';
 import SearchHeader from '../components/SearchHeader';
+import { useHead } from '../hooks/useHead'
 
 interface CharacterRaidState {
     [characterName: string]: string[]; // 선택된 레이드 이름 리스트
@@ -72,6 +73,32 @@ interface Raid {
 }
 
 const ResultPage: React.FC = () => {
+    const { search } = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const name = queryParams.get('name') || '';
+
+    const headConfig = useMemo(() => ({
+        title: `계산 결과 | 로생계산기`,
+        canonical: `https://www.loalife.co.kr/result${search}`,
+        metas: [
+            { name: 'description', content: `${name}님의 주간 수급량 계산 결과입니다.` },
+            { name: 'robots',      content: 'noindex,follow' },
+        ],
+        scripts: [
+            {
+                innerHTML: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "WebPage",
+                    "url": `https://www.loalife.co.kr/result${search}`,
+                    "name": `계산 결과 | 로생계산기`,
+                    "description": `${name}님의 주간 수급량 계산 결과입니다.`,
+                })
+            }
+        ]
+    }), [search, name])
+
+    useHead(headConfig);
+
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:800px)');
     const [loading, setLoading] = useState(true);

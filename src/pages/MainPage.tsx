@@ -1,11 +1,37 @@
-import React, {useState, ChangeEvent, useEffect} from 'react';
+import React, {useState, ChangeEvent, useEffect, useMemo} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
 import {Container, Typography, TextField, Button, Box, InputAdornment, IconButton} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useHead } from '../hooks/useHead'
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import PhoneIcon from '@mui/icons-material/Phone';
 
 const MainPage: React.FC = () => {
+    const headConfig = useMemo(() => ({
+        title: '로생계산기',
+        canonical: 'https://www.loalife.co.kr/',
+        metas: [
+            { name: 'description', content: '원정대의 주간 수급량을 한눈에 확인하세요.' },
+            { name: 'robots',      content: 'index,follow' },
+        ],
+        scripts: [
+            {
+                innerHTML: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "WebSite",
+                    "name": "로생계산기",
+                    "url": "https://www.loalife.co.kr/",
+                    "potentialAction": {
+                        "@type": "SearchAction",
+                        "target": "https://www.loalife.co.kr/result?name={name}",
+                        "query-input": "required name=name"
+                    }
+                })
+            }
+        ],
+    }), [])
+    useHead(headConfig);
+
     const [nickname, setNickname] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -232,7 +258,7 @@ const MainPage: React.FC = () => {
                         <Box
                             component="img"
                             src="/images/mokoko/sword_mokoko.png"
-                            alt="레벨별 수급량 보기"
+                            alt="레벨로 계산하기"
                             sx={{
                                 width: 'auto',
                                 height: 'auto',
@@ -242,7 +268,7 @@ const MainPage: React.FC = () => {
                             }}
                         />
                         <Typography variant="h6" sx={{fontWeight: 'bold', color: 'white'}}>
-                            레벨별 수급량 보기
+                            레벨로 계산하기
                         </Typography>
                         <Typography variant="body2" color="#f0f0f0" sx={{textAlign: 'center'}}>
                             레벨에 따른 보상을 계산합니다

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -26,6 +26,7 @@ import { chaosDungeonRewards, guardianRewards } from '../utils/rewardTables';
 import { Reward } from '../utils/rewardCalculator';
 import { ITEM_TRANSLATIONS } from '../types';
 import { api } from '../services/api';
+import {useHead} from "../hooks/useHead";
 
 interface Resource {
   item: string;
@@ -40,6 +41,27 @@ interface ResourceResponse {
 }
 
 const ContentRewardPage: React.FC = () => {
+  const headConfig = useMemo(() => ({
+    title: '컨텐츠 보상 | 로생계산기',
+    canonical: 'https://www.loalife.co.kr/content-reward',
+    metas: [
+      { name: 'description', content: '컨텐츠별 보상을 확인해보세요.' },
+      { name: 'robots',      content: 'noindex,follow' },
+    ],
+    scripts: [
+      {
+        innerHTML: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://www.loalife.co.kr/content-reward",
+          "name": "컨텐츠 보상 | 로생계산기",
+          "description": "컨텐츠별 보상을 확인해보세요."
+        })
+      }
+    ],
+  }), []);
+  useHead(headConfig)
+
   const navigate = useNavigate();
   const [showPriceEditor, setShowPriceEditor] = useState(false);
   const [resources, setResources] = useState<Resource[]>([]);
