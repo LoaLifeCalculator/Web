@@ -38,30 +38,12 @@ const RewardCard: React.FC<RewardCardProps> = ({
             onClick={() => setOpen(!open)}
         >
             <CardContent sx={{p: 2}}>
-                <Box sx={{display: 'flex', flexDirection: 'column', gap: open ? 1 : 0}}>
+                <Box sx={{display: 'flex', flexDirection: 'column', gap: 0}}>
                     <Box
-                        sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: open ? 1 : 0}}>
+                        sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                         <Typography variant="h6" sx={{fontWeight: 'bold', color: 'primary.main'}}>
                             {title}
                         </Typography>
-                        <Box sx={{display: {xs: 'none', '@media (min-width:800px)': {display: 'flex'}}, gap: 2, alignItems: 'center', ml: 'auto'}}>
-                            {tradableGold > 0 && (
-                                <Typography>
-                                    거래 가능:{' '}
-                                    <span style={{color: theme.palette.primary.main, fontWeight: 'bold'}}>
-                                        {Math.floor(tradableGold).toLocaleString()}G
-                                    </span>
-                                </Typography>
-                            )}
-                            {boundGold > 0 && (
-                                <Typography>
-                                    귀속:{' '}
-                                    <span style={{color: theme.palette.primary.main, fontWeight: 'bold'}}>
-                                        {Math.floor(boundGold).toLocaleString()}G
-                                    </span>
-                                </Typography>
-                            )}
-                        </Box>
                         <IconButton
                             size="small"
                             sx={{transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s'}}
@@ -69,7 +51,7 @@ const RewardCard: React.FC<RewardCardProps> = ({
                             {open ? <ExpandLess/> : <ExpandLess/>}
                         </IconButton>
                     </Box>
-                    <Box sx={{display: {xs: 'flex', '@media (min-width:800px)': {display: 'none'}}, gap: 2, alignItems: 'center', mb: open ? 1 : 0}}>
+                    <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
                         {tradableGold > 0 && (
                             <Typography>
                                 거래 가능:{' '}
@@ -88,7 +70,9 @@ const RewardCard: React.FC<RewardCardProps> = ({
                         )}
                     </Box>
                     <Collapse in={open} timeout={300}>
-                        <ResourceRewards tradableRewards={tradableRewards} boundRewards={boundRewards}/>
+                        <Box sx={{ mt: 1 }}>
+                            <ResourceRewards tradableRewards={tradableRewards} boundRewards={boundRewards}/>
+                        </Box>
                     </Collapse>
                 </Box>
             </CardContent>

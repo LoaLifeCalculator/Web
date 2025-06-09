@@ -111,6 +111,7 @@ const LevelRewardHeader: React.FC<HeaderProps> = ({ currentTab, onTabChange }) =
                     }}
                 >
                     <Tab label="계산" />
+                    <Tab label="결과" />
                     <Tab label="시세" />
                 </Tabs>
             </Box>

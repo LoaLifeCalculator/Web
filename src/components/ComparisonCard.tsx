@@ -13,6 +13,7 @@ interface ComparisonCardProps {
   compareLevel: number | null;
   selectedCompareRaids: string[];
   onCompareRaidToggle: (name: string) => void;
+  isMobile: boolean;
 }
 
 const ExpandMore = styled((props: any) => {
@@ -31,7 +32,8 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
   compareReward, 
   compareLevel,
   selectedCompareRaids,
-  onCompareRaidToggle
+  onCompareRaidToggle,
+  isMobile,
 }) => {
   const [expanded, setExpanded] = React.useState(true);
   const theme = useTheme();
@@ -43,7 +45,10 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
   if (!mainReward || !compareReward) return null;
 
   const calculateDifference = (main: number, compare: number) => {
-    return main - compare;
+    if (main === 0 && compare === 0) return null;
+    const diff = main - compare;
+    const percentage = compare === 0 ? 100 : (diff / compare) * 100;
+    return { diff, percentage };
   };
 
   const formatDifference = (value: number) => {
@@ -55,6 +60,11 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
     if (value > 0) return 'success.main';
     if (value < 0) return 'error.main';
     return 'text.primary';
+  };
+
+  const getItemName = (item: string) => {
+    if (item === 'GOLD') return '골드';
+    return ITEM_TRANSLATIONS[item] || item;
   };
 
   const renderRewardDifference = (mainReward: any, compareReward: any, type: 'tradable' | 'bound') => {
@@ -79,7 +89,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
             break;
         }
         const difference = calculateDifference(Number(value), Number(compareValue));
-        return difference !== 0;
+        return difference !== null;
       })
       .map(([key, value]) => {
         let compareValue = 0;
@@ -95,79 +105,114 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
             break;
         }
         const difference = calculateDifference(Number(value), Number(compareValue));
+        if (difference === null) return null;
+
+        const { diff } = difference;
         return (
           <Box key={key} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Typography variant="body2" color="text.secondary">
               {key}
             </Typography>
-            <Typography 
-              variant="body2" 
-              sx={{ 
-                color: difference < 0 ? 'error.main' : 'primary.main',
+            <Typography
+              variant="body2"
+              sx={{
+                color: diff < 0 ? 'error.main' : 'primary.main',
                 fontWeight: 'bold'
               }}
             >
-              {formatDifference(difference)}
+              {formatDifference(diff)}
             </Typography>
           </Box>
         );
-      });
+      }).filter(Boolean);
   };
 
   const renderResourceDifference = (mainReward: any, compareReward: any, type: 'tradable' | 'bound') => {
     const mainResources = type === 'tradable' ? mainReward.tradableResourceRewards : mainReward.boundResourceRewards;
     const compareResources = type === 'tradable' ? compareReward.tradableResourceRewards : compareReward.boundResourceRewards;
+    const allItems = new Set([...Object.keys(mainResources), ...Object.keys(compareResources)]);
 
-    const entries = Object.entries(mainResources)
-      .filter(([key, value]) => {
-        const compareValue = compareResources[key]?.count || 0;
-        const difference = calculateDifference((value as { count: number }).count, compareValue);
-        return difference !== 0;
-      })
-      .sort(([a], [b]) => {
-        if (a === 'GOLD') return -1;
-        if (b === 'GOLD') return 1;
-        return 0;
-      });
+    const entries = Array.from(allItems)
+        .filter(item => {
+            const mainCount = mainResources[item]?.count || 0;
+            const compareCount = compareResources[item]?.count || 0;
+            const difference = calculateDifference(mainCount, compareCount);
+            return difference !== null;
+        })
+        .sort((a, b) => {
+            if (a === 'GOLD') return -1;
+            if (b === 'GOLD') return 1;
+            return 0;
+        });
 
-    return entries.map(([resource, value]) => {
-      const compareValue = compareResources[resource]?.count || 0;
-      const difference = calculateDifference((value as { count: number }).count, compareValue);
-      const goldValueDifference = calculateDifference(
-        (value as { goldValue: number }).goldValue,
-        compareResources[resource]?.goldValue || 0
-      );
-      return (
-        <Box
-          key={resource}
-          sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}
-        >
-          <Avatar
-            src={`/images/items/${resource}.png`}
-            alt={resource === 'GOLD' ? '골드' : ITEM_TRANSLATIONS[resource] || resource}
-            variant="rounded"
-            sx={{ width: 24, height: 24, mr: 1 }}
-          />
-          <Typography
-            variant="body2"
-            color="text.primary"
-            sx={{
-              fontWeight: resource === 'GOLD' ? 'bold' : 'normal',
-              '& > span': {
-                color: resource === 'GOLD' ? theme.palette.primary.main : 'inherit',
-              },
-            }}
-          >
-            {resource === 'GOLD' ? '골드' : ITEM_TRANSLATIONS[resource] || resource}: <span style={{ color: difference < 0 ? theme.palette.error.main : theme.palette.primary.main }}>{formatDifference(difference)}</span>
-            {resource !== 'GOLD' && (
-              <span style={{ color: goldValueDifference < 0 ? theme.palette.error.main : theme.palette.primary.main, marginLeft: 4 }}>
-                {formatDifference(goldValueDifference)}G
-              </span>
-            )}
-          </Typography>
-        </Box>
-      );
+    const positiveItems: React.ReactNode[] = [];
+    const negativeItems: React.ReactNode[] = [];
+
+    entries.forEach(resource => {
+        const mainCount = mainResources[resource]?.count || 0;
+        const compareCount = compareResources[resource]?.count || 0;
+        const difference = calculateDifference(mainCount, compareCount);
+        if (difference === null) return;
+
+        const { diff } = difference;
+        const goldValueDifference = calculateDifference(
+            mainResources[resource]?.goldValue || 0,
+            compareResources[resource]?.goldValue || 0
+        );
+        if (goldValueDifference === null) return;
+
+        const itemElement = (
+            <Box
+                key={resource}
+                sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}
+            >
+                <Avatar
+                    src={`/images/items/${resource}.png`}
+                    alt={resource === 'GOLD' ? '골드' : ITEM_TRANSLATIONS[resource] || resource}
+                    variant="rounded"
+                    sx={{ width: 24, height: 24, mr: 1 }}
+                />
+                <Typography
+                    variant="body2"
+                    color="text.primary"
+                    sx={{
+                        fontWeight: resource === 'GOLD' ? 'bold' : 'normal',
+                        '& > span': {
+                            color: resource === 'GOLD' ? theme.palette.primary.main : 'inherit',
+                        },
+                    }}
+                >
+                    {resource === 'GOLD' ? '골드' : ITEM_TRANSLATIONS[resource] || resource}: <span style={{ color: diff < 0 ? theme.palette.error.main : theme.palette.primary.main }}>{formatDifference(diff)}</span>
+                    {resource !== 'GOLD' && (
+                        <span style={{ color: goldValueDifference.diff < 0 ? theme.palette.error.main : theme.palette.primary.main, marginLeft: 4 }}>
+                            {formatDifference(goldValueDifference.diff)}G
+                        </span>
+                    )}
+                </Typography>
+            </Box>
+        );
+
+        if (diff > 0) {
+            positiveItems.push(itemElement);
+        } else if (diff < 0) {
+            negativeItems.push(itemElement);
+        }
     });
+
+    if (isMobile) {
+        return [...positiveItems, ...negativeItems];
+    }
+
+    return (
+        <Box sx={{ display: 'flex', gap: 2 }}>
+            <Box sx={{ flex: 1 }}>
+                {positiveItems}
+            </Box>
+            <Box sx={{ flex: 1 }}>
+                {negativeItems}
+            </Box>
+        </Box>
+    );
   };
 
   return (
@@ -197,26 +242,6 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             레벨 비교 결과
           </Typography>
-          <Box sx={{ display: {xs: 'none', '@media (min-width:800px)': {display: 'flex'}}, gap: 2, alignItems: 'center', ml: 'auto', mr: 2 }}>
-            <Typography>
-              거래 가능:{' '}
-              <span style={{ 
-                color: mainReward.totalTradableGold - compareReward.totalTradableGold < 0 ? theme.palette.error.main : theme.palette.primary.main,
-                fontWeight: 'bold'
-              }}>
-                {formatDifference(mainReward.totalTradableGold - compareReward.totalTradableGold)}G
-              </span>
-            </Typography>
-            <Typography>
-              귀속:{' '}
-              <span style={{ 
-                color: mainReward.totalBoundGold - compareReward.totalBoundGold < 0 ? theme.palette.error.main : theme.palette.primary.main,
-                fontWeight: 'bold'
-              }}>
-                {formatDifference(mainReward.totalBoundGold - compareReward.totalBoundGold)}G
-              </span>
-            </Typography>
-          </Box>
           <IconButton
             onClick={(e) => {
               e.stopPropagation();
@@ -233,7 +258,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
             />
           </IconButton>
         </Box>
-        <Box sx={{ display: {xs: 'flex', '@media (min-width:800px)': {display: 'none'}}, gap: 2, alignItems: 'center', mb: 1 }}>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 1 }}>
           <Typography>
             거래 가능:{' '}
             <span style={{ 
@@ -264,6 +289,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
                   level={compareLevel}
                   selectedRaids={selectedCompareRaids}
                   onToggleRaid={onCompareRaidToggle}
+                  isMobile={isMobile}
                 />
               </Box>
             )}

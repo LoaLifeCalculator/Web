@@ -6,15 +6,17 @@ interface OptionSelectorProps {
     setGuardianOption: (opt: 'daily' | 'rest' | 'none') => void;
     chaosOption: 'daily' | 'rest' | 'none';
     setChaosOption: (opt: 'daily' | 'rest' | 'none') => void;
+    isMobile: boolean;
 }
 
 const OptionSelector: React.FC<OptionSelectorProps> = ({
-                                                           guardianOption,
-                                                           setGuardianOption,
-                                                           chaosOption,
-                                                           setChaosOption,
-                                                       }) => (
-    <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', md: 'row' } }}>
+    guardianOption,
+    setGuardianOption,
+    chaosOption,
+    setChaosOption,
+    isMobile,
+}) => (
+    <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row' }}>
         <Box sx={{ flex: 1 }}>
             <Typography variant="subtitle1" sx={{ mb: 1, fontWeight: 'bold' }}>
                 가디언 토벌

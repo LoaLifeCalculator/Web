@@ -19,6 +19,7 @@ interface OptionCardProps {
     selectedRaids: string[];
     onRaidToggle: (name: string) => void;
     calculatedMainLevel: number | null;
+    isMobile: boolean;
 }
 
 const OptionCard: React.FC<OptionCardProps> = ({
@@ -35,12 +36,16 @@ const OptionCard: React.FC<OptionCardProps> = ({
     selectedRaids,
     onRaidToggle,
     calculatedMainLevel,
+    isMobile,
 }) => {
     const [open, setOpen] = useState(true);
 
     const handleToggle = () => {
         setOpen(!open);
     };
+
+    // 현재 입력된 레벨을 숫자로 변환
+    const currentLevel = mainLevel ? parseInt(mainLevel) : null;
 
     return (
         <Card
@@ -78,20 +83,41 @@ const OptionCard: React.FC<OptionCardProps> = ({
                             onCompareLevelChange={onCompareLevelChange}
                             onCalculate={onCalculate}
                             onKeyDown={onKeyDown}
+                            isMobile={isMobile}
                         />
                         <OptionSelector
                             guardianOption={guardianOption}
                             setGuardianOption={onGuardianOptionChange}
                             chaosOption={chaosOption}
                             setChaosOption={onChaosOptionChange}
+                            isMobile={isMobile}
                         />
-                        {calculatedMainLevel !== null && (
-                            <RaidSelector
-                                level={calculatedMainLevel}
-                                selectedRaids={selectedRaids}
-                                onToggleRaid={onRaidToggle}
-                            />
-                        )}
+                        <RaidSelector
+                            level={currentLevel || 0}
+                            selectedRaids={selectedRaids}
+                            onToggleRaid={onRaidToggle}
+                            isMobile={isMobile}
+                        />
+                        <Button
+                            variant="contained"
+                            onClick={onCalculate}
+                            fullWidth
+                            sx={{
+                                height: isMobile ? '48px' : '56px',
+                                fontSize: isMobile ? '1rem' : '1.1rem',
+                                fontWeight: 'bold',
+                                borderRadius: 2,
+                                textTransform: 'none',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                                transition: 'all 0.2s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: '0 6px 16px rgba(0,0,0,0.2)',
+                                },
+                            }}
+                        >
+                            계산하기
+                        </Button>
                     </Box>
                 </CardContent>
             </Collapse>

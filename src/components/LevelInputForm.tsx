@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, TextField, Button } from '@mui/material';
+import { Box, TextField, Button, InputAdornment } from '@mui/material';
 import CalculateIcon from '@mui/icons-material/Calculate';
 
 interface LevelInputFormProps {
@@ -9,6 +9,7 @@ interface LevelInputFormProps {
     onCompareLevelChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onCalculate: () => void;
     onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+    isMobile: boolean;
 }
 
 const fieldStyles = {
@@ -31,73 +32,59 @@ const fieldStyles = {
 };
 
 const LevelInputForm: React.FC<LevelInputFormProps> = ({
-                                                           mainLevel,
-                                                           compareLevel,
-                                                           onMainLevelChange,
-                                                           onCompareLevelChange,
-                                                           onCalculate,
-                                                           onKeyDown,
-                                                       }) => {
+    mainLevel,
+    compareLevel,
+    onMainLevelChange,
+    onCompareLevelChange,
+    onCalculate,
+    onKeyDown,
+    isMobile,
+}) => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
-            <TextField
-                label="계산할 레벨"
-                type="number"
-                value={mainLevel}
-                onChange={onMainLevelChange}
-                onKeyDown={onKeyDown}
-                fullWidth
-                sx={{
-                    flex: { md: 1 },
-                    '& input[type=number]::-webkit-outer-spin-button': {
-                        WebkitAppearance: 'none',
-                        margin: 0,
-                    },
-                    '& input[type=number]::-webkit-inner-spin-button': {
-                        WebkitAppearance: 'none',
-                        margin: 0,
-                    },
-                    '& input[type=number]': {
-                        MozAppearance: 'textfield',
-                    },
-                }}
-            />
-            <Box sx={{ display: 'flex', gap: 2, width: { xs: '100%', md: 'auto' }, flex: { md: 1 } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 2 }}>
+                <TextField
+                    label="계산할 레벨"
+                    value={mainLevel}
+                    onChange={onMainLevelChange}
+                    onKeyDown={onKeyDown}
+                    fullWidth
+                    type="number"
+                    InputProps={{
+                        endAdornment: <InputAdornment position="end">레벨</InputAdornment>,
+                    }}
+                    sx={{
+                        '& .MuiOutlinedInput-root': {
+                            height: isMobile ? '48px' : '56px',
+                            fontSize: isMobile ? '1rem' : '1.1rem',
+                            '& fieldset': { borderRadius: 2 },
+                        },
+                        '& .MuiInputLabel-root': {
+                            fontSize: isMobile ? '0.9rem' : '1rem',
+                        },
+                    }}
+                />
                 <TextField
                     label="비교할 레벨"
-                    type="number"
                     value={compareLevel}
                     onChange={onCompareLevelChange}
                     onKeyDown={onKeyDown}
                     fullWidth
+                    type="number"
+                    InputProps={{
+                        endAdornment: <InputAdornment position="end">레벨</InputAdornment>,
+                    }}
                     sx={{
-                        '& input[type=number]::-webkit-outer-spin-button': {
-                            WebkitAppearance: 'none',
-                            margin: 0,
+                        '& .MuiOutlinedInput-root': {
+                            height: isMobile ? '48px' : '56px',
+                            fontSize: isMobile ? '1rem' : '1.1rem',
+                            '& fieldset': { borderRadius: 2 },
                         },
-                        '& input[type=number]::-webkit-inner-spin-button': {
-                            WebkitAppearance: 'none',
-                            margin: 0,
-                        },
-                        '& input[type=number]': {
-                            MozAppearance: 'textfield',
+                        '& .MuiInputLabel-root': {
+                            fontSize: isMobile ? '0.9rem' : '1rem',
                         },
                     }}
                 />
-                <Button
-                    variant="contained"
-                    onClick={onCalculate}
-                    sx={{
-                        height: { xs: '56px', sm: '56px' },
-                        minHeight: { xs: '56px', sm: '56px' },
-                        lineHeight: '56px',
-                        padding: 0,
-                        minWidth: { xs: '80px', sm: '100px' },
-                        fontSize: { xs: '0.875rem', sm: '1rem' }
-                    }}
-                >
-                    계산
-                </Button>
             </Box>
         </Box>
     );
