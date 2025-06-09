@@ -12,6 +12,7 @@ interface SearchHeaderProps {
     tab: number;
     setTab: (value: number) => void;
     onHome: () => void;
+    onRefresh: (data: any) => void;
 }
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({
@@ -21,7 +22,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     totalBoundGold,
     tab,
     setTab,
-    onHome
+    onHome,
+    onRefresh
 }) => {
     const isMobile = useMediaQuery('(max-width:800px)');
 
@@ -116,6 +118,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                     totalTradableGold={totalTradableGold}
                     totalBoundGold={totalBoundGold}
                     name={searchQuery}
+                    onRefresh={onRefresh}
                 />
             </Box>
         </Box>

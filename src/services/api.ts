@@ -114,7 +114,7 @@ export const searchCharacter = async (name: string): Promise<SearchResponse> => 
 };
 
 // 원정대 캐릭터 정보 갱신
-export const renewExpeditionCharacters = async (name: string): Promise<ExpeditionResponse> => {
+export const renewExpeditionCharacters = async (name: string): Promise<{ expeditions: { [key: string]: Character[] } }> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/renewal`, {
       params: { name },

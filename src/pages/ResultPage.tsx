@@ -868,6 +868,17 @@ const ResultPage: React.FC = () => {
         }));
     };
 
+    const handleRefresh = (newData: SearchResponse) => {
+        setData(newData);
+        // 서버 목록 정렬
+        const servers = Object.keys(newData.expeditions.expeditions).sort((a, b) => {
+            const aCharacters = newData.expeditions.expeditions[a];
+            const bCharacters = newData.expeditions.expeditions[b];
+            return bCharacters.length - aCharacters.length;
+        });
+        setSortedServers(servers);
+    };
+
     return (
         <>
             <GlobalStyles
@@ -899,6 +910,7 @@ const ResultPage: React.FC = () => {
                     tab={tab}
                     setTab={setTab}
                     onHome={handleHome}
+                    onRefresh={handleRefresh}
                 />
                 {loading ? (
                     <Box sx={{ 

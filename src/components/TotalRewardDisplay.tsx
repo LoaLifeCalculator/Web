@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
-import { renewExpeditionCharacters } from '../services/api';
+import { renewExpeditionCharacters, SearchResponse } from '../services/api';
 
 interface TotalRewardDisplayProps {
     totalTradableGold: number;
     totalBoundGold: number;
     name: string;
+    onRefresh: (data: SearchResponse) => void;
 }
 
-const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGold, totalBoundGold, name }) => {
+const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGold, totalBoundGold, name, onRefresh }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:800px)');
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -16,9 +17,14 @@ const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGo
     const handleRefresh = async () => {
         try {
             setIsRefreshing(true);
-            await renewExpeditionCharacters(name);
-            // 갱신 성공 후 페이지 새로고침
-            window.location.reload();
+            const response = await renewExpeditionCharacters(name);
+            const searchResponse: SearchResponse = {
+                expeditions: {
+                    expeditions: response.expeditions
+                },
+                resources: [] // 갱신 API는 resources를 반환하지 않으므로 빈 배열로 설정
+            };
+            onRefresh(searchResponse);
         } catch (error) {
             console.error('원정대 캐릭터 정보 갱신 실패:', error);
             alert('원정대 캐릭터 정보 갱신에 실패했습니다.');
