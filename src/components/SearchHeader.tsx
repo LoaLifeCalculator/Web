@@ -10,7 +10,7 @@ interface SearchHeaderProps {
     totalTradableGold: number;
     totalBoundGold: number;
     tab: number;
-    setTab: (tab: number) => void;
+    setTab: (value: number) => void;
     onHome: () => void;
 }
 
@@ -32,13 +32,14 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                 top: 0,
                 left: 0,
                 right: 0,
-                height: isMobile ? '180px' : '120px',
+                height: isMobile ? '160px' : '120px',
                 zIndex: 1000,
                 backgroundColor: 'background.paper',
                 borderBottom: 1,
                 borderColor: 'divider',
                 boxShadow: 1,
-                pt: 2
+                pt: 1,
+                pb: 1
             }}
         >
             <Box sx={{
@@ -46,13 +47,15 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                 px: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                py: 0.5
             }}>
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     height: '48px',
+                    mb: isMobile ? 0.5 : 1.5,
                     gap: 2
                 }}>
                     {!isMobile && (
@@ -73,21 +76,21 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                             sx={{ 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: 1, 
+                                gap: 1,
                                 cursor: 'pointer',
                                 flexShrink: 0
                             }}
                             onClick={onHome}
                         >
                             <img 
-                                src="/images/mokoko/calculate_mokoko.png"
+                                src="/images/common/calculate_mokoko.png" 
                                 alt="로생계산기" 
                                 style={{ 
                                     height: 32,
                                     width: 'auto'
-                                }} 
+                                }}
                             />
-                            <Typography 
+                            <Typography
                                 variant="h5"
                                 component="div"
                                 sx={{whiteSpace: 'nowrap'}}
@@ -101,20 +104,19 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                         />
                     </Box>
                 </Box>
-                <Box>
-                    {isMobile ? (
+                {isMobile && (
+                    <Box sx={{ mb: 0.5 }}>
                         <NavigationTabs
                             tab={tab}
                             setTab={setTab}
                         />
-                    ) : (
-                        <TotalRewardDisplay
-                            totalTradableGold={totalTradableGold}
-                            totalBoundGold={totalBoundGold}
-                            name={searchQuery}
-                        />
-                    )}
-                </Box>
+                    </Box>
+                )}
+                <TotalRewardDisplay
+                    totalTradableGold={totalTradableGold}
+                    totalBoundGold={totalBoundGold}
+                    name={searchQuery}
+                />
             </Box>
         </Box>
     );

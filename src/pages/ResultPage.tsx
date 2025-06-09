@@ -460,6 +460,23 @@ const ResultPage: React.FC = () => {
     };
 
     // 보상 계산 함수들
+    const calculateServerTotalRewardForPage = React.useCallback((server: string) => {
+        if (!data?.expeditions?.expeditions || !data.expeditions.expeditions[server]) {
+            return { totalTradableGold: 0, totalBoundGold: 0 };
+        }
+
+        return calculateServerTotalReward(
+            server,
+            data.expeditions.expeditions[server],
+            selectedRaids,
+            goldRewardStates,
+            excludeStates,
+            customPriceMap,
+            chaosOption,
+            guardianOption
+        );
+    }, [data, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
+
     const calculateTotalRewardForPage = React.useCallback(() => {
         if (!data?.expeditions?.expeditions || !sortedServers) {
             return {
@@ -488,24 +505,6 @@ const ResultPage: React.FC = () => {
             guardianOption
         );
     }, [data, sortedServers, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
-
-    // 서버별 총 보상 계산
-    const calculateServerTotalRewardForPage = React.useCallback((server: string) => {
-        if (!data?.expeditions?.expeditions || !data.expeditions.expeditions[server] || excludedServers[server]) {
-            return { totalTradableGold: 0, totalBoundGold: 0 };
-        }
-
-        return calculateServerTotalReward(
-            server,
-            data.expeditions.expeditions[server],
-            selectedRaids,
-            goldRewardStates,
-            excludeStates,
-            customPriceMap,
-            chaosOption,
-            guardianOption
-        );
-    }, [data, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
 
     const calculateRaidReward = React.useCallback(() => {
         let totalTradableGold = 0;
@@ -842,26 +841,28 @@ const ResultPage: React.FC = () => {
         }));
     };
 
-        return (
-        <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }}>
-            <GlobalStyles
-                styles={{
-                    body: {
-                        backgroundColor: theme.palette.background.default,
-                        margin: 0,
-                        padding: 0,
-                    },
-                    '*': {
-                        '&::-webkit-scrollbar': {
-                            display: 'none'
-                        },
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none'
-                    }
-                }}
-            />
-                <SearchHeader
-                    searchQuery={searchParams.get('name') || ''}
+    return (
+        <Container maxWidth={false} sx={{ 
+            pt: isMobile ? '180px' : '120px', 
+            pb: 4,
+            maxWidth: '850px !important',
+            overflow: 'hidden',
+            '&::-webkit-scrollbar': {
+                display: 'none'
+            },
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch',
+            '& > *': {
+                '&::-webkit-scrollbar': {
+                    display: 'none'
+                },
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none'
+            }
+        }}>
+            <SearchHeader
+                searchQuery={searchParams.get('name') || ''}
                 setSearchQuery={(query) => {
                     const params = new URLSearchParams(searchParams);
                     params.set('name', query);
@@ -873,65 +874,45 @@ const ResultPage: React.FC = () => {
                 setTab={setTab}
                 onHome={handleHome}
             />
-            <Container maxWidth={false} sx={{ 
-                pt: isMobile ? '180px' : '120px', 
-                pb: 4,
-                maxWidth: '850px !important',
-                overflow: 'hidden',
-                '&::-webkit-scrollbar': {
-                    display: 'none'
-                },
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-                WebkitOverflowScrolling: 'touch',
-                '& > *': {
-                    '&::-webkit-scrollbar': {
-                        display: 'none'
-                    },
-                    scrollbarWidth: 'none',
-                    msOverflowStyle: 'none'
-                }
-            }}>
-                {loading ? (
-                    <Box sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'center', 
-                        alignItems: 'center', 
-                        height: 'calc(100vh - 120px)',
-                        flexDirection: 'column',
-                        gap: 2
-                    }}>
-                        <img 
-                            src="/images/mokoko/laptop_mokoko.png"
-                            alt="로딩중" 
-                            style={{ 
-                                width: 'auto',
-                                height: 200,
-                                display: 'block'
-                            }}
-                        />
-                        <Typography 
-                            variant="h6" 
-                            sx={{ 
-                                color: 'primary.main',
-                                fontWeight: 'bold'
-                            }}
-                        >
-                            데이터를 불러오는 중입니다...
-                        </Typography>
-                    </Box>
-                ) : error ? (
-                    <Typography color="error" align="center">{error}</Typography>
-                ) : data ? (
-                    <>
-                        {tab === 0 && (
-                            <Box sx={{ mt: 2 }}>
-                                {sortedServers.map((server) => (
-                                    !excludedServers[server] && (
+            {loading ? (
+                <Box sx={{ 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    height: 'calc(100vh - 120px)',
+                    flexDirection: 'column',
+                    gap: 2
+                }}>
+                    <img 
+                        src="/images/mokoko/laptop_mokoko.png"
+                        alt="로딩중" 
+                        style={{ 
+                            width: 'auto',
+                            height: 200,
+                            display: 'block'
+                        }}
+                    />
+                    <Typography 
+                        variant="h6" 
+                        sx={{ 
+                            color: 'primary.main',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        데이터를 불러오는 중입니다...
+                    </Typography>
+                </Box>
+            ) : error ? (
+                <Typography color="error" align="center">{error}</Typography>
+            ) : data ? (
+                <>
+                    {tab === 0 && (
+                        <Box sx={{ mt: 2 }}>
+                            {sortedServers.map((server) => (
                                 <ServerCard
                                     key={server}
                                     server={server}
-                                            characters={data.expeditions.expeditions[server]}
+                                    characters={data.expeditions.expeditions[server]}
                                     expanded={expandedServers[server] || false}
                                     onToggle={() => handleServerToggle(server)}
                                     selectedRaids={selectedRaids}
@@ -948,24 +929,23 @@ const ResultPage: React.FC = () => {
                                     guardianOption={guardianOption}
                                     expandedCharacters={expandedCharacters}
                                     onCharacterToggle={handleCharacterToggle}
-                                            calculateServerTotalReward={calculateServerTotalRewardForPage}
+                                    calculateServerTotalReward={calculateServerTotalRewardForPage}
                                     isServerExcluded={excludedServers[server] || false}
                                     onServerExcludeChange={handleServerExcludeChange}
                                 />
-                                    )
                             ))}
                         </Box>
                     )}
-                        {tab === 1 && (
-                            <Box sx={{ mt: 2 }}>
-                        <TotalRewardCard
-                                    calculateTotalReward={calculateTotalRewardForPage}
-                            calculateRaidReward={calculateRaidReward}
-                            calculateChaosReward={calculateChaosReward}
-                            calculateGuardianReward={calculateGuardianReward}
-                            resources={resources}
-                        />
-                            </Box>
+                    {tab === 1 && (
+                        <Box sx={{ mt: 2 }}>
+                            <TotalRewardCard
+                                calculateTotalReward={calculateTotalRewardForPage}
+                                calculateRaidReward={calculateRaidReward}
+                                calculateChaosReward={calculateChaosReward}
+                                calculateGuardianReward={calculateGuardianReward}
+                                resources={resources}
+                            />
+                        </Box>
                     )}
                     {tab === 2 && (
                         <FilterAndToolsTab
@@ -982,19 +962,18 @@ const ResultPage: React.FC = () => {
                         />
                     )}
                     {tab === 3 && (
-                            <Box sx={{ mt: 2 }}>
-                        <PriceTab
-                            resources={resources}
-                            priceMap={customPriceMap}
-                            onPriceChange={handlePriceChange}
-                                    onClose={() => {}}
-                        />
-                </Box>
-                        )}
-        </>
-                ) : null}
-            </Container>
-        </Box>
+                        <Box sx={{ mt: 2 }}>
+                            <PriceTab
+                                resources={resources}
+                                priceMap={customPriceMap}
+                                onPriceChange={handlePriceChange}
+                                onClose={() => {}}
+                            />
+                        </Box>
+                    )}
+                </>
+            ) : null}
+        </Container>
     );
 };
 

@@ -156,26 +156,28 @@ const ServerCard: React.FC<ServerCardProps> = ({
 
           {/* 2행: 거래 가능/귀속 (모바일 전용) */}
           {isMobile && (
-            <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
-              {!isServerExcluded && calculateServerTotalReward(server).totalTradableGold > 0 && (
-                <span style={{ color: theme.palette.primary.main }}>
-                  거래 가능: {Math.floor(calculateServerTotalReward(server).totalTradableGold).toLocaleString()}G
-                </span>
-              )}
-              {!isServerExcluded && calculateServerTotalReward(server).totalTradableGold > 0 && calculateServerTotalReward(server).totalBoundGold > 0 && (
-                <span style={{ marginLeft: '16px', color: theme.palette.primary.main }}>
-                  귀속: {Math.floor(calculateServerTotalReward(server).totalBoundGold).toLocaleString()}G
-                </span>
-              )}
-              {!isServerExcluded && calculateServerTotalReward(server).totalTradableGold === 0 && calculateServerTotalReward(server).totalBoundGold > 0 && (
-                <span style={{ color: theme.palette.primary.main }}>
-                  귀속: {Math.floor(calculateServerTotalReward(server).totalBoundGold).toLocaleString()}G
-                </span>
-              )}
-              {isServerExcluded && (
-                <span style={{ color: theme.palette.text.secondary }}>계산 제외됨</span>
-              )}
-            </Typography>
+            <Box sx={{ mt: 1 }}>
+              <Typography variant="body1" sx={{ whiteSpace: 'nowrap' }}>
+                {!isServerExcluded && calculateServerTotalReward(server).totalTradableGold > 0 && (
+                  <span style={{ color: theme.palette.primary.main }}>
+                    거래 가능: {Math.floor(calculateServerTotalReward(server).totalTradableGold).toLocaleString()}G
+                  </span>
+                )}
+                {!isServerExcluded && calculateServerTotalReward(server).totalTradableGold > 0 && calculateServerTotalReward(server).totalBoundGold > 0 && (
+                  <span style={{ marginLeft: '16px', color: theme.palette.primary.main }}>
+                    귀속: {Math.floor(calculateServerTotalReward(server).totalBoundGold).toLocaleString()}G
+                  </span>
+                )}
+                {!isServerExcluded && calculateServerTotalReward(server).totalTradableGold === 0 && calculateServerTotalReward(server).totalBoundGold > 0 && (
+                  <span style={{ color: theme.palette.primary.main }}>
+                    귀속: {Math.floor(calculateServerTotalReward(server).totalBoundGold).toLocaleString()}G
+                  </span>
+                )}
+                {isServerExcluded && (
+                  <span style={{ color: theme.palette.text.secondary }}>계산 제외됨</span>
+                )}
+              </Typography>
+            </Box>
           )}
         </Box>
         <Collapse in={expanded} timeout={300}>

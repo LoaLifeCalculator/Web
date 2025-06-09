@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, useMediaQuery, useTheme, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
 import { renewExpeditionCharacters } from '../services/api';
 
 interface TotalRewardDisplayProps {
@@ -34,7 +34,8 @@ const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGo
             justifyContent: 'space-between',
             gap: 2,
             px: 1,
-            height: '48px'
+            height: '40px',
+            my: 0.5
         }}>
             <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4 }}>
                 {totalTradableGold > 0 && (

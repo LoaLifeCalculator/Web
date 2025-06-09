@@ -114,7 +114,7 @@ const LevelRewardPage: React.FC = () => {
   };
   const handleCompareRaidToggle = (name: string) => {
     setSelectedCompareRaids(prev =>
-      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
+        prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
     );
   };
   const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
@@ -448,17 +448,17 @@ const LevelRewardPage: React.FC = () => {
           {currentTab === 0 && (
             <Box sx={{ mt: 5 }}>
               <OptionCard
-                mainLevel={mainLevel}
-                compareLevel={compareLevel}
-                onMainLevelChange={handleMainLevelChange}
-                onCompareLevelChange={handleCompareLevelChange}
-                onCalculate={handleCalculate}
+                            mainLevel={mainLevel}
+                            compareLevel={compareLevel}
+                            onMainLevelChange={handleMainLevelChange}
+                            onCompareLevelChange={handleCompareLevelChange}
+                            onCalculate={handleCalculate}
                 onKeyDown={handleKeyDown}
-                guardianOption={guardianOption}
+                                guardianOption={guardianOption}
                 onGuardianOptionChange={setGuardianOption}
-                chaosOption={chaosOption}
+                                chaosOption={chaosOption}
                 onChaosOptionChange={setChaosOption}
-                selectedRaids={selectedRaids}
+                                    selectedRaids={selectedRaids}
                 onRaidToggle={handleRaidToggle}
                 calculatedMainLevel={calculatedMainLevel}
               />
@@ -470,13 +470,13 @@ const LevelRewardPage: React.FC = () => {
                     </Box>
                   ) : (
                     <>
-                      <RewardCard
-                        title="총 보상"
-                        tradableGold={mainReward.totalTradableGold}
-                        boundGold={mainReward.totalBoundGold}
-                        tradableRewards={mainReward.tradableResourceRewards}
-                        boundRewards={mainReward.boundResourceRewards}
-                      />
+                            <RewardCard
+                                title="총 보상"
+                                tradableGold={mainReward.totalTradableGold}
+                                boundGold={mainReward.totalBoundGold}
+                                tradableRewards={mainReward.tradableResourceRewards}
+                                boundRewards={mainReward.boundResourceRewards}
+                            />
                       {calculatedCompareLevel !== null && compareReward && (compareReward.totalTradableGold > 0 || compareReward.totalBoundGold > 0) && (
                         <ComparisonCard
                           mainReward={mainReward}
@@ -488,33 +488,33 @@ const LevelRewardPage: React.FC = () => {
                       )}
                       {mainReward.raidTradableGold > 0 || mainReward.raidBoundGold > 0 ? (
                         <RewardCard
-                          title="레이드 보상"
-                          tradableGold={mainReward.raidTradableGold}
-                          boundGold={mainReward.raidBoundGold}
-                          tradableRewards={mainReward.raidTradableRewards}
-                          boundRewards={mainReward.raidBoundRewards}
+                            title="레이드 보상"
+                            tradableGold={mainReward.raidTradableGold}
+                            boundGold={mainReward.raidBoundGold}
+                            tradableRewards={mainReward.raidTradableRewards}
+                            boundRewards={mainReward.raidBoundRewards}
                         />
                       ) : null}
                       {mainReward.chaosTradableGold > 0 || mainReward.chaosBoundGold > 0 ? (
                         <RewardCard
-                          title="카오스 던전 보상"
-                          tradableGold={mainReward.chaosTradableGold}
-                          boundGold={mainReward.chaosBoundGold}
-                          tradableRewards={mainReward.chaosTradableRewards}
-                          boundRewards={mainReward.chaosBoundRewards}
+                            title="카오스 던전 보상"
+                            tradableGold={mainReward.chaosTradableGold}
+                            boundGold={mainReward.chaosBoundGold}
+                            tradableRewards={mainReward.chaosTradableRewards}
+                            boundRewards={mainReward.chaosBoundRewards}
                         />
                       ) : null}
                       {mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0 ? (
                         <RewardCard
-                          title="가디언 토벌 보상"
-                          tradableGold={mainReward.guardianTradableGold}
-                          boundGold={mainReward.guardianBoundGold}
-                          tradableRewards={mainReward.guardianTradableRewards}
-                          boundRewards={mainReward.guardianBoundRewards}
+                            title="가디언 토벌 보상"
+                            tradableGold={mainReward.guardianTradableGold}
+                            boundGold={mainReward.guardianBoundGold}
+                            tradableRewards={mainReward.guardianTradableRewards}
+                            boundRewards={mainReward.guardianBoundRewards}
                         />
                       ) : null}
                     </>
-                  )}
+                )}
                 </>
               )}
             </Box>
@@ -558,15 +558,15 @@ const LevelRewardPage: React.FC = () => {
                 />
               )}
               {hasCalculated && mainReward && (mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0) && (
-                <RewardCard
+                    <RewardCard
                   title="가디언 토벌 보상"
                   tradableGold={mainReward.guardianTradableGold}
                   boundGold={mainReward.guardianBoundGold}
                   tradableRewards={mainReward.guardianTradableRewards}
                   boundRewards={mainReward.guardianBoundRewards}
-                />
-              )}
-            </>
+                    />
+                )}
+              </>
           ) : loading ? (
             <Box sx={{ mt: 5 }}>
               <Typography>로딩 중...</Typography>
@@ -578,10 +578,10 @@ const LevelRewardPage: React.FC = () => {
           ) : (
             <Box sx={{ mt: 5 }}>
               <PriceTab
-                resources={resources.map(r => ({ item: r.item, avgPrice: r.avgPrice }))}
-                priceMap={priceMap}
-                onPriceChange={handlePriceChange}
-                onClose={() => setCurrentTab(0)}
+                  resources={resources.map(r => ({ item: r.item, avgPrice: r.avgPrice }))}
+                  priceMap={priceMap}
+                  onPriceChange={handlePriceChange}
+                  onClose={() => setCurrentTab(0)}
               />
             </Box>
           )}
