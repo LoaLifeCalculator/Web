@@ -39,7 +39,7 @@ const LevelRewardHeader: React.FC<HeaderProps> = ({ currentTab, onTabChange }) =
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Box sx={{ height: { xs: 36, sm: 48 } }}>
                         <img
-                            src="/images/mokoko/sword_mokoko.png"
+                            src="/images/mokoko/how_is_it_mokoko.png"
                             alt="검을 든 모코코"
                             style={{ 
                                 height: '100%',
@@ -72,7 +72,7 @@ const LevelRewardHeader: React.FC<HeaderProps> = ({ currentTab, onTabChange }) =
                 >
                     <Box sx={{ height: { xs: 36, sm: 48 } }}>
                         <img
-                            src="/images/mokoko/calculate_mokoko.png"
+                            src="/images/mokoko/burp_mokoko.png"
                             alt="로생계산기"
                             style={{ 
                                 height: '100%',

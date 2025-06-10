@@ -91,10 +91,10 @@ const MainPage: React.FC = () => {
                     gap: 1
                 }}>
                     <img
-                        src="/images/mokoko/calculate_mokoko.png"
+                        src="/images/mokoko/burp_mokoko.png"
                         alt="로생계산기"
                         style={{
-                            height: 64,
+                            height: 100,
                             width: 'auto',
                             display: 'block'
                         }}
@@ -221,7 +221,7 @@ const MainPage: React.FC = () => {
                     >
                         <Box
                             component="img"
-                            src="/images/mokoko/gold_mokoko.png"
+                            src="/images/mokoko/flex_mokoko.png"
                             alt="컨텐츠 보상 보기"
                             sx={{
                                 width: 'auto',
@@ -257,7 +257,7 @@ const MainPage: React.FC = () => {
                     >
                         <Box
                             component="img"
-                            src="/images/mokoko/sword_mokoko.png"
+                            src="/images/mokoko/how_is_it_mokoko.png"
                             alt="레벨로 계산하기"
                             sx={{
                                 width: 'auto',

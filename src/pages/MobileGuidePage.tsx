@@ -132,10 +132,10 @@ const MobileGuidePage: React.FC = () => {
                 <Paper elevation={3} sx={{p: 3, mb: 3, mx: 0}}>
                     <Box sx={{display: 'flex', alignItems: 'flex-end', mb: 3}}>
                         <img
-                            src="/images/mokoko/phone_mokoko.png"
-                            alt="모코코"
+                            src="/images/mokoko/guide_nineveh.png"
+                            alt="가이드 니나브"
                             style={{
-                                height: 64,
+                                height: 80,
                                 width: 'auto',
                                 marginRight: 16
                             }}

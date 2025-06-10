@@ -922,7 +922,7 @@ const ResultPage: React.FC = () => {
                         gap: 2
                     }}>
                         <img 
-                            src="/images/mokoko/laptop_mokoko.png"
+                            src="/images/mokoko/cheer_mokoko.png"
                             alt="로딩중" 
                             style={{ 
                                 width: 'auto',
