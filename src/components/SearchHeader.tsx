@@ -79,16 +79,17 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
                                 display: 'flex', 
                                 alignItems: 'center', 
                                 gap: 1,
+                                flexShrink: 0,
                                 cursor: 'pointer',
-                                flexShrink: 0
+                                '&:hover': { opacity: 0.8 },
                             }}
                             onClick={onHome}
                         >
                             <img 
-                                src="/images/mokoko/burp_mokoko.png"
+                                src="/images/mokoko/title_mokoko.png"
                                 alt="로생계산기" 
                                 style={{ 
-                                    height: 40,
+                                    height: 35,
                                     width: 'auto'
                                 }}
                             />

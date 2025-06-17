@@ -438,9 +438,63 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
             {/* 왼쪽: 보상 정보 */}
             <Box sx={{ flex: 1 }}>
-              {/* 카오스 던전 보상 */}
+              {/* 레이드 보상 */}
               <Box sx={{ p: 1, bgcolor: 'reward.background', borderRadius: 1 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>주간 카오스 던전 보상</Typography>
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
+                  <Box
+                      component="img"
+                      src="images/mokoko/raid_mokoko.png"
+                      alt="레이드 보상"
+                      sx={{
+                        width: '30px',
+                        height: 'auto',
+                        objectFit: 'contain'
+                      }}
+                  />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 'bold', fontSize: '100%' }}>레이드 보상</Typography>
+                </Box>
+                {!isExcluded && (() => {
+                  const tradableGold = raids.reduce((sum, raid) =>
+                      selectedRaids.includes(raid.name) ?
+                          sum + calcRaidTradableGold(isGoldReward ? raid.goldReward : raid.nonGoldReward, priceMap) :
+                          sum, 0
+                  );
+                  const boundGold = raids.reduce((sum, raid) =>
+                      selectedRaids.includes(raid.name) ?
+                          sum + calcRaidBoundGold(isGoldReward ? raid.goldReward : raid.nonGoldReward, priceMap) :
+                          sum, 0
+                  );
+                  return (
+                      <>
+                        {tradableGold > 0 && (
+                            <Typography sx={{ color: theme.palette.primary.main }}>거래가능: {Math.floor(tradableGold).toLocaleString()} G</Typography>
+                        )}
+                        {boundGold > 0 && (
+                            <Typography sx={{ color: theme.palette.primary.main }}>귀속: {Math.floor(boundGold).toLocaleString()} G</Typography>
+                        )}
+                      </>
+                  );
+                })()}
+                {isExcluded && (
+                    <Typography color="text.secondary">계산 제외됨</Typography>
+                )}
+              </Box>
+              {/* 카오스 던전 보상 */}
+              <Box sx={{ mt: 1, p: 1, bgcolor: 'reward.background', borderRadius: 1 }}>
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
+                  <Box
+                      component="img"
+                      src="images/mokoko/chaos_mokoko.png"
+                      alt="카던 보상"
+                      sx={{
+                        width: '30px',
+                        height: 'auto',
+                        objectFit: 'contain'
+                      }}
+                  />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 'bold', fontSize: '100%' }}>카던 보상</Typography>
+                </Box>
+
                 {!isExcluded && chaosReward && chaosOption !== 2 && (
                   <>
                     {calcChaosTradableGold(chaosReward, priceMap, chaosOption === 1) > 0 && (
@@ -461,7 +515,19 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
 
               {/* 가디언 토벌 보상 */}
               <Box sx={{ mt: 1, p: 1, bgcolor: 'reward.background', borderRadius: 1 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>주간 가디언 토벌 보상</Typography>
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
+                  <Box
+                      component="img"
+                      src="images/mokoko/guardian_mokoko.png"
+                      alt="가토 보상"
+                      sx={{
+                        width: '30px',
+                        height: 'auto',
+                        objectFit: 'contain'
+                      }}
+                  />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 'bold', fontSize: '100%' }}>가토 보상</Typography>
+                </Box>
                 {!isExcluded && guardianReward && guardianOption !== 2 && (
                   <>
                     {calcGuardianTradableGold(guardianReward, priceMap, guardianOption === 1) > 0 && (
@@ -477,36 +543,6 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
                 )}
                 {!isExcluded && guardianOption === 2 && (
                   <Typography color="text.secondary">계산하지 않음</Typography>
-                )}
-              </Box>
-
-              {/* 레이드 보상 */}
-              <Box sx={{ mt: 1, p: 1, bgcolor: 'reward.background', borderRadius: 1 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>주간 레이드 보상</Typography>
-                {!isExcluded && (() => {
-                  const tradableGold = raids.reduce((sum, raid) => 
-                    selectedRaids.includes(raid.name) ? 
-                      sum + calcRaidTradableGold(isGoldReward ? raid.goldReward : raid.nonGoldReward, priceMap) : 
-                      sum, 0
-                  );
-                  const boundGold = raids.reduce((sum, raid) => 
-                    selectedRaids.includes(raid.name) ? 
-                      sum + calcRaidBoundGold(isGoldReward ? raid.goldReward : raid.nonGoldReward, priceMap) : 
-                      sum, 0
-                  );
-                  return (
-                    <>
-                      {tradableGold > 0 && (
-                        <Typography sx={{ color: theme.palette.primary.main }}>거래가능: {Math.floor(tradableGold).toLocaleString()} G</Typography>
-                      )}
-                      {boundGold > 0 && (
-                        <Typography sx={{ color: theme.palette.primary.main }}>귀속: {Math.floor(boundGold).toLocaleString()} G</Typography>
-                      )}
-                    </>
-                  );
-                })()}
-                {isExcluded && (
-                  <Typography color="text.secondary">계산 제외됨</Typography>
                 )}
               </Box>
             </Box>

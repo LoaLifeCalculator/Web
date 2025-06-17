@@ -561,6 +561,7 @@ const LevelRewardPage: React.FC = () => {
                                             <>
                                                 <RewardCard
                                                     title="총 보상"
+                                                    imageUrl="images/mokoko/total_mokoko.png"
                                                     tradableGold={mainReward.totalTradableGold}
                                                     boundGold={mainReward.totalBoundGold}
                                                     tradableRewards={mainReward.tradableResourceRewards}
@@ -569,6 +570,7 @@ const LevelRewardPage: React.FC = () => {
                                                 {mainReward.raidTradableGold > 0 || mainReward.raidBoundGold > 0 ? (
                                                     <RewardCard
                                                         title="레이드 보상"
+                                                        imageUrl="images/mokoko/raid_mokoko.png"
                                                         tradableGold={mainReward.raidTradableGold}
                                                         boundGold={mainReward.raidBoundGold}
                                                         tradableRewards={mainReward.raidTradableRewards}
@@ -578,6 +580,7 @@ const LevelRewardPage: React.FC = () => {
                                                 {mainReward.chaosTradableGold > 0 || mainReward.chaosBoundGold > 0 ? (
                                                     <RewardCard
                                                         title="카오스 던전 보상"
+                                                        imageUrl="images/mokoko/chaos_mokoko.png"
                                                         tradableGold={mainReward.chaosTradableGold}
                                                         boundGold={mainReward.chaosBoundGold}
                                                         tradableRewards={mainReward.chaosTradableRewards}
@@ -587,6 +590,7 @@ const LevelRewardPage: React.FC = () => {
                                                 {mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0 ? (
                                                     <RewardCard
                                                         title="가디언 토벌 보상"
+                                                        imageUrl="images/mokoko/guardian_mokoko.png"
                                                         tradableGold={mainReward.guardianTradableGold}
                                                         boundGold={mainReward.guardianBoundGold}
                                                         tradableRewards={mainReward.guardianTradableRewards}

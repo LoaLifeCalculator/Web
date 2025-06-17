@@ -125,10 +125,10 @@ const MainPage: React.FC = () => {
                         gap: 1
                     }}>
                         <img
-                            src="/images/mokoko/burp_mokoko.png"
+                            src="/images/mokoko/title_mokoko.png"
                             alt="로생계산기"
                             style={{
-                                height: 100,
+                                height: 90,
                                 width: 'auto',
                                 display: 'block'
                             }}

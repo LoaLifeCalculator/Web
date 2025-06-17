@@ -72,7 +72,7 @@ const LevelRewardHeader: React.FC<HeaderProps> = ({ currentTab, onTabChange }) =
                 >
                     <Box sx={{ height: { xs: 36, sm: 48 } }}>
                         <img
-                            src="/images/mokoko/burp_mokoko.png"
+                            src="/images/mokoko/title_mokoko.png"
                             alt="로생계산기"
                             style={{ 
                                 height: '100%',

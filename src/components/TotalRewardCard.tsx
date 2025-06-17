@@ -40,17 +40,17 @@ const renderResourceRewards = (
   theme: any
 ) => {
   if (!rewards) return null;
-  
+
   let entries = Object.entries(rewards).filter(([_, value]) => value.count > 0);
   if (entries.length === 0) return null;
-  
+
   // GOLD를 맨 앞으로, 나머지는 goldValue 내림차순 정렬
   entries = entries.sort((a, b) => {
     if (a[0] === 'GOLD') return -1;
     if (b[0] === 'GOLD') return 1;
     return b[1].goldValue - a[1].goldValue;
   });
-  
+
   // 모바일 버전은 1열, PC 버전은 2열 레이아웃
   const rows = [];
   if (isMobile) {
@@ -62,7 +62,7 @@ const renderResourceRewards = (
       rows.push(entries.slice(i, i + 2));
     }
   }
-  
+
   return (
     <Box sx={{ mt: 1, fontSize: '0.95rem' }}>
       {rows.map((row, idx) => (
@@ -151,8 +151,8 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
 
   return (
     <Box sx={{ mb: 2, fontSize: '0.95rem' }}>
-      <Card 
-        sx={{ 
+      <Card
+        sx={{
           mb: 2,
           cursor: 'pointer',
           boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
@@ -166,9 +166,21 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
       >
         <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
           <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
-            <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-              주간 총 보상
-            </Typography>
+              <Box sx={{display: 'flex', gap: 0.5, alignItems: 'center'}}>
+                  <Box
+                      component="img"
+                      src="images/mokoko/total_mokoko.png"
+                      alt="총 보상 이미지"
+                      sx={{
+                          width: '50px',
+                          height: 'auto',
+                          objectFit: 'contain'
+                      }}
+                  />
+                  <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
+                      주간 총 보상
+                  </Typography>
+              </Box>
             <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
               {Math.floor(totalReward.totalTradableGold) > 0 && (
                 <Typography sx={{ fontSize: '0.95rem' }}>
@@ -206,8 +218,8 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
       <Box sx={{ mt: 2, fontSize: '0.95rem' }}>
         {/* 레이드 보상 */}
         {Math.floor(raidReward.totalTradableGold) > 0 || Math.floor(raidReward.totalBoundGold) > 0 ? (
-          <Card 
-            sx={{ 
+          <Card
+            sx={{
               mb: 2,
               cursor: 'pointer',
               boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
@@ -221,9 +233,21 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
           >
             <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
-                <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-                  주간 레이드 보상
-                </Typography>
+                  <Box sx={{display: 'flex', gap: 0.5, alignItems: 'center'}}>
+                      <Box
+                          component="img"
+                          src="images/mokoko/raid_mokoko.png"
+                          alt="레이드 보상 이미지"
+                          sx={{
+                              width: '50px',
+                              height: 'auto',
+                              objectFit: 'contain'
+                          }}
+                      />
+                      <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
+                          주간 레이드 보상
+                      </Typography>
+                  </Box>
                 <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
                   {Math.floor(raidReward.totalTradableGold) > 0 && (
                     <Typography sx={{ fontSize: '0.95rem' }}>
@@ -261,8 +285,8 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
 
         {/* 카오스 던전 보상 */}
         {Math.floor(chaosReward.totalTradableGold) > 0 || Math.floor(chaosReward.totalBoundGold) > 0 ? (
-          <Card 
-            sx={{ 
+          <Card
+            sx={{
               mb: 2,
               cursor: 'pointer',
               boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
@@ -276,9 +300,21 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
           >
             <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
-                <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-                  주간 카오스 던전 보상
-                </Typography>
+                  <Box sx={{display: 'flex', gap: 0.5, alignItems: 'center'}}>
+                    <Box
+                        component="img"
+                        src="images/mokoko/chaos_mokoko.png"
+                        alt="카오스 던전 보상 이미지"
+                        sx={{
+                            width: '50px',
+                            height: 'auto',
+                            objectFit: 'contain'
+                        }}
+                    />
+                    <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
+                        주간 카오스 던전 보상
+                    </Typography>
+                </Box>
                 <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
                   {Math.floor(chaosReward.totalTradableGold) > 0 && (
                     <Typography sx={{ fontSize: '0.95rem' }}>
@@ -316,8 +352,8 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
 
         {/* 가디언 토벌 보상 */}
         {Math.floor(guardianReward.totalTradableGold) > 0 || Math.floor(guardianReward.totalBoundGold) > 0 ? (
-          <Card 
-            sx={{ 
+          <Card
+            sx={{
               cursor: 'pointer',
               boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
               '&:hover': {
@@ -330,9 +366,21 @@ const TotalRewardCard: React.FC<TotalRewardCardProps> = ({
           >
             <CardContent sx={{ fontSize: '0.95rem', pt: 2, paddingBottom: '0.5rem !important' }}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: isMobile ? 'flex-start' : 'center', mb: 2, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 1 : 0 }}>
-                <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
-                  주간 가디언 토벌 보상
-                </Typography>
+                  <Box sx={{display: 'flex', gap: 0.5, alignItems: 'center'}}>
+                      <Box
+                          component="img"
+                          src="images/mokoko/guardian_mokoko.png"
+                          alt="가디언 토벌 보상 이미지"
+                          sx={{
+                              width: '50px',
+                              height: 'auto',
+                              objectFit: 'contain'
+                          }}
+                      />
+                      <Typography sx={{ fontSize: '1.5rem', fontWeight: 'bold', mr: isMobile ? 0 : 4, lineHeight: 1, whiteSpace: 'nowrap' }}>
+                          주간 가디언 토벌 보상
+                      </Typography>
+                  </Box>
                 <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4, flexDirection: 'row', width: '100%' }}>
                   {Math.floor(guardianReward.totalTradableGold) > 0 && (
                     <Typography sx={{ fontSize: '0.95rem' }}>

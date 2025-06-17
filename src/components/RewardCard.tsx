@@ -8,19 +8,23 @@ import {useTheme} from '@mui/material/styles';
 
 interface RewardCardProps {
     title: string;
+    imageUrl: string;
     tradableGold: number;
     boundGold: number;
     tradableRewards: Record<string, { count: number; goldValue: number }>;
     boundRewards: Record<string, { count: number; goldValue: number }>;
 }
 
-const RewardCard: React.FC<RewardCardProps> = ({
-                                                   title,
-                                                   tradableGold,
-                                                   boundGold,
-                                                   tradableRewards,
-                                                   boundRewards,
-                                               }) => {
+const RewardCard: React.FC<RewardCardProps> = (
+    {
+        title,
+        imageUrl,
+        tradableGold,
+        boundGold,
+        tradableRewards,
+        boundRewards,
+    }
+) => {
     const theme = useTheme();
     const [open, setOpen] = useState(true);
 
@@ -41,9 +45,21 @@ const RewardCard: React.FC<RewardCardProps> = ({
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 0}}>
                     <Box
                         sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Typography variant="h6" sx={{fontWeight: 'bold', color: 'primary.main'}}>
-                            {title}
-                        </Typography>
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
+                            <Box
+                                component="img"
+                                src={imageUrl}
+                                alt="보상 이미지"
+                                sx={{
+                                    width: 'auto',
+                                    height: '35px',
+                                    objectFit: 'contain'
+                                }}
+                            />
+                            <Typography variant="h6" sx={{fontWeight: 'bold', color: 'primary.main'}}>
+                                {title}
+                            </Typography>
+                        </Box>
                         <IconButton
                             size="small"
                             sx={{transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s'}}
@@ -70,7 +86,7 @@ const RewardCard: React.FC<RewardCardProps> = ({
                         )}
                     </Box>
                     <Collapse in={open} timeout={300}>
-                        <Box sx={{ mt: 1 }}>
+                        <Box sx={{mt: 1}}>
                             <ResourceRewards tradableRewards={tradableRewards} boundRewards={boundRewards}/>
                         </Box>
                     </Collapse>
