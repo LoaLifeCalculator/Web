@@ -20,7 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ComputerIcon from '@mui/icons-material/Computer';
 import AppleIcon from '@mui/icons-material/Apple';
 import AndroidIcon from '@mui/icons-material/Android';
-import ChromeIcon from '../components/ChromeIcon';
+import ChromeIcon from '../components/mobileGuidePage/ChromeIcon';
 import {useHead} from "../hooks/useHead";
 
 interface PlatformCardProps {

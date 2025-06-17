@@ -34,4 +34,4 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ tab, setTab }) => {
     );
 };
 
-export default NavigationTabs; 
+export default NavigationTabs;

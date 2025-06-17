@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Avatar, Card, CardContent, Collapse } from '@mui/material';
-import { Resource } from '../services/api';
-import { ITEM_TRANSLATIONS } from '../types';
+import { Resource } from '../../services/api';
+import { ITEM_TRANSLATIONS } from '../../types';
 import { useTheme } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
 import { useMediaQuery } from '@mui/material';

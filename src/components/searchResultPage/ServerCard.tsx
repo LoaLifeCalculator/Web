@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Card, CardContent, Typography, Box, IconButton, useTheme, useMediaQuery, Collapse, Switch, FormControlLabel } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { Character } from '../services/api';
+import { Character } from '../../services/api';
 import ResultCharacterCard from './ResultCharacterCard';
-import { RaidReward } from '../utils/raidTable';
+import { RaidReward } from '../../utils/raidTable';
 
 interface ServerCardProps {
   server: string;

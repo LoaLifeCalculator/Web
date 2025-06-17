@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, CircularProgress, useTheme, useMediaQuery } from '@mui/material';
-import { renewExpeditionCharacters, SearchResponse } from '../services/api';
+import { renewExpeditionCharacters, SearchResponse } from '../../services/api';
 
 interface TotalRewardDisplayProps {
     totalTradableGold: number;

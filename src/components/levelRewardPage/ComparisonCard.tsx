@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Box, Collapse, IconButton, Avatar } from
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
-import { ITEM_TRANSLATIONS } from '../types';
+import { ITEM_TRANSLATIONS } from '../../types';
 import RaidSelector from './RaidSelector';
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 

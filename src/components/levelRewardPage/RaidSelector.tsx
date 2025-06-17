@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box, Typography, Button, FormControlLabel, Checkbox } from '@mui/material';
-import { getAvailableRaids } from '../utils/rewardCalculator';
+import { getAvailableRaids } from '../../utils/rewardCalculator';
 
 interface RaidSelectorProps {
     level: number;

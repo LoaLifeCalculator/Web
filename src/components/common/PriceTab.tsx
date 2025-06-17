@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { Box, Typography, OutlinedInput, List, ListItem, Avatar, Card, CardContent, Button, IconButton, useTheme, useMediaQuery } from '@mui/material';
-import { ITEM_TRANSLATIONS } from '../types';
+import { ITEM_TRANSLATIONS } from '../../types';
 import CloseIcon from '@mui/icons-material/Close';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 

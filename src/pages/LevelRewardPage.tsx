@@ -3,17 +3,17 @@ import {Box, Container, Typography, Card} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 import {useTheme, useMediaQuery} from '@mui/material';
 import {api, Resource} from '../services/api';
-import LevelRewardHeader from '../components/LevelRewardHeader';
-import OptionCard from '../components/OptionCard';
-import RewardCard from '../components/RewardCard';
-import PriceTab from '../components/PriceTab';
+import LevelRewardHeader from '../components/levelRewardPage/LevelRewardHeader';
+import OptionCard from '../components/levelRewardPage/OptionCard';
+import RewardCard from '../components/levelRewardPage/RewardCard';
+import PriceTab from '../components/common/PriceTab';
 import {
     getAvailableRaids,
     getSuitableChaosReward,
     getSuitableGuardianReward,
 } from '../utils/rewardCalculator';
 import {GlobalStyles} from '@mui/material';
-import ComparisonCard from '../components/ComparisonCard';
+import ComparisonCard from '../components/levelRewardPage/ComparisonCard';
 import {useHead} from "../hooks/useHead";
 
 interface LevelReward {

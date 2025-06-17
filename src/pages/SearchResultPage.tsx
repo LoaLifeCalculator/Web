@@ -41,12 +41,12 @@ import {
     calculateTotalReward,
     calculateServerTotalReward
 } from '../utils/rewardCalculator';
-import ResultCharacterCard from '../components/ResultCharacterCard';
-import FilterAndToolsTab from '../components/FilterAndToolsTab';
-import PriceTab from '../components/PriceTab';
-import TotalRewardCard from '../components/TotalRewardCard';
-import ServerCard from '../components/ServerCard';
-import SearchHeader from '../components/SearchHeader';
+import ResultCharacterCard from '../components/searchResultPage/ResultCharacterCard';
+import FilterAndToolsTab from '../components/searchResultPage/FilterAndToolsTab';
+import PriceTab from '../components/common/PriceTab';
+import TotalRewardCard from '../components/searchResultPage/TotalRewardCard';
+import ServerCard from '../components/searchResultPage/ServerCard';
+import SearchResultHeader from '../components/searchResultPage/SearchResultHeader';
 import { useHead } from '../hooks/useHead'
 
 interface CharacterRaidState {
@@ -72,7 +72,7 @@ interface Raid {
     nonGoldReward: any;
 }
 
-const ResultPage: React.FC = () => {
+const SearchResultPage: React.FC = () => {
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search);
     const name = queryParams.get('name') || '';
@@ -898,7 +898,7 @@ const ResultPage: React.FC = () => {
                 maxWidth: '850px !important',
                 overflow: 'auto'
             }}>
-                <SearchHeader
+                <SearchResultHeader
                     searchQuery={searchParams.get('name') || ''}
                     setSearchQuery={(query) => {
                         const params = new URLSearchParams(searchParams);
@@ -1016,4 +1016,4 @@ const ResultPage: React.FC = () => {
     );
 };
 
-export default ResultPage; 
+export default SearchResultPage;

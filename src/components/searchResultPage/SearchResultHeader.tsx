@@ -15,7 +15,7 @@ interface SearchHeaderProps {
     onRefresh: (data: any) => void;
 }
 
-const SearchHeader: React.FC<SearchHeaderProps> = ({
+const SearchResultHeader: React.FC<SearchHeaderProps> = ({
     searchQuery,
     setSearchQuery,
     totalTradableGold,
@@ -126,4 +126,4 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     );
 };
 
-export default SearchHeader; 
+export default SearchResultHeader;

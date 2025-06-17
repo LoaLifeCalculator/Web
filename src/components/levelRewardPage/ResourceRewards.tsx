@@ -3,7 +3,7 @@
 import React from 'react';
 import { Box, Typography, Avatar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { ITEM_TRANSLATIONS } from '../types';
+import { ITEM_TRANSLATIONS } from '../../types';
 
 interface ResourceRewardsProps {
     tradableRewards: Record<string, { count: number; goldValue: number }>;
