@@ -45,14 +45,14 @@ const RewardCard: React.FC<RewardCardProps> = (
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 0}}>
                     <Box
                         sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5}}>
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.5}}>
                             <Box
                                 component="img"
                                 src={imageUrl}
                                 alt="보상 이미지"
                                 sx={{
-                                    width: 'auto',
-                                    height: '35px',
+                                    width: '45px',
+                                    height: 'auto',
                                     objectFit: 'contain'
                                 }}
                             />
