@@ -283,7 +283,7 @@ const ContentRewardPage: React.FC = () => {
                                 fontSize: {xs: '1.5rem', sm: '2rem'},
                             }}
                         >
-                            컨텐츠 보상
+                            컨텐츠 보상 보기
                         </Typography>
                     </Box>
                     <Box

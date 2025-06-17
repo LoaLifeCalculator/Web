@@ -89,7 +89,7 @@ const LevelRewardHeader: React.FC<HeaderProps> = ({ currentTab, onTabChange }) =
                             fontSize: { xs: '1.25rem', sm: '2rem' },
                         }}
                     >
-                        로생 계산기
+                        로생계산기
                     </Typography>
                 </Box>
             </Box>

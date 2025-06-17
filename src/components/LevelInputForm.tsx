@@ -44,7 +44,7 @@ const LevelInputForm: React.FC<LevelInputFormProps> = ({
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 2 }}>
                 <TextField
-                    label="계산할 레벨"
+                    label="계산할 레벨 (필수)"
                     value={mainLevel}
                     onChange={onMainLevelChange}
                     onKeyDown={onKeyDown}

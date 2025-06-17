@@ -142,7 +142,7 @@ const MainPage: React.FC = () => {
                                 lineHeight: 1
                             }}
                         >
-                            로생 계산기
+                            로생계산기
                         </Typography>
                     </Box>
 
