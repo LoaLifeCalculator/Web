@@ -66,9 +66,9 @@ const theme = createTheme({
           textTransform: 'none',
           fontWeight: 600,
           '&.MuiButton-contained': {
-            backgroundColor: '#3F51B5',
+            backgroundColor: '#2e7d32',
             '&:hover': {
-              backgroundColor: '#303F9F',
+              backgroundColor: '#1b5e20',
             },
           },
         },
