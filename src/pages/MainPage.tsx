@@ -1,6 +1,6 @@
 import React, {useState, ChangeEvent, useEffect, useMemo} from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {Container, Typography, TextField, Button, Box, InputAdornment, IconButton} from '@mui/material';
+import {Container, Typography, TextField, Button, Box, InputAdornment, IconButton, useMediaQuery} from '@mui/material';
 import Link from '@mui/material/Link';
 import SearchIcon from '@mui/icons-material/Search';
 import { useHead } from '../hooks/useHead'
@@ -37,6 +37,7 @@ const MainPage: React.FC = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const location = useLocation();
+    const isMobile = useMediaQuery('(max-width:800px)');
 
     useEffect(() => {
         if (location.state?.error) {
@@ -77,7 +78,8 @@ const MainPage: React.FC = () => {
                     borderRadius: '4px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px'
+                    gap: '4px',
+                    width: isMobile ? 'calc(100% - 32px)' : 'auto'
                 }}
             >
                 <Typography
@@ -122,7 +124,8 @@ const MainPage: React.FC = () => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: 1
+                        gap: 1,
+                        width: '100%'
                     }}>
                         <img
                             src="/images/mokoko/title_mokoko.png"
@@ -210,7 +213,7 @@ const MainPage: React.FC = () => {
                     <Typography
                         onClick={handleMobileGuide}
                         sx={{
-                            mt: 2,
+                            mt: 1,
                             ml: 1.5,
                             alignSelf: 'flex-start',
                             color: 'primary.main',
@@ -224,16 +227,27 @@ const MainPage: React.FC = () => {
                     >
                         모바일 사용자이신가요?
                     </Typography>
+                </Box>
 
-                    {/* 컨텐츠 보상 보기 버튼 */}
+                {/* 컨텐츠 보상 보기 버튼 */}
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: 'calc(50% + 100px)',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: '100%',
+                        maxWidth: 600,
+                        px: 2,
+                    }}
+                >
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                            gridTemplateColumns: '1fr 1fr',
                             gap: 2,
                             width: '100%',
                             maxWidth: 800,
-                            mt: 4
                         }}
                     >
                         <Button
