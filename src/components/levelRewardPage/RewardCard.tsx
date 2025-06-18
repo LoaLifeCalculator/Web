@@ -13,6 +13,8 @@ interface RewardCardProps {
     boundGold: number;
     tradableRewards: Record<string, { count: number; goldValue: number }>;
     boundRewards: Record<string, { count: number; goldValue: number }>;
+    isExpanded: boolean;
+    onToggle: () => void;
 }
 
 const RewardCard: React.FC<RewardCardProps> = (
@@ -23,6 +25,8 @@ const RewardCard: React.FC<RewardCardProps> = (
         boundGold,
         tradableRewards,
         boundRewards,
+        isExpanded,
+        onToggle
     }
 ) => {
     const theme = useTheme();
@@ -39,7 +43,7 @@ const RewardCard: React.FC<RewardCardProps> = (
                 transition: 'transform 0.3s',
                 '&:hover': {transform: 'translateY(-2px)', boxShadow: '0 8px 24px rgba(0,0,0,0.2)'},
             }}
-            onClick={() => setOpen(!open)}
+            onClick={onToggle}
         >
             <CardContent sx={{p: 2}}>
                 <Box sx={{display: 'flex', flexDirection: 'column', gap: 0}}>
@@ -62,9 +66,9 @@ const RewardCard: React.FC<RewardCardProps> = (
                         </Box>
                         <IconButton
                             size="small"
-                            sx={{transform: open ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s'}}
+                            sx={{transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s'}}
                         >
-                            {open ? <ExpandLess/> : <ExpandLess/>}
+                            {isExpanded ? <ExpandLess/> : <ExpandLess/>}
                         </IconButton>
                     </Box>
                     <Box sx={{display: 'flex', gap: 2, alignItems: 'center'}}>
@@ -85,7 +89,7 @@ const RewardCard: React.FC<RewardCardProps> = (
                             </Typography>
                         )}
                     </Box>
-                    <Collapse in={open} timeout={300}>
+                    <Collapse in={isExpanded} timeout={300}>
                         <Box sx={{mt: 1}}>
                             <ResourceRewards tradableRewards={tradableRewards} boundRewards={boundRewards}/>
                         </Box>

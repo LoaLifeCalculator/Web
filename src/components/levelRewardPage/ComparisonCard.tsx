@@ -35,7 +35,7 @@ const ComparisonCard: React.FC<ComparisonCardProps> = ({
   onCompareRaidToggle,
   isMobile,
 }) => {
-  const [expanded, setExpanded] = React.useState(true);
+  const [expanded, setExpanded] = React.useState(false);
   const theme = useTheme();
 
   const handleExpandClick = () => {

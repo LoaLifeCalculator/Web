@@ -102,6 +102,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
                             variant="contained"
                             onClick={onCalculate}
                             fullWidth
+                            disabled={!mainLevel}
                             sx={{
                                 height: isMobile ? '48px' : '56px',
                                 fontSize: isMobile ? '1rem' : '1.1rem',
@@ -114,9 +115,13 @@ const OptionCard: React.FC<OptionCardProps> = ({
                                     transform: 'translateY(-2px)',
                                     boxShadow: '0 6px 16px rgba(0,0,0,0.2)',
                                 },
+                                '&.Mui-disabled': {
+                                    backgroundColor: 'rgba(0, 0, 0, 0.12)',
+                                    color: 'rgba(0, 0, 0, 0.26)',
+                                }
                             }}
                         >
-                            계산하기
+                            {mainLevel ? '계산하기' : '레벨을 입력해주세요'}
                         </Button>
                     </Box>
                 </CardContent>

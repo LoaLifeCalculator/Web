@@ -61,16 +61,29 @@ const LevelRewardPage: React.FC = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery('(max-width:800px)');
 
-    const [mainLevel, setMainLevel] = useState<string>('');
-    const [compareLevel, setCompareLevel] = useState<string>('');
-    const [calculatedMainLevel, setCalculatedMainLevel] = useState<number | null>(null);
-    const [calculatedCompareLevel, setCalculatedCompareLevel] = useState<number | null>(null);
+    const [currentInput, setCurrentInput] = useState<{
+        mainLevel: string;
+        compareLevel: string;
+        guardianOption: 'daily' | 'rest' | 'none';
+        chaosOption: 'daily' | 'rest' | 'none';
+        selectedRaids: string[];
+        selectedCompareRaids: string[];
+    }>({
+        mainLevel: '',
+        compareLevel: '',
+        guardianOption: 'daily',
+        chaosOption: 'daily',
+        selectedRaids: [],
+        selectedCompareRaids: []
+    });
 
-    const [guardianOption, setGuardianOption] = useState<'daily' | 'rest' | 'none'>('daily');
-    const [chaosOption, setChaosOption] = useState<'daily' | 'rest' | 'none'>('daily');
-    const [selectedRaids, setSelectedRaids] = useState<string[]>([]);
-    const [calculatedRaids, setCalculatedRaids] = useState<string[]>([]);
-    const [selectedCompareRaids, setSelectedCompareRaids] = useState<string[]>([]);
+    const [fixedMainReward, setFixedMainReward] = useState<LevelReward | null>(null);
+    const [fixedCompareReward, setFixedCompareReward] = useState<LevelReward | null>(null);
+    const [fixedOptions, setFixedOptions] = useState<{
+        guardianOption: 'daily' | 'rest' | 'none';
+        chaosOption: 'daily' | 'rest' | 'none';
+    } | null>(null);
+    const [fixedCompareLevel, setFixedCompareLevel] = useState<number | null>(null);
 
     const [resources, setResources] = useState<Resource[]>([]);
     const [priceMap, setPriceMap] = useState<Record<string, number>>({});
@@ -79,6 +92,9 @@ const LevelRewardPage: React.FC = () => {
     const [currentTab, setCurrentTab] = useState(0);
     const [retryCount, setRetryCount] = useState(0);
     const [hasCalculated, setHasCalculated] = useState(false);
+    const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+    const [isCompareOpen, setIsCompareOpen] = useState(false);
+    const [isPriceSettingOpen, setIsPriceSettingOpen] = useState(false);
 
     // Fetch resource prices
     useEffect(() => {
@@ -102,86 +118,166 @@ const LevelRewardPage: React.FC = () => {
         fetchResources();
     }, [retryCount]);
 
+    const handleCalculate = () => {
+        if (currentInput.mainLevel) {
+            const mainLevel = parseInt(currentInput.mainLevel);
+            if (!isNaN(mainLevel)) {
+                const mainReward = calculateLevelReward(
+                    mainLevel,
+                    false,
+                    currentInput.selectedRaids,
+                    { guardianOption: currentInput.guardianOption, chaosOption: currentInput.chaosOption }
+                );
+                setFixedMainReward(mainReward);
+                setFixedOptions({
+                    guardianOption: currentInput.guardianOption,
+                    chaosOption: currentInput.chaosOption
+                });
+
+                // 비교 캐릭터의 레벨이 비어있으면 0으로 취급
+                const compareLevel = currentInput.compareLevel ? parseInt(currentInput.compareLevel) : 0;
+                if (!isNaN(compareLevel)) {
+                    // 비교 캐릭터의 레벨에 맞는 상위 3개 레이드를 선택
+                    const availableRaids = getAvailableRaids(compareLevel).slice(0, 3).map(r => r.name);
+                    setCurrentInput(prev => ({
+                        ...prev,
+                        selectedCompareRaids: availableRaids
+                    }));
+
+                    const compareReward = calculateLevelReward(
+                        compareLevel,
+                        true,
+                        availableRaids,
+                        { guardianOption: currentInput.guardianOption, chaosOption: currentInput.chaosOption }
+                    );
+                    setFixedCompareReward(compareReward);
+                    setFixedCompareLevel(compareLevel);
+                }
+
+                setCurrentTab(1);
+            }
+        }
+    };
+
+    const handleGuardianOptionChange = (option: 'daily' | 'rest' | 'none') => {
+        // 상태 업데이트
+        setCurrentInput(prev => ({
+            ...prev,
+            guardianOption: option
+        }));
+        
+        // 옵션이 변경되면 비교 캐릭터의 계산값도 즉시 업데이트
+        if (fixedCompareLevel && fixedOptions) {
+            const newCompareReward = calculateLevelReward(
+                fixedCompareLevel,
+                true,
+                currentInput.selectedCompareRaids,
+                { guardianOption: fixedOptions.guardianOption, chaosOption: fixedOptions.chaosOption }
+            );
+            setFixedCompareReward(newCompareReward);
+        }
+    };
+
+    const handleChaosOptionChange = (option: 'daily' | 'rest' | 'none') => {
+        // 상태 업데이트
+        setCurrentInput(prev => ({
+            ...prev,
+            chaosOption: option
+        }));
+        
+        // 옵션이 변경되면 비교 캐릭터의 계산값도 즉시 업데이트
+        if (fixedCompareLevel && fixedOptions) {
+            const newCompareReward = calculateLevelReward(
+                fixedCompareLevel,
+                true,
+                currentInput.selectedCompareRaids,
+                { guardianOption: fixedOptions.guardianOption, chaosOption: fixedOptions.chaosOption }
+            );
+            setFixedCompareReward(newCompareReward);
+        }
+    };
+
+    const handleRaidToggle = (name: string) => {
+        setCurrentInput(prev => ({
+            ...prev,
+            selectedRaids: prev.selectedRaids.includes(name)
+                ? prev.selectedRaids.filter(r => r !== name)
+                : [...prev.selectedRaids, name]
+        }));
+    };
+
+    const handleCompareRaidToggle = (raidName: string) => {
+        setCurrentInput(prev => {
+            const newSelectedCompareRaids = prev.selectedCompareRaids.includes(raidName)
+                ? prev.selectedCompareRaids.filter(name => name !== raidName)
+                : [...prev.selectedCompareRaids, raidName];
+
+            // 레이드 선택이 변경되면 비교 캐릭터의 계산값도 즉시 업데이트
+            if (fixedCompareLevel && fixedOptions) {
+                // 새로운 레이드 선택 상태를 직접 전달하여 계산
+                const newCompareReward = calculateLevelReward(
+                    fixedCompareLevel,
+                    true,
+                    newSelectedCompareRaids,
+                    { guardianOption: fixedOptions.guardianOption, chaosOption: fixedOptions.chaosOption }
+                );
+                setFixedCompareReward(newCompareReward);
+            }
+
+            return {
+                ...prev,
+                selectedCompareRaids: newSelectedCompareRaids
+            };
+        });
+    };
+
     const handleMainLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.value;
         if (v === '' || /^\d+$/.test(v)) {
-            setMainLevel(v);
+            setCurrentInput(prev => ({
+                ...prev,
+                mainLevel: v
+            }));
             // 레벨이 변경될 때마다 해당 레벨에 맞는 레이드 선택 상태 초기화
             if (v !== '') {
                 const level = parseInt(v);
                 if (!isNaN(level)) {
-                    setSelectedRaids(getAvailableRaids(level).slice(0, 3).map(r => r.name));
+                    setCurrentInput(prev => ({
+                        ...prev,
+                        selectedRaids: getAvailableRaids(level).slice(0, 3).map(r => r.name)
+                    }));
                 }
             } else {
-                setSelectedRaids([]);
+                setCurrentInput(prev => ({
+                    ...prev,
+                    selectedRaids: []
+                }));
             }
         }
     };
+
     const handleCompareLevelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const v = e.target.value;
         if (v === '' || /^\d+$/.test(v)) {
-            setCompareLevel(v);
-            // 비교 레벨이 변경될 때 해당 레벨의 상위 3개 레이드를 기본 선택
-            if (v !== '') {
-                const level = parseInt(v);
-                if (!isNaN(level)) {
-                    setSelectedCompareRaids(getAvailableRaids(level).slice(0, 3).map(r => r.name));
-                }
-            } else {
-                setSelectedCompareRaids([]);
-            }
+            setCurrentInput(prev => ({
+                ...prev,
+                compareLevel: v
+            }));
         }
-    };
-    const handleCalculate = () => {
-        if (mainLevel) {
-            const level = parseInt(mainLevel);
-            if (!isNaN(level)) {
-                setCalculatedMainLevel(level);
-                setCalculatedRaids(selectedRaids);
-            }
-        }
-        if (compareLevel) {
-            const level = parseInt(compareLevel);
-            if (!isNaN(level)) {
-                setCalculatedCompareLevel(level);
-            }
-        }
-        // 계산이 완료되면 결과 탭으로 이동
-        setCurrentTab(1);
-    };
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') handleCalculate();
-    };
-    const handleRaidToggle = (name: string) => {
-        setSelectedRaids(prev => {
-            const newRaids = prev.includes(name)
-                ? prev.filter(r => r !== name)
-                : [...prev, name];
-            return newRaids;
-        });
-        // 레이드 선택이 변경되어도 계산 결과는 유지
-        // setCalculatedMainLevel(null);
-        // setCalculatedCompareLevel(null);
-    };
-    const handleCompareRaidToggle = (name: string) => {
-        setSelectedCompareRaids(prev =>
-            prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
-        );
-    };
-    const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
-        setCurrentTab(newValue);
-    };
-    const handlePriceChange = (item: string, val: number) => {
-        setPriceMap(prev => ({...prev, [item]: val}));
     };
 
-    // Convert resource count to gold value
-    const calculateGoldValue = (resource: string, count: number): number => {
-        return (priceMap[resource] ?? 0) * count;
-    };
+    const calculateLevelReward = (
+        level: number, 
+        isCompare: boolean = false, 
+        selectedRaidsOverride?: string[], 
+        optionsOverride?: { guardianOption: 'daily' | 'rest' | 'none', chaosOption: 'daily' | 'rest' | 'none' }
+    ): LevelReward => {
+        // 옵션 오버라이드가 있으면 그것을 사용하고, 없으면 현재 입력값을 사용
+        const guardianOption = optionsOverride?.guardianOption ?? currentInput.guardianOption;
+        const chaosOption = optionsOverride?.chaosOption ?? currentInput.chaosOption;
+        // selectedRaidsOverride가 있으면 그것을 사용하고, 없으면 currentInput에서 가져옴
+        const selectedRaids = selectedRaidsOverride ?? (isCompare ? currentInput.selectedCompareRaids : currentInput.selectedRaids);
 
-    // Detailed reward calculation (original logic preserved)
-    const calculateLevelReward = (level: number, isCompare: boolean = false): LevelReward => {
         let totalTradableGold = 0;
         let totalBoundGold = 0;
         const tradableResourceRewards: Record<string, { count: number; goldValue: number }> = {};
@@ -382,8 +478,7 @@ const LevelRewardPage: React.FC = () => {
 
         // Raid Rewards
         const availableRaids = getAvailableRaids(level);
-        const targetRaidNames = isCompare ? selectedCompareRaids : calculatedRaids;
-        const targetRaids = availableRaids.filter(raid => targetRaidNames.includes(raid.name));
+        const targetRaids = availableRaids.filter(raid => selectedRaids.includes(raid.name));
 
         targetRaids.forEach(raid => {
             if (raid.goldReward.gold) {
@@ -472,93 +567,150 @@ const LevelRewardPage: React.FC = () => {
         };
     };
 
-    const mainReward = calculatedMainLevel !== null
-        ? calculateLevelReward(calculatedMainLevel)
-        : null;
-    const compareReward = calculatedCompareLevel !== null
-        ? calculateLevelReward(calculatedCompareLevel, true)
-        : null;
+    // Convert resource count to gold value
+    const calculateGoldValue = (resource: string, count: number): number => {
+        return (priceMap[resource] ?? 0) * count;
+    };
+
+    // 기준 캐릭터의 계산값은 고정된 값을 사용하고, 비교 캐릭터의 계산값도 고정된 값을 사용
+    const mainReward = fixedMainReward;
+    const compareReward = fixedCompareReward;
+
+    const toggleCard = (cardId: string) => {
+        if (isMobile) {
+            // 모바일 화면에서는 클릭된 카드만 토글
+            setExpandedCards(prev => ({
+                ...prev,
+                [cardId]: !prev[cardId]
+            }));
+        } else {
+            // PC 화면에서는 같은 행의 카드도 함께 토글
+            const [cardType, cardIndex] = cardId.split('-');
+            const isCurrentlyExpanded = expandedCards[cardId];
+
+            // mainReward가 null이면 해당 카드만 토글
+            if (!mainReward) {
+                setExpandedCards(prev => ({
+                    ...prev,
+                    [cardId]: !prev[cardId]
+                }));
+                return;
+            }
+
+            // 현재 렌더링된 카드들의 순서를 결정
+            const renderedCards = [];
+            if (mainReward.totalTradableGold > 0 || mainReward.totalBoundGold > 0) {
+                renderedCards.push({ type: 'total', id: 'total-0' });
+            }
+            if (mainReward.raidTradableGold > 0 || mainReward.raidBoundGold > 0) {
+                renderedCards.push({ type: 'raid', id: 'raid-1' });
+            }
+            if (mainReward.chaosTradableGold > 0 || mainReward.chaosBoundGold > 0) {
+                renderedCards.push({ type: 'chaos', id: 'chaos-2' });
+            }
+            if (mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0) {
+                renderedCards.push({ type: 'guardian', id: 'guardian-3' });
+            }
+
+            // 현재 카드의 인덱스 찾기
+            const currentIndex = renderedCards.findIndex(card => card.id === cardId);
+            if (currentIndex !== -1) {
+                const isEvenIndex = currentIndex % 2 === 0;
+                const pairIndex = isEvenIndex ? currentIndex + 1 : currentIndex - 1;
+
+                // 같은 행의 카드가 있는 경우에만 토글
+                if (pairIndex >= 0 && pairIndex < renderedCards.length) {
+                    const pairCard = renderedCards[pairIndex];
+                    setExpandedCards(prev => ({
+                        ...prev,
+                        [cardId]: !isCurrentlyExpanded,
+                        [pairCard.id]: !isCurrentlyExpanded
+                    }));
+                } else {
+                    // 짝이 없는 경우 해당 카드만 토글
+                    setExpandedCards(prev => ({
+                        ...prev,
+                        [cardId]: !prev[cardId]
+                    }));
+                }
+            }
+        }
+    };
 
     return (
-        <>
-            <GlobalStyles
-                styles={{
-                    '*::-webkit-scrollbar': {
-                        display: 'none'
-                    },
-                    '*': {
-                        msOverflowStyle: 'none',
-                        scrollbarWidth: 'none'
-                    }
-                }}
-            />
-            <Box sx={{minHeight: '100vh', bgcolor: 'background.default'}}>
-                <LevelRewardHeader currentTab={currentTab} onTabChange={handleTabChange}/>
-                <Container maxWidth={false} sx={{py: 12, maxWidth: '850px !important', height: 'auto'}}>
-                    {currentTab === 0 && (
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2,
-                            width: '100%',
-                            maxWidth: '1200px',
-                            mx: 'auto',
-                            px: 2,
-                            mt: 5
-                        }}>
-                            <OptionCard
-                                mainLevel={mainLevel}
-                                compareLevel={compareLevel}
-                                onMainLevelChange={handleMainLevelChange}
-                                onCompareLevelChange={handleCompareLevelChange}
-                                onCalculate={handleCalculate}
-                                onKeyDown={handleKeyDown}
-                                guardianOption={guardianOption}
+        <Box sx={{minHeight: '100vh', bgcolor: 'background.default'}}>
+            <LevelRewardHeader currentTab={currentTab} onTabChange={(_, newValue) => setCurrentTab(newValue)}/>
+            <Container maxWidth={false} sx={{py: 12, maxWidth: '850px !important', height: 'auto'}}>
+                {currentTab === 0 && (
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        width: '100%',
+                        maxWidth: '1200px',
+                        mx: 'auto',
+                        px: 2,
+                        mt: 5
+                    }}>
+                        <OptionCard
+                            mainLevel={currentInput.mainLevel}
+                            compareLevel={currentInput.compareLevel}
+                            onMainLevelChange={handleMainLevelChange}
+                            onCompareLevelChange={handleCompareLevelChange}
+                            onCalculate={handleCalculate}
+                            onKeyDown={(e) => e.key === 'Enter' && handleCalculate()}
+                            guardianOption={currentInput.guardianOption}
+                            isMobile={isMobile}
+                            onGuardianOptionChange={handleGuardianOptionChange}
+                            chaosOption={currentInput.chaosOption}
+                            onChaosOptionChange={handleChaosOptionChange}
+                            selectedRaids={currentInput.selectedRaids}
+                            onRaidToggle={handleRaidToggle}
+                            calculatedMainLevel={fixedMainReward ? parseInt(currentInput.mainLevel) : null}
+                        />
+                    </Box>
+                )}
+                {currentTab === 1 && (
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                        width: '100%',
+                        maxWidth: '1200px',
+                        mx: 'auto',
+                        px: 2,
+                        mt: 5
+                    }}>
+                        {compareReward && (compareReward.totalTradableGold > 0 || compareReward.totalBoundGold > 0) && (
+                            <ComparisonCard
+                                mainReward={mainReward}
+                                compareReward={compareReward}
+                                compareLevel={fixedCompareLevel}
+                                selectedCompareRaids={currentInput.selectedCompareRaids}
+                                onCompareRaidToggle={handleCompareRaidToggle}
                                 isMobile={isMobile}
-                                onGuardianOptionChange={setGuardianOption}
-                                chaosOption={chaosOption}
-                                onChaosOptionChange={setChaosOption}
-                                selectedRaids={selectedRaids}
-                                onRaidToggle={handleRaidToggle}
-                                calculatedMainLevel={calculatedMainLevel}
                             />
-                        </Box>
-                    )}
-                    {currentTab === 1 && (
+                        )}
                         <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
+                            display: 'grid',
+                            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
                             gap: 2,
-                            width: '100%',
-                            maxWidth: '1200px',
-                            mx: 'auto',
-                            px: 2,
-                            mt: 5
+                            width: '100%'
                         }}>
-                            {calculatedCompareLevel !== null && compareReward && (compareReward.totalTradableGold > 0 || compareReward.totalBoundGold > 0) && (
-                                <ComparisonCard
-                                    mainReward={mainReward}
-                                    compareReward={compareReward}
-                                    compareLevel={calculatedCompareLevel}
-                                    selectedCompareRaids={selectedCompareRaids}
-                                    onCompareRaidToggle={handleCompareRaidToggle}
-                                    isMobile={isMobile}
-                                />
-                            )}
-                            <Box sx={{
-                                display: 'grid',
-                                gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-                                gap: 2,
-                                width: '100%'
-                            }}>
-                                {calculatedMainLevel !== null && mainReward && (
-                                    <>
-                                        {mainReward.totalTradableGold === 0 && mainReward.totalBoundGold === 0 ? (
-                                            <Box sx={{textAlign: 'center', py: 4, color: 'text.secondary'}}>
-                                                표시할 보상이 없습니다
-                                            </Box>
-                                        ) : (
-                                            <>
+                            {mainReward && (
+                                <>
+                                    {mainReward.totalTradableGold === 0 && mainReward.totalBoundGold === 0 ? (
+                                        <Box sx={{
+                                            gridColumn: '1 / -1',
+                                            textAlign: 'center',
+                                            py: 4,
+                                            color: 'text.secondary'
+                                        }}>
+                                            표시할 보상이 없습니다. 레벨 값을 확인해주세요.
+                                        </Box>
+                                    ) : (
+                                        <>
+                                            {mainReward.totalTradableGold > 0 || mainReward.totalBoundGold > 0 ? (
                                                 <RewardCard
                                                     title="총 보상"
                                                     imageUrl="images/mokoko/total_mokoko.png"
@@ -566,66 +718,72 @@ const LevelRewardPage: React.FC = () => {
                                                     boundGold={mainReward.totalBoundGold}
                                                     tradableRewards={mainReward.tradableResourceRewards}
                                                     boundRewards={mainReward.boundResourceRewards}
+                                                    isExpanded={expandedCards['total-0']}
+                                                    onToggle={() => toggleCard('total-0')}
                                                 />
-                                                {mainReward.raidTradableGold > 0 || mainReward.raidBoundGold > 0 ? (
-                                                    <RewardCard
-                                                        title="레이드 보상"
-                                                        imageUrl="images/mokoko/raid_mokoko.png"
-                                                        tradableGold={mainReward.raidTradableGold}
-                                                        boundGold={mainReward.raidBoundGold}
-                                                        tradableRewards={mainReward.raidTradableRewards}
-                                                        boundRewards={mainReward.raidBoundRewards}
-                                                    />
-                                                ) : null}
-                                                {mainReward.chaosTradableGold > 0 || mainReward.chaosBoundGold > 0 ? (
-                                                    <RewardCard
-                                                        title="카오스 던전 보상"
-                                                        imageUrl="images/mokoko/chaos_mokoko.png"
-                                                        tradableGold={mainReward.chaosTradableGold}
-                                                        boundGold={mainReward.chaosBoundGold}
-                                                        tradableRewards={mainReward.chaosTradableRewards}
-                                                        boundRewards={mainReward.chaosBoundRewards}
-                                                    />
-                                                ) : null}
-                                                {mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0 ? (
-                                                    <RewardCard
-                                                        title="가디언 토벌 보상"
-                                                        imageUrl="images/mokoko/guardian_mokoko.png"
-                                                        tradableGold={mainReward.guardianTradableGold}
-                                                        boundGold={mainReward.guardianBoundGold}
-                                                        tradableRewards={mainReward.guardianTradableRewards}
-                                                        boundRewards={mainReward.guardianBoundRewards}
-                                                    />
-                                                ) : null}
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </Box>
+                                            ) : null}
+                                            {mainReward.raidTradableGold > 0 || mainReward.raidBoundGold > 0 ? (
+                                                <RewardCard
+                                                    title="레이드 보상"
+                                                    imageUrl="images/mokoko/raid_mokoko.png"
+                                                    tradableGold={mainReward.raidTradableGold}
+                                                    boundGold={mainReward.raidBoundGold}
+                                                    tradableRewards={mainReward.raidTradableRewards}
+                                                    boundRewards={mainReward.raidBoundRewards}
+                                                    isExpanded={expandedCards['raid-1']}
+                                                    onToggle={() => toggleCard('raid-1')}
+                                                />
+                                            ) : null}
+                                            {mainReward.chaosTradableGold > 0 || mainReward.chaosBoundGold > 0 ? (
+                                                <RewardCard
+                                                    title="카오스 던전 보상"
+                                                    imageUrl="images/mokoko/chaos_mokoko.png"
+                                                    tradableGold={mainReward.chaosTradableGold}
+                                                    boundGold={mainReward.chaosBoundGold}
+                                                    tradableRewards={mainReward.chaosTradableRewards}
+                                                    boundRewards={mainReward.chaosBoundRewards}
+                                                    isExpanded={expandedCards['chaos-2']}
+                                                    onToggle={() => toggleCard('chaos-2')}
+                                                />
+                                            ) : null}
+                                            {mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0 ? (
+                                                <RewardCard
+                                                    title="가디언 토벌 보상"
+                                                    imageUrl="images/mokoko/guardian_mokoko.png"
+                                                    tradableGold={mainReward.guardianTradableGold}
+                                                    boundGold={mainReward.guardianBoundGold}
+                                                    tradableRewards={mainReward.guardianTradableRewards}
+                                                    boundRewards={mainReward.guardianBoundRewards}
+                                                    isExpanded={expandedCards['guardian-3']}
+                                                    onToggle={() => toggleCard('guardian-3')}
+                                                />
+                                            ) : null}
+                                        </>
+                                    )}
+                                </>
+                            )}
                         </Box>
-                    )}
-                    {currentTab === 2 && (
-                        <Box sx={{mt: 5}}>
-                            <PriceTab
-                                resources={resources.map(r => ({item: r.item, avgPrice: r.avgPrice}))}
-                                priceMap={priceMap}
-                                onPriceChange={handlePriceChange}
-                                onClose={() => setCurrentTab(0)}
-                            />
-                        </Box>
-                    )}
-                    {loading ? (
-                        <Box sx={{mt: 5}}>
-                            <Typography>로딩 중...</Typography>
-                        </Box>
-                    ) : error ? (
-                        <Box sx={{mt: 5}}>
-                            <Typography color="error">{error}</Typography>
-                        </Box>
-                    ) : null}
-                </Container>
-            </Box>
-        </>
+                    </Box>
+                )}
+                {currentTab === 2 && (
+                    <Box sx={{mt: 5}}>
+                        <Typography 
+                            variant="body1" 
+                            color="text.secondary" 
+                            align="center" 
+                        >
+                            시세 변경은 계산하기 버튼을 눌렀을 때 반영됩니다
+                        </Typography>
+                        <PriceTab
+                            resources={resources.map(r => ({item: r.item, avgPrice: r.avgPrice}))}
+                            priceMap={priceMap}
+                            onPriceChange={(item: string, val: number) => setPriceMap(prev => ({...prev, [item]: val}))}
+                            onClose={() => setCurrentTab(0)}
+                        />
+                    </Box>
+                )}
+            </Container>
+        </Box>
     );
 };
 
