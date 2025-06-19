@@ -54,55 +54,81 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
   };
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ py: 3, px: 0 }}>
       <Box sx={{ 
         display: 'grid', 
         gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
         gap: 2 
       }}>
         {/* 카오스 던전 */}
-        <Card>
+        <Card sx={{ p: 0.5, pb: 0 }}>
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+            <Typography variant="h6" sx={{ color: 'primary.main', mb: 1 }}>
               카오스 던전 보상 계산
             </Typography>
             <RadioGroup
               row
               value={chaosOption}
               onChange={(e) => onChaosOptionChange(Number(e.target.value))}
+              sx={{ gap: 2, pl: 1 }}
             >
-              <FormControlLabel value={0} control={<Radio />} label="매일" />
-              <FormControlLabel value={1} control={<Radio />} label="휴게만" />
-              <FormControlLabel value={2} control={<Radio />} label="계산 X" />
+              <FormControlLabel 
+                value={0} 
+                control={<Radio size="small" sx={{ p: 0.5 }} />} 
+                label="매일" 
+              />
+              <FormControlLabel 
+                value={1} 
+                control={<Radio size="small" sx={{ p: 0.5 }} />} 
+                label="휴게만" 
+              />
+              <FormControlLabel 
+                value={2} 
+                control={<Radio size="small" sx={{ p: 0.5 }} />} 
+                label="계산 X" 
+              />
             </RadioGroup>
           </CardContent>
         </Card>
 
         {/* 가디언 토벌 */}
-        <Card>
+        <Card sx={{ p: 0.5, pb: 0 }}>
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+            <Typography variant="h6" sx={{ color: 'primary.main', mb: 1 }}>
               가디언 토벌 보상 계산
             </Typography>
             <RadioGroup
               row
               value={guardianOption}
               onChange={(e) => onGuardianOptionChange(Number(e.target.value))}
+              sx={{ gap: 2, pl: 1 }}
             >
-              <FormControlLabel value={0} control={<Radio />} label="매일" />
-              <FormControlLabel value={1} control={<Radio />} label="휴게만" />
-              <FormControlLabel value={2} control={<Radio />} label="계산 X" />
+              <FormControlLabel 
+                value={0} 
+                control={<Radio size="small" sx={{ p: 0.5 }} />} 
+                label="매일" 
+              />
+              <FormControlLabel 
+                value={1} 
+                control={<Radio size="small" sx={{ p: 0.5 }} />} 
+                label="휴게만" 
+              />
+              <FormControlLabel 
+                value={2} 
+                control={<Radio size="small" sx={{ p: 0.5 }} />} 
+                label="계산 X" 
+              />
             </RadioGroup>
           </CardContent>
         </Card>
 
         {/* 일괄 제외 */}
         <Card 
-          sx={{ cursor: 'pointer' }}
+          sx={{ cursor: 'pointer', p: 0.5, pb: 0 }}
           onClick={() => excludeInputRef.current?.focus()}
         >
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+            <Typography variant="h6" sx={{ color: 'primary.main' }}>
               일정 레벨 이상 캐릭터만 계산
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
@@ -143,11 +169,11 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
 
         {/* 일괄 레이드 입장 기능 */}
         <Card 
-          sx={{ cursor: 'pointer' }}
+          sx={{ cursor: 'pointer', p: 0.5, pb: 0  }}
           onClick={() => raidInputRef.current?.focus()}
         >
           <CardContent>
-            <Typography variant="h6" sx={{ color: 'primary.main', mb: 2 }}>
+            <Typography variant="h6" sx={{ color: 'primary.main' }}>
               일정 레벨 이상 캐릭터 레이드 입장
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>

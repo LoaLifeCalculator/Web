@@ -304,8 +304,8 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
     const newExcluded = event.target.checked;
     onExcludeChange();
     
-    // 모바일에서 "제외" 활성화 시 카드 토글 닫기
-    if (isMobile && newExcluded) {
+    // "제외" 활성화 시 카드 토글 닫기
+    if (isMobile && newExcluded && isExpanded) {
       onToggle();
     }
   };

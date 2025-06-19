@@ -20,15 +20,16 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ tab, setTab }) => {
                 bottom: 0
             },
             '& .MuiTab-root': {
-                minWidth: '80px',
-                padding: '6px 16px'
+                minWidth: isMobile ? '80px' : undefined,
+                padding: isMobile ? '6px 12px' : undefined,
+                fontSize: isMobile ? '0.875rem' : undefined
             }
         }}>
             <Tabs value={tab} onChange={handleTabChange}>
                 <Tab label="원정대"/>
                 <Tab label="자세히"/>
                 <Tab label="도구"/>
-                <Tab label="시세 수정"/>
+                <Tab label="시세"/>
             </Tabs>
         </Box>
     );

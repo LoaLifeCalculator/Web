@@ -26,7 +26,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import SearchIcon from '@mui/icons-material/Search';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import {searchCharacter, Character, Resource, SearchResponse} from '../services/api';
+import {searchCharacter, Character, Resource, SearchResponse, renewExpeditionCharacters} from '../services/api';
 import {Reward} from '../types';
 import {
     getSuitableChaosReward,
@@ -171,14 +171,22 @@ const SearchResultPage: React.FC = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            setExcludedServers({}); // 서버 제외 상태 초기화
+
             const response = await searchCharacter(searchParams.get('name') || '');
 
-            // 골드 수급량이 0인 캐릭터 필터링
-            const filteredExpeditions: SearchResponse = {
+            // 필터링된 데이터 생성
+            const filteredExpeditions = {
                 expeditions: {
                     expeditions: Object.entries(response.expeditions.expeditions).reduce((acc, [server, characters]) => {
-                        const filteredCharacters = characters.filter((char: Character) => char.level >= 1370);
+                        // 레벨 1370 이상 캐릭터만 필터링
+                        const filteredCharacters = characters.filter((char: Character) => {
+                            const isValid = char.level >= 1370;
+                            if (!isValid) {
+                                console.log(`Filtered out character: ${char.characterName} (Level: ${char.level})`);
+                            }
+                            return isValid;
+                        });
+                        
                         if (filteredCharacters.length > 0) {
                             acc[server] = filteredCharacters;
                         }
@@ -188,10 +196,29 @@ const SearchResultPage: React.FC = () => {
                 resources: response.resources
             };
 
+            // 필터링 결과 확인
+            console.log('Filtered expeditions:', filteredExpeditions);
+            
+            // 데이터 설정
             setData(filteredExpeditions);
             setResources(response.resources);
 
-            // 서버 정렬 (골드 많은 순)
+            // 1640 레벨 이상 캐릭터 확인 및 제외 상태 초기화
+            const hasHighLevelCharacter = Object.values(filteredExpeditions.expeditions.expeditions).some(
+                (characters: Character[]) => characters.some(char => char.level >= 1640)
+            );
+
+            if (hasHighLevelCharacter) {
+                const newExcludeStates: CharacterExcludeState = {};
+                Object.values(filteredExpeditions.expeditions.expeditions).forEach((characters: Character[]) => {
+                    characters.forEach((character: Character) => {
+                        newExcludeStates[character.characterName] = character.level < 1640;
+                    });
+                });
+                setExcludeStates(newExcludeStates);
+            }
+
+            // 서버 정렬
             const sortedServers = Object.keys(filteredExpeditions.expeditions.expeditions).sort((a, b) => {
                 const aGold = calculateServerTotalReward(
                     a,
@@ -215,7 +242,6 @@ const SearchResultPage: React.FC = () => {
                 ).totalTradableGold;
                 return bGold - aGold;
             });
-
             setSortedServers(sortedServers);
 
             // 초기 시세 데이터 설정
@@ -223,19 +249,16 @@ const SearchResultPage: React.FC = () => {
                 acc[resource.item] = resource.avgPrice;
                 return acc;
             }, {} as Record<string, number>);
-
             setCustomPriceMap(initialPriceMap);
 
-            // 각 서버별로 레벨이 높은 상위 6개 캐릭터에 대해서만 초기화
+            // 각 서버별 상위 6개 캐릭터 초기화
             Object.entries(filteredExpeditions.expeditions.expeditions).forEach(([server, characters]) => {
-                // 레벨 기준으로 정렬하고 상위 6개 선택
                 const topCharacters = [...characters]
                     .sort((a, b) => b.level - a.level)
                     .slice(0, 6);
 
-                // 선택된 캐릭터들에 대해서만 초기화
                 topCharacters.forEach((character: Character) => {
-                    // 레이드 선택 초기화
+                    // 레이드 선택 초기화 (상위 3개 레이드)
                     initializeSelectedRaids(character);
                     // 골드 획득 옵션 활성화
                     setGoldRewardStates(prev => ({
@@ -273,6 +296,21 @@ const SearchResultPage: React.FC = () => {
 
             setData(filteredExpeditions);
             setResources(response.resources);
+
+            // 1640 레벨 이상 캐릭터 확인 및 제외 상태 초기화
+            const hasHighLevelCharacter = Object.values(filteredExpeditions.expeditions.expeditions).some(
+                (characters: Character[]) => characters.some(char => char.level >= 1640)
+            );
+
+            if (hasHighLevelCharacter) {
+                const newExcludeStates: CharacterExcludeState = {};
+                Object.values(filteredExpeditions.expeditions.expeditions).forEach((characters: Character[]) => {
+                    characters.forEach((character: Character) => {
+                        newExcludeStates[character.characterName] = character.level < 1640;
+                    });
+                });
+                setExcludeStates(newExcludeStates);
+            }
 
             // 서버 정렬 (골드 많은 순)
             const sortedServers = Object.keys(filteredExpeditions.expeditions.expeditions).sort((a, b) => {
@@ -868,15 +906,113 @@ const SearchResultPage: React.FC = () => {
         }));
     };
 
-    const handleRefresh = (newData: SearchResponse) => {
-        setData(newData);
-        // 서버 목록 정렬
-        const servers = Object.keys(newData.expeditions.expeditions).sort((a, b) => {
-            const aCharacters = newData.expeditions.expeditions[a];
-            const bCharacters = newData.expeditions.expeditions[b];
-            return bCharacters.length - aCharacters.length;
-        });
-        setSortedServers(servers);
+    const handleRefresh = async () => {
+        // 갱신 시 모든 상태 초기화
+        setData(null);
+        setSelectedRaids({});
+        setGoldRewardStates({});
+        setExcludeStates({});
+        setSortedServers([]);
+        setExcludedServers({});
+        setCustomPriceMap({});
+        setResources([]);
+        
+        try {
+            setLoading(true);
+            const response = await renewExpeditionCharacters(searchParams.get('name') || '');
+            
+            // 필터링된 데이터 생성
+            const filteredExpeditions = {
+                expeditions: {
+                    expeditions: Object.entries(response.expeditions.expeditions).reduce((acc, [server, characters]) => {
+                        // 레벨 1370 이상 캐릭터만 필터링
+                        const filteredCharacters = characters.filter((char: Character) => {
+                            const isValid = char.level >= 1370;
+                            if (!isValid) {
+                                console.log(`Filtered out character: ${char.characterName} (Level: ${char.level})`);
+                            }
+                            return isValid;
+                        });
+                        
+                        if (filteredCharacters.length > 0) {
+                            acc[server] = filteredCharacters;
+                        }
+                        return acc;
+                    }, {} as { [key: string]: Character[] })
+                },
+                resources: response.resources
+            };
+
+            // 필터링 결과 확인
+            console.log('Filtered expeditions:', filteredExpeditions);
+            
+            // 데이터 설정
+            setData(filteredExpeditions);
+            setResources(response.resources);
+
+            // 1640 레벨 이상 캐릭터 확인 및 제외 상태 초기화
+            const hasHighLevelCharacter = Object.values(filteredExpeditions.expeditions.expeditions).some(
+                (characters: Character[]) => characters.some(char => char.level >= 1640)
+            );
+
+            if (hasHighLevelCharacter) {
+                const newExcludeStates: CharacterExcludeState = {};
+                Object.values(filteredExpeditions.expeditions.expeditions).forEach((characters: Character[]) => {
+                    characters.forEach((character: Character) => {
+                        newExcludeStates[character.characterName] = character.level < 1640;
+                    });
+                });
+                setExcludeStates(newExcludeStates);
+            }
+
+            // 서버 정렬
+            const sortedServers = Object.keys(filteredExpeditions.expeditions.expeditions).sort((a, b) => {
+                const aGold = calculateServerTotalReward(
+                    a,
+                    filteredExpeditions.expeditions.expeditions[a],
+                    selectedRaids,
+                    goldRewardStates,
+                    excludeStates,
+                    customPriceMap,
+                    chaosOption,
+                    guardianOption
+                ).totalTradableGold;
+                const bGold = calculateServerTotalReward(
+                    b,
+                    filteredExpeditions.expeditions.expeditions[b],
+                    selectedRaids,
+                    goldRewardStates,
+                    excludeStates,
+                    customPriceMap,
+                    chaosOption,
+                    guardianOption
+                ).totalTradableGold;
+                return bGold - aGold;
+            });
+            setSortedServers(sortedServers);
+
+            // 각 서버별 상위 6개 캐릭터 초기화
+            Object.entries(filteredExpeditions.expeditions.expeditions).forEach(([server, characters]) => {
+                const topCharacters = [...characters]
+                    .sort((a, b) => b.level - a.level)
+                    .slice(0, 6);
+
+                topCharacters.forEach((character: Character) => {
+                    // 레이드 선택 초기화 (상위 3개 레이드)
+                    initializeSelectedRaids(character);
+                    // 골드 획득 옵션 활성화
+                    setGoldRewardStates(prev => ({
+                        ...prev,
+                        [character.characterName]: true
+                    }));
+                });
+            });
+        } catch (error) {
+            console.error('데이터 갱신 중 오류 발생:', error);
+            setError('데이터를 갱신하는 중 오류가 발생했습니다.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (

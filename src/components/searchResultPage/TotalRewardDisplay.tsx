@@ -18,15 +18,9 @@ const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGo
         try {
             setIsRefreshing(true);
             const response = await renewExpeditionCharacters(name);
-            const searchResponse: SearchResponse = {
-                expeditions: {
-                    expeditions: response.expeditions
-                },
-                resources: [] // 갱신 API는 resources를 반환하지 않으므로 빈 배열로 설정
-            };
-            onRefresh(searchResponse);
+            onRefresh(response);
         } catch (error) {
-            console.error('원정대 캐릭터 정보 갱신 실패:', error);
+            console.error('데이터 갱신 중 오류 발생:', error);
             alert('원정대 캐릭터 정보 갱신에 실패했습니다.');
         } finally {
             setIsRefreshing(false);
@@ -39,11 +33,17 @@ const TotalRewardDisplay: React.FC<TotalRewardDisplayProps> = ({ totalTradableGo
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 2,
-            px: 1,
+            px: isMobile ? 0 : 1,
             height: '40px',
-            my: 0.5
+            my: isMobile ? 0 : 0.5,
+            mt: isMobile ? 0.5 : 0
         }}>
-            <Box sx={{ display: 'flex', gap: isMobile ? 2 : 4 }}>
+            <Box sx={{ 
+                display: 'flex', 
+                gap: isMobile ? 0.5 : 2,
+                flexDirection: isMobile ? 'column' : 'row',
+                alignItems: isMobile ? 'flex-start' : 'center'
+            }}>
                 {totalTradableGold > 0 && (
                     <Typography variant={isMobile ? "body1" : "h6"} sx={{ color: 'text.primary' }}>
                         거래 가능: <span style={{

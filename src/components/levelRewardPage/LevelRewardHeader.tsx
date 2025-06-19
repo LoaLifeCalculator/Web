@@ -80,17 +80,6 @@ const LevelRewardHeader: React.FC<HeaderProps> = ({ currentTab, onTabChange }) =
                             }}
                         />
                     </Box>
-                    <Typography
-                        variant="h3"
-                        component="h1"
-                        sx={{
-                            color: 'primary.main',
-                            fontWeight: 'bold',
-                            fontSize: { xs: '1.25rem', sm: '2rem' },
-                        }}
-                    >
-                        로생계산기
-                    </Typography>
                 </Box>
             </Box>
 

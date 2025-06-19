@@ -181,6 +181,7 @@ const MainPage: React.FC = () => {
                             label="닉네임을 적어주시면 계산해 드릴게요!"
                             variant="outlined"
                             value={nickname}
+                            autoComplete="off"
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setNickname(e.target.value)}
                             error={!!error}
                             helperText={error}

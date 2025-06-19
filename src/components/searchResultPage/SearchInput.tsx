@@ -57,7 +57,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchQuery, setSearchQuery }
     };
 
     return (
-        <Box sx={{ position: 'relative', width: '100%' }}>
+        <Box sx={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
             <OutlinedInput
                 inputRef={searchInputRef}
                 placeholder="캐릭터명 검색"
@@ -108,7 +108,6 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchQuery, setSearchQuery }
                 sx={{
                     minWidth: 200,
                     maxWidth: 275,
-                    flexGrow: 1,
                     width: '100%',
                     '& .MuiOutlinedInput-notchedOutline': {
                         borderColor: 'divider'
@@ -129,12 +128,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchQuery, setSearchQuery }
                     sx={{
                         position: 'absolute',
                         top: '100%',
-                        left: 0,
                         right: 0,
                         mt: 1,
                         zIndex: 1000,
                         maxHeight: '300px',
-                        overflowY: 'auto'
+                        overflowY: 'auto',
+                        minWidth: '50%',
+                        maxWidth: '100%',
+                        width: searchInputRef.current?.offsetWidth
                     }}
                 >
                     <List>
@@ -157,7 +158,9 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchQuery, setSearchQuery }
                                     primaryTypographyProps={{
                                         sx: {
                                             fontSize: '1rem',
-                                            color: 'text.primary'
+                                            color: 'text.primary',
+                                            wordBreak: 'break-all',
+                                            whiteSpace: 'normal'
                                         }
                                     }}
                                 />

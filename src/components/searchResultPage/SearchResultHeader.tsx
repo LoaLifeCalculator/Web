@@ -34,7 +34,7 @@ const SearchResultHeader: React.FC<SearchHeaderProps> = ({
                 top: 0,
                 left: 0,
                 right: 0,
-                height: isMobile ? '160px' : '120px',
+                height: isMobile ? '180px' : '120px',
                 zIndex: 1000,
                 backgroundColor: 'background.paper',
                 borderBottom: 1,
@@ -50,7 +50,8 @@ const SearchResultHeader: React.FC<SearchHeaderProps> = ({
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                py: 0.5
+                py: 0.5,
+                width: '100%'
             }}>
                 <Box sx={{
                     display: 'flex',
@@ -58,7 +59,8 @@ const SearchResultHeader: React.FC<SearchHeaderProps> = ({
                     justifyContent: 'space-between',
                     height: '48px',
                     mb: isMobile ? 0.5 : 1.5,
-                    gap: 2
+                    gap: 2,
+                    width: '100%'
                 }}>
                     {!isMobile && (
                         <NavigationTabs
@@ -70,14 +72,14 @@ const SearchResultHeader: React.FC<SearchHeaderProps> = ({
                         display: 'flex', 
                         alignItems: 'center', 
                         gap: 2,
-                        width: isMobile ? '100%' : 'auto',
                         justifyContent: isMobile ? 'space-between' : 'flex-end',
+                        width: isMobile ? '100%' : 'auto',
                         flexShrink: 0
                     }}>
                         <Box 
                             sx={{ 
                                 display: 'flex', 
-                                alignItems: 'center', 
+                                alignItems: 'center',
                                 gap: 1,
                                 flexShrink: 0,
                                 cursor: 'pointer',
@@ -93,18 +95,13 @@ const SearchResultHeader: React.FC<SearchHeaderProps> = ({
                                     width: 'auto'
                                 }}
                             />
-                            <Typography
-                                variant="h5"
-                                component="div"
-                                sx={{whiteSpace: 'nowrap'}}
-                            >
-                                로생계산기
-                            </Typography>
                         </Box>
-                        <SearchInput
-                            searchQuery={searchQuery}
-                            setSearchQuery={setSearchQuery}
-                        />
+                        <Box sx={{flex: 1, minWidth: 0}}>
+                            <SearchInput
+                                searchQuery={searchQuery}
+                                setSearchQuery={setSearchQuery}
+                            />
+                        </Box>
                     </Box>
                 </Box>
                 {isMobile && (
