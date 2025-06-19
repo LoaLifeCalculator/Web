@@ -638,152 +638,165 @@ const LevelRewardPage: React.FC = () => {
     };
 
     return (
-        <Box sx={{minHeight: '100vh', bgcolor: 'background.default'}}>
-            <LevelRewardHeader currentTab={currentTab} onTabChange={(_, newValue) => setCurrentTab(newValue)}/>
-            <Container maxWidth={false} sx={{py: 12, maxWidth: '850px !important', height: 'auto'}}>
-                {currentTab === 0 && (
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        width: '100%',
-                        maxWidth: '1200px',
-                        mx: 'auto',
-                        px: 2,
-                        mt: 5
-                    }}>
-                        <OptionCard
-                            mainLevel={currentInput.mainLevel}
-                            compareLevel={currentInput.compareLevel}
-                            onMainLevelChange={handleMainLevelChange}
-                            onCompareLevelChange={handleCompareLevelChange}
-                            onCalculate={handleCalculate}
-                            onKeyDown={(e) => e.key === 'Enter' && handleCalculate()}
-                            guardianOption={currentInput.guardianOption}
-                            isMobile={isMobile}
-                            onGuardianOptionChange={handleGuardianOptionChange}
-                            chaosOption={currentInput.chaosOption}
-                            onChaosOptionChange={handleChaosOptionChange}
-                            selectedRaids={currentInput.selectedRaids}
-                            onRaidToggle={handleRaidToggle}
-                            calculatedMainLevel={fixedMainReward ? parseInt(currentInput.mainLevel) : null}
-                        />
-                    </Box>
-                )}
-                {currentTab === 1 && (
-                    <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 2,
-                        width: '100%',
-                        maxWidth: '1200px',
-                        mx: 'auto',
-                        px: 2,
-                        mt: 5
-                    }}>
-                        {compareReward && (compareReward.totalTradableGold > 0 || compareReward.totalBoundGold > 0) && (
-                            <ComparisonCard
-                                mainReward={mainReward}
-                                compareReward={compareReward}
-                                compareLevel={fixedCompareLevel}
-                                selectedCompareRaids={currentInput.selectedCompareRaids}
-                                onCompareRaidToggle={handleCompareRaidToggle}
-                                isMobile={isMobile}
-                            />
-                        )}
+        <>
+            <GlobalStyles
+                styles={{
+                    '*::-webkit-scrollbar': {
+                        display: 'none'
+                    },
+                    '*': {
+                        msOverflowStyle: 'none',
+                        scrollbarWidth: 'none'
+                    }
+                }}
+            />
+            <Box sx={{minHeight: '100vh', bgcolor: 'background.default'}}>
+                <LevelRewardHeader currentTab={currentTab} onTabChange={(_, newValue) => setCurrentTab(newValue)}/>
+                <Container maxWidth={false} sx={{py: 12, maxWidth: '850px !important', height: 'auto'}}>
+                    {currentTab === 0 && (
                         <Box sx={{
-                            display: 'grid',
-                            gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+                            display: 'flex',
+                            flexDirection: 'column',
                             gap: 2,
-                            width: '100%'
+                            width: '100%',
+                            maxWidth: '1200px',
+                            mx: 'auto',
+                            px: 2,
+                            mt: 5
                         }}>
-                            {mainReward && (
-                                <>
-                                    {mainReward.totalTradableGold === 0 && mainReward.totalBoundGold === 0 ? (
-                                        <Box sx={{
-                                            gridColumn: '1 / -1',
-                                            textAlign: 'center',
-                                            py: 4,
-                                            color: 'text.secondary'
-                                        }}>
-                                            표시할 보상이 없습니다. 레벨 값을 확인해주세요.
-                                        </Box>
-                                    ) : (
-                                        <>
-                                            {mainReward.totalTradableGold > 0 || mainReward.totalBoundGold > 0 ? (
-                                                <RewardCard
-                                                    title="총 보상"
-                                                    imageUrl="images/mokoko/total_mokoko.png"
-                                                    tradableGold={mainReward.totalTradableGold}
-                                                    boundGold={mainReward.totalBoundGold}
-                                                    tradableRewards={mainReward.tradableResourceRewards}
-                                                    boundRewards={mainReward.boundResourceRewards}
-                                                    isExpanded={expandedCards['total-0']}
-                                                    onToggle={() => toggleCard('total-0')}
-                                                />
-                                            ) : null}
-                                            {mainReward.raidTradableGold > 0 || mainReward.raidBoundGold > 0 ? (
-                                                <RewardCard
-                                                    title="레이드 보상"
-                                                    imageUrl="images/mokoko/raid_mokoko.png"
-                                                    tradableGold={mainReward.raidTradableGold}
-                                                    boundGold={mainReward.raidBoundGold}
-                                                    tradableRewards={mainReward.raidTradableRewards}
-                                                    boundRewards={mainReward.raidBoundRewards}
-                                                    isExpanded={expandedCards['raid-1']}
-                                                    onToggle={() => toggleCard('raid-1')}
-                                                />
-                                            ) : null}
-                                            {mainReward.chaosTradableGold > 0 || mainReward.chaosBoundGold > 0 ? (
-                                                <RewardCard
-                                                    title="카오스 던전 보상"
-                                                    imageUrl="images/mokoko/chaos_mokoko.png"
-                                                    tradableGold={mainReward.chaosTradableGold}
-                                                    boundGold={mainReward.chaosBoundGold}
-                                                    tradableRewards={mainReward.chaosTradableRewards}
-                                                    boundRewards={mainReward.chaosBoundRewards}
-                                                    isExpanded={expandedCards['chaos-2']}
-                                                    onToggle={() => toggleCard('chaos-2')}
-                                                />
-                                            ) : null}
-                                            {mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0 ? (
-                                                <RewardCard
-                                                    title="가디언 토벌 보상"
-                                                    imageUrl="images/mokoko/guardian_mokoko.png"
-                                                    tradableGold={mainReward.guardianTradableGold}
-                                                    boundGold={mainReward.guardianBoundGold}
-                                                    tradableRewards={mainReward.guardianTradableRewards}
-                                                    boundRewards={mainReward.guardianBoundRewards}
-                                                    isExpanded={expandedCards['guardian-3']}
-                                                    onToggle={() => toggleCard('guardian-3')}
-                                                />
-                                            ) : null}
-                                        </>
-                                    )}
-                                </>
-                            )}
+                            <OptionCard
+                                mainLevel={currentInput.mainLevel}
+                                compareLevel={currentInput.compareLevel}
+                                onMainLevelChange={handleMainLevelChange}
+                                onCompareLevelChange={handleCompareLevelChange}
+                                onCalculate={handleCalculate}
+                                onKeyDown={(e) => e.key === 'Enter' && handleCalculate()}
+                                guardianOption={currentInput.guardianOption}
+                                isMobile={isMobile}
+                                onGuardianOptionChange={handleGuardianOptionChange}
+                                chaosOption={currentInput.chaosOption}
+                                onChaosOptionChange={handleChaosOptionChange}
+                                selectedRaids={currentInput.selectedRaids}
+                                onRaidToggle={handleRaidToggle}
+                                calculatedMainLevel={fixedMainReward ? parseInt(currentInput.mainLevel) : null}
+                            />
                         </Box>
-                    </Box>
-                )}
-                {currentTab === 2 && (
-                    <Box sx={{mt: 5}}>
-                        <Typography 
-                            variant="body1" 
-                            color="text.secondary" 
-                            align="center" 
-                        >
-                            시세 변경은 계산하기 버튼을 눌렀을 때 반영됩니다
-                        </Typography>
-                        <PriceTab
-                            resources={resources.map(r => ({item: r.item, avgPrice: r.avgPrice}))}
-                            priceMap={priceMap}
-                            onPriceChange={(item: string, val: number) => setPriceMap(prev => ({...prev, [item]: val}))}
-                            onClose={() => setCurrentTab(0)}
-                        />
-                    </Box>
-                )}
-            </Container>
-        </Box>
+                    )}
+                    {currentTab === 1 && (
+                        <Box sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 2,
+                            width: '100%',
+                            maxWidth: '1200px',
+                            mx: 'auto',
+                            px: 2,
+                            mt: 5
+                        }}>
+                            {compareReward && (compareReward.totalTradableGold > 0 || compareReward.totalBoundGold > 0) && (
+                                <ComparisonCard
+                                    mainReward={mainReward}
+                                    compareReward={compareReward}
+                                    compareLevel={fixedCompareLevel}
+                                    selectedCompareRaids={currentInput.selectedCompareRaids}
+                                    onCompareRaidToggle={handleCompareRaidToggle}
+                                    isMobile={isMobile}
+                                />
+                            )}
+                            <Box sx={{
+                                display: 'grid',
+                                gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+                                gap: 2,
+                                width: '100%'
+                            }}>
+                                {mainReward && (
+                                    <>
+                                        {mainReward.totalTradableGold === 0 && mainReward.totalBoundGold === 0 ? (
+                                            <Box sx={{
+                                                gridColumn: '1 / -1',
+                                                textAlign: 'center',
+                                                py: 4,
+                                                color: 'text.secondary'
+                                            }}>
+                                                표시할 보상이 없습니다. 레벨 값을 확인해주세요.
+                                            </Box>
+                                        ) : (
+                                            <>
+                                                {mainReward.totalTradableGold > 0 || mainReward.totalBoundGold > 0 ? (
+                                                    <RewardCard
+                                                        title="총 보상"
+                                                        imageUrl="images/mokoko/total_mokoko.png"
+                                                        tradableGold={mainReward.totalTradableGold}
+                                                        boundGold={mainReward.totalBoundGold}
+                                                        tradableRewards={mainReward.tradableResourceRewards}
+                                                        boundRewards={mainReward.boundResourceRewards}
+                                                        isExpanded={expandedCards['total-0']}
+                                                        onToggle={() => toggleCard('total-0')}
+                                                    />
+                                                ) : null}
+                                                {mainReward.raidTradableGold > 0 || mainReward.raidBoundGold > 0 ? (
+                                                    <RewardCard
+                                                        title="레이드 보상"
+                                                        imageUrl="images/mokoko/raid_mokoko.png"
+                                                        tradableGold={mainReward.raidTradableGold}
+                                                        boundGold={mainReward.raidBoundGold}
+                                                        tradableRewards={mainReward.raidTradableRewards}
+                                                        boundRewards={mainReward.raidBoundRewards}
+                                                        isExpanded={expandedCards['raid-1']}
+                                                        onToggle={() => toggleCard('raid-1')}
+                                                    />
+                                                ) : null}
+                                                {mainReward.chaosTradableGold > 0 || mainReward.chaosBoundGold > 0 ? (
+                                                    <RewardCard
+                                                        title="카오스 던전 보상"
+                                                        imageUrl="images/mokoko/chaos_mokoko.png"
+                                                        tradableGold={mainReward.chaosTradableGold}
+                                                        boundGold={mainReward.chaosBoundGold}
+                                                        tradableRewards={mainReward.chaosTradableRewards}
+                                                        boundRewards={mainReward.chaosBoundRewards}
+                                                        isExpanded={expandedCards['chaos-2']}
+                                                        onToggle={() => toggleCard('chaos-2')}
+                                                    />
+                                                ) : null}
+                                                {mainReward.guardianTradableGold > 0 || mainReward.guardianBoundGold > 0 ? (
+                                                    <RewardCard
+                                                        title="가디언 토벌 보상"
+                                                        imageUrl="images/mokoko/guardian_mokoko.png"
+                                                        tradableGold={mainReward.guardianTradableGold}
+                                                        boundGold={mainReward.guardianBoundGold}
+                                                        tradableRewards={mainReward.guardianTradableRewards}
+                                                        boundRewards={mainReward.guardianBoundRewards}
+                                                        isExpanded={expandedCards['guardian-3']}
+                                                        onToggle={() => toggleCard('guardian-3')}
+                                                    />
+                                                ) : null}
+                                            </>
+                                        )}
+                                    </>
+                                )}
+                            </Box>
+                        </Box>
+                    )}
+                    {currentTab === 2 && (
+                        <Box sx={{mt: 5}}>
+                            <Typography 
+                                variant="body1" 
+                                color="text.secondary" 
+                                align="center" 
+                            >
+                                시세 변경은 계산하기 버튼을 눌렀을 때 반영됩니다
+                            </Typography>
+                            <PriceTab
+                                resources={resources.map(r => ({item: r.item, avgPrice: r.avgPrice}))}
+                                priceMap={priceMap}
+                                onPriceChange={(item: string, val: number) => setPriceMap(prev => ({...prev, [item]: val}))}
+                                onClose={() => setCurrentTab(0)}
+                            />
+                        </Box>
+                    )}
+                </Container>
+            </Box>
+        </>
     );
 };
 

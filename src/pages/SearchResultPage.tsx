@@ -552,6 +552,12 @@ const SearchResultPage: React.FC = () => {
             };
         }
 
+        let totalTradableGold = 0;
+        let totalBoundGold = 0;
+        const tradableResourceRewards: Record<string, { count: number, goldValue: number }> = {};
+        const boundResourceRewards: Record<string, { count: number, goldValue: number }> = {};
+
+        // 모든 캐릭터 수집
         let allCharacters: Character[] = [];
         sortedServers.forEach(server => {
             if (excludedServers[server]) return;
@@ -560,16 +566,267 @@ const SearchResultPage: React.FC = () => {
             allCharacters = [...allCharacters, ...characters];
         });
 
-        return calculateTotalReward(
-            allCharacters,
-            selectedRaids,
-            goldRewardStates,
-            excludeStates,
-            customPriceMap,
-            chaosOption,
-            guardianOption
-        );
-    }, [data, sortedServers, excludedServers, selectedRaids, goldRewardStates, excludeStates, customPriceMap, chaosOption, guardianOption]);
+        // 각 캐릭터별로 보상 계산
+        allCharacters.forEach((character: Character) => {
+            if (!character || excludeStates[character.characterName]) return;
+
+            // 카오스 던전 보상
+            if (chaosOption !== 2) {
+                const chaosReward = getSuitableChaosReward(character.level);
+                if (chaosReward) {
+                    const multiplier = chaosOption === 1 ? 14 / 3 : 7;
+                    
+                    // 순수 골드
+                    if (chaosReward.gold) {
+                        const goldAmount = chaosReward.gold * multiplier;
+                        if (!tradableResourceRewards['GOLD']) {
+                            tradableResourceRewards['GOLD'] = { count: 0, goldValue: 0 };
+                        }
+                        tradableResourceRewards['GOLD'].count += goldAmount;
+                        tradableResourceRewards['GOLD'].goldValue += goldAmount;
+                        totalTradableGold += goldAmount;
+                    }
+
+                    // 거래 가능 재화
+                    if (chaosReward.weaponStones) {
+                        Object.entries(chaosReward.weaponStones).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+                    if (chaosReward.armorStones) {
+                        Object.entries(chaosReward.armorStones).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+                    if (chaosReward.gems) {
+                        Object.entries(chaosReward.gems).forEach(([grade, count]) => {
+                            const resource = `GEM_TIER_${grade}`;
+                            const totalCount = count * multiplier;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+
+                    // 귀속 재화
+                    if (chaosReward.shards) {
+                        Object.entries(chaosReward.shards).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!boundResourceRewards[resource]) {
+                                boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            boundResourceRewards[resource].goldValue += goldValue;
+                            totalBoundGold += goldValue;
+                        });
+                    }
+                    if (chaosReward.leapStones) {
+                        Object.entries(chaosReward.leapStones).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!boundResourceRewards[resource]) {
+                                boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            boundResourceRewards[resource].goldValue += goldValue;
+                            totalBoundGold += goldValue;
+                        });
+                    }
+                }
+            }
+
+            // 가디언 토벌 보상
+            if (guardianOption !== 2) {
+                const guardianReward = getSuitableGuardianReward(character.level);
+                if (guardianReward) {
+                    const multiplier = guardianOption === 1 ? 14 / 3 : 7;
+                    
+                    // 순수 골드
+                    if (guardianReward.gold) {
+                        const goldAmount = guardianReward.gold * multiplier;
+                        if (!tradableResourceRewards['GOLD']) {
+                            tradableResourceRewards['GOLD'] = { count: 0, goldValue: 0 };
+                        }
+                        tradableResourceRewards['GOLD'].count += goldAmount;
+                        tradableResourceRewards['GOLD'].goldValue += goldAmount;
+                        totalTradableGold += goldAmount;
+                    }
+
+                    // 거래 가능 재화
+                    if (guardianReward.weaponStones) {
+                        Object.entries(guardianReward.weaponStones).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+                    if (guardianReward.armorStones) {
+                        Object.entries(guardianReward.armorStones).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+                    if (guardianReward.gems) {
+                        Object.entries(guardianReward.gems).forEach(([grade, count]) => {
+                            const resource = `GEM_TIER_${grade}`;
+                            const totalCount = count * multiplier;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+                    if (guardianReward.leapStones) {
+                        Object.entries(guardianReward.leapStones).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+
+                    // 귀속 재화
+                    if (guardianReward.shards) {
+                        Object.entries(guardianReward.shards).forEach(([resource, count]) => {
+                            const totalCount = count * multiplier;
+                            if (!boundResourceRewards[resource]) {
+                                boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards[resource].count += totalCount;
+                            const goldValue = totalCount * (customPriceMap[resource] || 0);
+                            boundResourceRewards[resource].goldValue += goldValue;
+                            totalBoundGold += goldValue;
+                        });
+                    }
+                }
+            }
+
+            // 레이드 보상
+            const availableRaids = getAvailableRaids(character.level);
+            const checkedRaids = selectedRaids[character.characterName] || [];
+            const isGoldReward = goldRewardStates[character.characterName] || false;
+
+            availableRaids.forEach(raid => {
+                if (checkedRaids.includes(raid.name)) {
+                    const reward = isGoldReward ? raid.goldReward : raid.nonGoldReward;
+                    
+                    // 순수 골드
+                    if (reward.gold) {
+                        if (!tradableResourceRewards['GOLD']) {
+                            tradableResourceRewards['GOLD'] = { count: 0, goldValue: 0 };
+                        }
+                        tradableResourceRewards['GOLD'].count += reward.gold;
+                        tradableResourceRewards['GOLD'].goldValue += reward.gold;
+                        totalTradableGold += reward.gold;
+                    }
+
+                    // 거래 가능 재화
+                    if (reward.gems) {
+                        Object.entries(reward.gems).forEach(([grade, count]) => {
+                            const resource = `GEM_TIER_${grade}`;
+                            if (!tradableResourceRewards[resource]) {
+                                tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards[resource].count += count;
+                            const goldValue = count * (customPriceMap[resource] || 0);
+                            tradableResourceRewards[resource].goldValue += goldValue;
+                            totalTradableGold += goldValue;
+                        });
+                    }
+
+                    // 귀속 재화
+                    if (reward.shards) {
+                        Object.entries(reward.shards).forEach(([resource, count]) => {
+                            if (!boundResourceRewards[resource]) {
+                                boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards[resource].count += count;
+                            const goldValue = count * (customPriceMap[resource] || 0);
+                            boundResourceRewards[resource].goldValue += goldValue;
+                            totalBoundGold += goldValue;
+                        });
+                    }
+                    if (reward.weaponStones) {
+                        Object.entries(reward.weaponStones).forEach(([resource, count]) => {
+                            if (!boundResourceRewards[resource]) {
+                                boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards[resource].count += count;
+                            const goldValue = count * (customPriceMap[resource] || 0);
+                            boundResourceRewards[resource].goldValue += goldValue;
+                            totalBoundGold += goldValue;
+                        });
+                    }
+                    if (reward.armorStones) {
+                        Object.entries(reward.armorStones).forEach(([resource, count]) => {
+                            if (!boundResourceRewards[resource]) {
+                                boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards[resource].count += count;
+                            const goldValue = count * (customPriceMap[resource] || 0);
+                            boundResourceRewards[resource].goldValue += goldValue;
+                            totalBoundGold += goldValue;
+                        });
+                    }
+                    if (reward.leapStones) {
+                        Object.entries(reward.leapStones).forEach(([resource, count]) => {
+                            if (!boundResourceRewards[resource]) {
+                                boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards[resource].count += count;
+                            const goldValue = count * (customPriceMap[resource] || 0);
+                            boundResourceRewards[resource].goldValue += goldValue;
+                            totalBoundGold += goldValue;
+                        });
+                    }
+                }
+            });
+        });
+
+        return {
+            totalTradableGold,
+            totalBoundGold,
+            tradableResourceRewards,
+            boundResourceRewards
+        };
+    }, [data, sortedServers, excludedServers, excludeStates, selectedRaids, goldRewardStates, customPriceMap, chaosOption, guardianOption]);
 
     const calculateRaidReward = React.useCallback(() => {
         let totalTradableGold = 0;
@@ -594,69 +851,75 @@ const SearchResultPage: React.FC = () => {
 
                 availableRaids.forEach(raid => {
                     if (checkedRaids.includes(raid.name)) {
-                        const reward: Reward = isGoldReward ? raid.goldReward : raid.nonGoldReward;
-                        totalTradableGold += calcRaidTradableGold(reward, customPriceMap);
-                        totalBoundGold += calcRaidBoundGold(reward, customPriceMap);
+                        const reward = isGoldReward ? raid.goldReward : raid.nonGoldReward;
 
-                        // 거래 가능 재화 집계
+                        // 순수 골드
                         if (reward.gold) {
-                            if (!tradableResourceRewards['GOLD']) tradableResourceRewards['GOLD'] = {
-                                count: 0,
-                                goldValue: 0
-                            };
+                            if (!tradableResourceRewards['GOLD']) {
+                                tradableResourceRewards['GOLD'] = { count: 0, goldValue: 0 };
+                            }
                             tradableResourceRewards['GOLD'].count += reward.gold;
                             tradableResourceRewards['GOLD'].goldValue += reward.gold;
+                            totalTradableGold += reward.gold;
                         }
+
+                        // 거래 가능 재화
                         if (reward.gems) {
                             Object.entries(reward.gems).forEach(([grade, count]) => {
                                 const resource = `GEM_TIER_${grade}`;
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
                                 tradableResourceRewards[resource].count += count;
-                                tradableResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
+                                const goldValue = count * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
                             });
                         }
-                        // 귀속 재화 집계
+
+                        // 귀속 재화
                         if (reward.shards) {
                             Object.entries(reward.shards).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
+                                if (!boundResourceRewards[resource]) {
+                                    boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
                                 boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
+                                const goldValue = count * (customPriceMap[resource] || 0);
+                                boundResourceRewards[resource].goldValue += goldValue;
+                                totalBoundGold += goldValue;
                             });
                         }
                         if (reward.weaponStones) {
                             Object.entries(reward.weaponStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
+                                if (!boundResourceRewards[resource]) {
+                                    boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
                                 boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
+                                const goldValue = count * (customPriceMap[resource] || 0);
+                                boundResourceRewards[resource].goldValue += goldValue;
+                                totalBoundGold += goldValue;
                             });
                         }
                         if (reward.armorStones) {
                             Object.entries(reward.armorStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
+                                if (!boundResourceRewards[resource]) {
+                                    boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
                                 boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
+                                const goldValue = count * (customPriceMap[resource] || 0);
+                                boundResourceRewards[resource].goldValue += goldValue;
+                                totalBoundGold += goldValue;
                             });
                         }
                         if (reward.leapStones) {
                             Object.entries(reward.leapStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
+                                if (!boundResourceRewards[resource]) {
+                                    boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
                                 boundResourceRewards[resource].count += count;
-                                boundResourceRewards[resource].goldValue += count * (customPriceMap[resource] || 0);
+                                const goldValue = count * (customPriceMap[resource] || 0);
+                                boundResourceRewards[resource].goldValue += goldValue;
+                                totalBoundGold += goldValue;
                             });
                         }
                     }
@@ -690,68 +953,79 @@ const SearchResultPage: React.FC = () => {
                 if (chaosOption !== 2) {
                     const chaosReward = getSuitableChaosReward(character.level);
                     if (chaosReward) {
-                        totalTradableGold += calcChaosTradableGold(chaosReward, customPriceMap, chaosOption === 1);
-                        totalBoundGold += calcChaosBoundGold(chaosReward, customPriceMap, chaosOption === 1);
-
-                        // 거래 가능 재화 집계
+                        // 순수 골드
                         if (chaosReward.gold) {
-                            if (!tradableResourceRewards['GOLD']) tradableResourceRewards['GOLD'] = {
-                                count: 0,
-                                goldValue: 0
-                            };
-                            tradableResourceRewards['GOLD'].count += chaosReward.gold * chaosMultiplier;
-                            tradableResourceRewards['GOLD'].goldValue += chaosReward.gold * chaosMultiplier;
+                            const goldAmount = chaosReward.gold * chaosMultiplier;
+                            if (!tradableResourceRewards['GOLD']) {
+                                tradableResourceRewards['GOLD'] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards['GOLD'].count += goldAmount;
+                            tradableResourceRewards['GOLD'].goldValue += goldAmount;
+                            totalTradableGold += goldAmount;
                         }
+
+                        // 거래 가능 재화
                         if (chaosReward.weaponStones) {
                             Object.entries(chaosReward.weaponStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count * chaosMultiplier;
-                                tradableResourceRewards[resource].goldValue += count * chaosMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * chaosMultiplier;
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                tradableResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
                             });
                         }
                         if (chaosReward.armorStones) {
                             Object.entries(chaosReward.armorStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count * chaosMultiplier;
-                                tradableResourceRewards[resource].goldValue += count * chaosMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * chaosMultiplier;
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                tradableResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
                             });
                         }
                         if (chaosReward.gems) {
                             Object.entries(chaosReward.gems).forEach(([grade, count]) => {
                                 const resource = `GEM_TIER_${grade}`;
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count * chaosMultiplier;
-                                tradableResourceRewards[resource].goldValue += count * chaosMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * chaosMultiplier;
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                tradableResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
                             });
                         }
-                        // 귀속 재화 집계
+
+                        // 귀속 재화
                         if (chaosReward.shards) {
                             Object.entries(chaosReward.shards).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count * chaosMultiplier;
-                                boundResourceRewards[resource].goldValue += count * chaosMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * chaosMultiplier;
+                                if (!boundResourceRewards[resource]) {
+                                    boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                boundResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                boundResourceRewards[resource].goldValue += goldValue;
+                                totalBoundGold += goldValue;
                             });
                         }
                         if (chaosReward.leapStones) {
                             Object.entries(chaosReward.leapStones).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count * chaosMultiplier;
-                                boundResourceRewards[resource].goldValue += count * chaosMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * chaosMultiplier;
+                                if (!boundResourceRewards[resource]) {
+                                    boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                boundResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                boundResourceRewards[resource].goldValue += goldValue;
+                                totalBoundGold += goldValue;
                             });
                         }
                     }
@@ -785,68 +1059,79 @@ const SearchResultPage: React.FC = () => {
                 if (guardianOption !== 2) {
                     const guardianReward = getSuitableGuardianReward(character.level);
                     if (guardianReward) {
-                        totalTradableGold += calcGuardianTradableGold(guardianReward, customPriceMap, guardianOption === 1);
-                        totalBoundGold += calcGuardianBoundGold(guardianReward, customPriceMap, guardianOption === 1);
-
-                        // 거래 가능 재화 집계
+                        // 순수 골드
                         if (guardianReward.gold) {
-                            if (!tradableResourceRewards['GOLD']) tradableResourceRewards['GOLD'] = {
-                                count: 0,
-                                goldValue: 0
-                            };
-                            tradableResourceRewards['GOLD'].count += guardianReward.gold * guardianMultiplier;
-                            tradableResourceRewards['GOLD'].goldValue += guardianReward.gold * guardianMultiplier;
+                            const goldAmount = guardianReward.gold * guardianMultiplier;
+                            if (!tradableResourceRewards['GOLD']) {
+                                tradableResourceRewards['GOLD'] = { count: 0, goldValue: 0 };
+                            }
+                            tradableResourceRewards['GOLD'].count += goldAmount;
+                            tradableResourceRewards['GOLD'].goldValue += goldAmount;
+                            totalTradableGold += goldAmount;
                         }
+
+                        // 거래 가능 재화
                         if (guardianReward.weaponStones) {
                             Object.entries(guardianReward.weaponStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count * guardianMultiplier;
-                                tradableResourceRewards[resource].goldValue += count * guardianMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * guardianMultiplier;
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                tradableResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
                             });
                         }
                         if (guardianReward.armorStones) {
                             Object.entries(guardianReward.armorStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count * guardianMultiplier;
-                                tradableResourceRewards[resource].goldValue += count * guardianMultiplier * (customPriceMap[resource] || 0);
-                            });
-                        }
-                        if (guardianReward.leapStones) {
-                            Object.entries(guardianReward.leapStones).forEach(([resource, count]) => {
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count * guardianMultiplier;
-                                tradableResourceRewards[resource].goldValue += count * guardianMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * guardianMultiplier;
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                tradableResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
                             });
                         }
                         if (guardianReward.gems) {
                             Object.entries(guardianReward.gems).forEach(([grade, count]) => {
                                 const resource = `GEM_TIER_${grade}`;
-                                if (!tradableResourceRewards[resource]) tradableResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                tradableResourceRewards[resource].count += count * guardianMultiplier;
-                                tradableResourceRewards[resource].goldValue += count * guardianMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * guardianMultiplier;
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                tradableResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
                             });
                         }
-                        // 귀속 재화 집계
+
+                        // 귀속 재화
+                        if (guardianReward.leapStones) {
+                            Object.entries(guardianReward.leapStones).forEach(([resource, count]) => {
+                                const totalCount = count * guardianMultiplier;
+                                if (!tradableResourceRewards[resource]) {
+                                    tradableResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                tradableResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                tradableResourceRewards[resource].goldValue += goldValue;
+                                totalTradableGold += goldValue;
+                            });
+                        }
                         if (guardianReward.shards) {
                             Object.entries(guardianReward.shards).forEach(([resource, count]) => {
-                                if (!boundResourceRewards[resource]) boundResourceRewards[resource] = {
-                                    count: 0,
-                                    goldValue: 0
-                                };
-                                boundResourceRewards[resource].count += count * guardianMultiplier;
-                                boundResourceRewards[resource].goldValue += count * guardianMultiplier * (customPriceMap[resource] || 0);
+                                const totalCount = count * guardianMultiplier;
+                                if (!boundResourceRewards[resource]) {
+                                    boundResourceRewards[resource] = { count: 0, goldValue: 0 };
+                                }
+                                boundResourceRewards[resource].count += totalCount;
+                                const goldValue = totalCount * (customPriceMap[resource] || 0);
+                                boundResourceRewards[resource].goldValue += goldValue;
+                                totalBoundGold += goldValue;
                             });
                         }
                     }
@@ -949,6 +1234,13 @@ const SearchResultPage: React.FC = () => {
             // 데이터 설정
             setData(filteredExpeditions);
             setResources(response.resources);
+
+            // 초기 시세 데이터 설정 (추가된 부분)
+            const initialPriceMap = response.resources.reduce((acc, resource) => {
+                acc[resource.item] = resource.avgPrice;
+                return acc;
+            }, {} as Record<string, number>);
+            setCustomPriceMap(initialPriceMap);
 
             // 1640 레벨 이상 캐릭터 확인 및 제외 상태 초기화
             const hasHighLevelCharacter = Object.values(filteredExpeditions.expeditions.expeditions).some(
