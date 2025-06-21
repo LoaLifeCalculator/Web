@@ -15,7 +15,7 @@ interface FilterAndToolsTabProps {
   onBatchRaidByLevel: (level: number) => void;
 }
 
-const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
+const OptionTab: React.FC<FilterAndToolsTabProps> = ({
   chaosOption,
   onChaosOptionChange,
   guardianOption,
@@ -216,4 +216,4 @@ const FilterAndToolsTab: React.FC<FilterAndToolsTabProps> = ({
   );
 };
 
-export default FilterAndToolsTab; 
+export default OptionTab;

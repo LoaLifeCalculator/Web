@@ -42,7 +42,7 @@ import {
     calculateServerTotalReward
 } from '../utils/rewardCalculator';
 import ResultCharacterCard from '../components/searchResultPage/ResultCharacterCard';
-import FilterAndToolsTab from '../components/searchResultPage/FilterAndToolsTab';
+import OptionTab from '../components/searchResultPage/OptionTab';
 import PriceTab from '../components/common/PriceTab';
 import TotalRewardCard from '../components/searchResultPage/TotalRewardCard';
 import ServerCard from '../components/searchResultPage/ServerCard';
@@ -1414,7 +1414,7 @@ const SearchResultPage: React.FC = () => {
                             </Box>
                         )}
                         {tab === 2 && (
-                            <FilterAndToolsTab
+                            <OptionTab
                                 chaosOption={chaosOption}
                                 onChaosOptionChange={handleChaosOptionChange}
                                 guardianOption={guardianOption}
