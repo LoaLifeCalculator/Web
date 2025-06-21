@@ -63,7 +63,7 @@ const RewardCard: React.FC<RewardCardProps> = ({
                                 mb: 0.5
                             }}
                         >
-                            골드 보상
+                            기본 보상
                         </Typography>
                         {formatReward(reward).map((detail, detailIndex) => (
                             <Box

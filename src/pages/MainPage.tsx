@@ -110,7 +110,7 @@ const MainPage: React.FC = () => {
                         color: 'text.main',
                     }}
                 >
-                    이모티콘을 제공해주신 {' '}
+                    이모티콘을 제공해 주신 {' '}
                     <Link
                         href="https://coconut-emoji.tistory.com/"
                         target="_blank"

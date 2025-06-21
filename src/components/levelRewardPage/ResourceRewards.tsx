@@ -68,9 +68,9 @@ const ResourceRewards: React.FC<ResourceRewardsProps> = ({
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {Object.keys(tradableRewards).length > 0 &&
-                renderSection(tradableRewards, '거래 가능 아이템')}
+                renderSection(tradableRewards, '거래 가능 재화')}
             {Object.keys(boundRewards).length > 0 &&
-                renderSection(boundRewards, '귀속 아이템')}
+                renderSection(boundRewards, '귀속 재화')}
         </Box>
     );
 };

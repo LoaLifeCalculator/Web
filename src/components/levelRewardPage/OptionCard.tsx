@@ -121,7 +121,7 @@ const OptionCard: React.FC<OptionCardProps> = ({
                                 }
                             }}
                         >
-                            {mainLevel ? '계산하기' : '레벨을 입력해주세요'}
+                            {mainLevel ? '계산하기' : '레벨을 입력해 주세요'}
                         </Button>
                     </Box>
                 </CardContent>

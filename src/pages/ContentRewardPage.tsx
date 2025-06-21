@@ -417,7 +417,7 @@ const ContentRewardPage: React.FC = () => {
                                     px: 2
                                 }}
                             >
-                                가디언 토벌과 카오스 던전 보상은 추정치이며, 지속적으로 업데이트중입니다.
+                                가디언 토벌과 카오스 던전 보상은 추정치이며, 지속적으로 업데이트 중입니다.
                             </Typography>
                             <Box sx={{p: 2}}>
                                 <Accordion
