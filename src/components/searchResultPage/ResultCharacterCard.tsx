@@ -50,8 +50,7 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
   onResourcesToggle,
 }) => {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery('(max-width:1300px)');
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery('(max-width:800px)');
 
   // 보상 계산
   let totalTradableGold = 0;

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Box, Typography, FormControlLabel, Radio, RadioGroup, TextField, Button, Card, CardContent } from '@mui/material';
+import { Box, Typography, FormControlLabel, Radio, RadioGroup, TextField, Button, Card, CardContent, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 interface FilterAndToolsTabProps {
@@ -30,6 +30,7 @@ const OptionTab: React.FC<FilterAndToolsTabProps> = ({
   const [excludeButtonVariant, setExcludeButtonVariant] = useState<'contained' | 'outlined'>('contained');
   const [raidButtonVariant, setRaidButtonVariant] = useState<'contained' | 'outlined'>('contained');
   const theme = useTheme();
+  const isMobile = useMediaQuery('(max-width:800px)');
   const excludeInputRef = useRef<HTMLInputElement>(null);
   const raidInputRef = useRef<HTMLInputElement>(null);
 
@@ -57,7 +58,7 @@ const OptionTab: React.FC<FilterAndToolsTabProps> = ({
     <Box sx={{ py: 3, px: 0 }}>
       <Box sx={{ 
         display: 'grid', 
-        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
         gap: 2 
       }}>
         {/* 카오스 던전 */}

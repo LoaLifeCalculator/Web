@@ -7,11 +7,8 @@ interface RestViewButtonProps {
     label?: string;
 }
 
-const RestViewButton: React.FC<RestViewButtonProps> = ({isActive, onClick, label}) => {
+const RestViewButton: React.FC<RestViewButtonProps> = ({isActive, onClick, label = "휴게 기준으로 보기"}) => {
     const theme = useTheme();
-    
-    // isActive 상태에 따라 텍스트 결정
-    const buttonText = isActive ? "휴식 게이지 O" : "휴식 게이지 X";
     
     return (
         <Button
@@ -29,7 +26,7 @@ const RestViewButton: React.FC<RestViewButtonProps> = ({isActive, onClick, label
                 }
             }}
         >
-            {buttonText}
+            {label}
         </Button>
     );
 };
