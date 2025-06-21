@@ -188,16 +188,16 @@ export const guardianRewards: RewardEntry[] = [
         reward: {
             leapStones: {DESTINY_LEAPSTONE: 21},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 186},
-            armorStones: {DESTINY_GUARDIAN_STONE: 550}
+            armorStones: {DESTINY_GUARDIAN_STONE: 570}
         }
     },
     {
         minLevel: 1680,
         name: "스콜라키아",
         reward: {
-            leapStones: {DESTINY_LEAPSTONE: 17},
-            weaponStones: {DESTINY_DESTRUCTION_STONE: 196},
-            armorStones: {DESTINY_GUARDIAN_STONE: 438}
+            leapStones: {DESTINY_LEAPSTONE: 18},
+            weaponStones: {DESTINY_DESTRUCTION_STONE: 150},
+            armorStones: {DESTINY_GUARDIAN_STONE: 449}
         }
     },
     {
@@ -205,8 +205,8 @@ export const guardianRewards: RewardEntry[] = [
         name: "아게오로스",
         reward: {
             leapStones: {DESTINY_LEAPSTONE: 12},
-            weaponStones: {DESTINY_DESTRUCTION_STONE: 92},
-            armorStones: {DESTINY_GUARDIAN_STONE: 281}
+            weaponStones: {DESTINY_DESTRUCTION_STONE: 97},
+            armorStones: {DESTINY_GUARDIAN_STONE: 291}
         }
     },
     {
