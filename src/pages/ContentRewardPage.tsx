@@ -140,6 +140,10 @@ const ContentRewardPage: React.FC = () => {
             total += reward.gold;
         }
 
+        if (reward.boundedGold) {
+            total += reward.boundedGold;
+        }
+
         if (reward.shards) {
             Object.entries(reward.shards).forEach(([key, count]) => {
                 const resource = resources.find(r => r.item === key);
@@ -235,7 +239,16 @@ const ContentRewardPage: React.FC = () => {
                 name: '골드',
                 count: reward.gold,
                 image: '/images/items/GOLD.png',
-                goldValue: reward.gold
+                goldValue: undefined
+            });
+        }
+
+        if (reward.boundedGold) {
+            details.push({
+                name: '귀속 골드',
+                count: reward.boundedGold,
+                image: '/images/items/GOLD.png',
+                goldValue: undefined
             });
         }
 

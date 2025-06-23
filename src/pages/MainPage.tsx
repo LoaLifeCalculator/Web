@@ -152,7 +152,7 @@ const MainPage: React.FC = () => {
                         width: '100%'
                     }}>
                         <img
-                            src="/images/mokoko/title_mokoko.png"
+                            src="/images/mokoko/welcome_mokoko.png"
                             alt="로생계산기"
                             style={{
                                 height: 90,

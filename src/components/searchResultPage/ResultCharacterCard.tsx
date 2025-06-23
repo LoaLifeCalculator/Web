@@ -210,6 +210,15 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
           tradableResources['GOLD'].goldValue += reward.gold;
         }
 
+        // 귀속 골드 추가
+        if (reward.boundedGold) {
+          if (!boundResources['BOUNDED_GOLD']) {
+            boundResources['BOUNDED_GOLD'] = { count: 0, goldValue: 0 };
+          }
+          boundResources['BOUNDED_GOLD'].count += reward.boundedGold;
+          boundResources['BOUNDED_GOLD'].goldValue += reward.boundedGold;
+        }
+
         // 재화 수급량 계산
         if (reward.weaponStones) {
           Object.entries(reward.weaponStones).forEach(([resource, count]) => {
@@ -267,10 +276,12 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
     let entries = Object.entries(rewards).filter(([_, value]) => value.count > 0);
     if (entries.length === 0) return null;
     
-    // GOLD를 맨 앞으로, 나머지는 goldValue 내림차순 정렬
+    // GOLD와 BOUNDED_GOLD를 맨 앞으로, 나머지는 goldValue 내림차순 정렬
     entries = entries.sort((a, b) => {
       if (a[0] === 'GOLD') return -1;
       if (b[0] === 'GOLD') return 1;
+      if (a[0] === 'BOUNDED_GOLD') return -1;
+      if (b[0] === 'BOUNDED_GOLD') return 1;
       return b[1].goldValue - a[1].goldValue;
     });
     
@@ -279,14 +290,14 @@ const ResultCharacterCard: React.FC<ResultCharacterCardProps> = ({
         {entries.map(([resource, { count, goldValue }]) => (
           <Box key={resource} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
             <Avatar
-              src={`/images/items/${resource}.png`}
-              alt={ITEM_TRANSLATIONS[resource] || resource}
+              src={resource === 'BOUNDED_GOLD' ? '/images/items/GOLD.png' : `/images/items/${resource}.png`}
+              alt={resource === 'GOLD' ? '골드' : resource === 'BOUNDED_GOLD' ? '귀속 골드' : ITEM_TRANSLATIONS[resource] || resource}
               sx={{ width: 25, height: 25 }}
               variant="rounded"
             />
-            {resource === 'GOLD' ? (
+            {resource === 'GOLD' || resource === 'BOUNDED_GOLD' ? (
               <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '0.85rem' }}>
-                골드: <span style={{ color: theme.palette.primary.main }}>{Math.floor(goldValue).toLocaleString()}G</span>
+                {resource === 'GOLD' ? '골드' : '귀속 골드'}: <span style={{ color: theme.palette.primary.main }}>{Math.floor(goldValue).toLocaleString()}G</span>
               </Typography>
             ) : (
               <Typography variant="body1" sx={{ fontSize: '0.85rem' }}>

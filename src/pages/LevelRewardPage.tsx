@@ -492,6 +492,17 @@ const LevelRewardPage: React.FC = () => {
                 totalTradableGold += g;
                 raidTradableGold += g;
             }
+            if (raid.goldReward.boundedGold) {
+                const bg = raid.goldReward.boundedGold;
+                boundResourceRewards['BOUNDED_GOLD'] = boundResourceRewards['BOUNDED_GOLD'] ?? {count: 0, goldValue: 0};
+                raidBoundRewards['BOUNDED_GOLD'] = raidBoundRewards['BOUNDED_GOLD'] ?? {count: 0, goldValue: 0};
+                boundResourceRewards['BOUNDED_GOLD'].count += bg;
+                boundResourceRewards['BOUNDED_GOLD'].goldValue += bg;
+                raidBoundRewards['BOUNDED_GOLD'].count += bg;
+                raidBoundRewards['BOUNDED_GOLD'].goldValue += bg;
+                totalBoundGold += bg;
+                raidBoundGold += bg;
+            }
             if (raid.goldReward.gems) {
                 Object.entries(raid.goldReward.gems).forEach(([tier, cnt]) => {
                     const key = `GEM_TIER_${tier}`;

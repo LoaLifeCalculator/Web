@@ -44,10 +44,12 @@ const renderResourceRewards = (
   let entries = Object.entries(rewards).filter(([_, value]) => value.count > 0);
   if (entries.length === 0) return null;
 
-  // GOLD를 맨 앞으로, 나머지는 goldValue 내림차순 정렬
+  // GOLD와 BOUNDED_GOLD를 맨 앞으로, 나머지는 goldValue 내림차순 정렬
   entries = entries.sort((a, b) => {
     if (a[0] === 'GOLD') return -1;
     if (b[0] === 'GOLD') return 1;
+    if (a[0] === 'BOUNDED_GOLD') return -1;
+    if (b[0] === 'BOUNDED_GOLD') return 1;
     return b[1].goldValue - a[1].goldValue;
   });
 
@@ -72,15 +74,15 @@ const renderResourceRewards = (
               {isMobile ? (
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, width: '100%' }}>
                   <Avatar
-                    src={`/images/items/${resource}.png`}
-                    alt={ITEM_TRANSLATIONS[resource] || resource}
+                    src={resource === 'BOUNDED_GOLD' ? '/images/items/GOLD.png' : `/images/items/${resource}.png`}
+                    alt={resource === 'GOLD' ? '골드' : resource === 'BOUNDED_GOLD' ? '귀속 골드' : ITEM_TRANSLATIONS[resource] || resource}
                     sx={{ width: 25, height: 25 }}
                     variant="rounded"
                   />
                   <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1, flex: 1 }}>
-                    {resource === 'GOLD' ? (
+                    {resource === 'GOLD' || resource === 'BOUNDED_GOLD' ? (
                       <Typography variant="body1" sx={{ fontWeight: 'bold', fontSize: '0.85rem' }}>
-                        골드
+                        {resource === 'GOLD' ? '골드' : '귀속 골드'}
                       </Typography>
                     ) : (
                       <Typography variant="body1" sx={{ fontSize: '0.85rem' }}>
@@ -95,14 +97,14 @@ const renderResourceRewards = (
               ) : (
                 <>
                   <Avatar
-                    src={`/images/items/${resource}.png`}
-                    alt={ITEM_TRANSLATIONS[resource] || resource}
+                    src={resource === 'BOUNDED_GOLD' ? '/images/items/GOLD.png' : `/images/items/${resource}.png`}
+                    alt={resource === 'GOLD' ? '골드' : resource === 'BOUNDED_GOLD' ? '귀속 골드' : ITEM_TRANSLATIONS[resource] || resource}
                     sx={{ width: 25, height: 25 }}
                     variant="rounded"
                   />
-                  {resource === 'GOLD' ? (
+                  {resource === 'GOLD' || resource === 'BOUNDED_GOLD' ? (
                     <Typography variant="body1" sx={{ fontWeight: 'bold', ml: 1, fontSize: '0.85rem' }}>
-                      골드: <span style={{ color: theme.palette.primary.main, fontWeight: 'bold' }}>{Math.floor(goldValue).toLocaleString()}G</span>
+                      {resource === 'GOLD' ? '골드' : '귀속 골드'}: <span style={{ color: theme.palette.primary.main, fontWeight: 'bold' }}>{Math.floor(goldValue).toLocaleString()}G</span>
                     </Typography>
                   ) : (
                     <Typography variant="body1" sx={{ ml: 1, fontSize: '0.85rem' }}>

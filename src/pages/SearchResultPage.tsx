@@ -757,6 +757,16 @@ const SearchResultPage: React.FC = () => {
                         totalTradableGold += reward.gold;
                     }
 
+                    // 귀속 골드
+                    if (reward.boundedGold) {
+                        if (!boundResourceRewards['BOUNDED_GOLD']) {
+                            boundResourceRewards['BOUNDED_GOLD'] = { count: 0, goldValue: 0 };
+                        }
+                        boundResourceRewards['BOUNDED_GOLD'].count += reward.boundedGold;
+                        boundResourceRewards['BOUNDED_GOLD'].goldValue += reward.boundedGold;
+                        totalBoundGold += reward.boundedGold;
+                    }
+
                     // 거래 가능 재화
                     if (reward.gems) {
                         Object.entries(reward.gems).forEach(([grade, count]) => {
@@ -861,6 +871,16 @@ const SearchResultPage: React.FC = () => {
                             tradableResourceRewards['GOLD'].count += reward.gold;
                             tradableResourceRewards['GOLD'].goldValue += reward.gold;
                             totalTradableGold += reward.gold;
+                        }
+
+                        // 귀속 골드
+                        if (reward.boundedGold) {
+                            if (!boundResourceRewards['BOUNDED_GOLD']) {
+                                boundResourceRewards['BOUNDED_GOLD'] = { count: 0, goldValue: 0 };
+                            }
+                            boundResourceRewards['BOUNDED_GOLD'].count += reward.boundedGold;
+                            boundResourceRewards['BOUNDED_GOLD'].goldValue += reward.boundedGold;
+                            totalBoundGold += reward.boundedGold;
                         }
 
                         // 거래 가능 재화

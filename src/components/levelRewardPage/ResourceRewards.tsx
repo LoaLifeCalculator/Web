@@ -23,6 +23,8 @@ const ResourceRewards: React.FC<ResourceRewardsProps> = ({
         const entries = Object.entries(rewards).sort(([a], [b]) => {
             if (a === 'GOLD') return -1;
             if (b === 'GOLD') return 1;
+            if (a === 'BOUNDED_GOLD') return -1;
+            if (b === 'BOUNDED_GOLD') return 1;
             return rewards[b].goldValue - rewards[a].goldValue;
         });
 
@@ -37,8 +39,8 @@ const ResourceRewards: React.FC<ResourceRewardsProps> = ({
                         sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}
                     >
                         <Avatar
-                            src={`/images/items/${resource}.png`}
-                            alt={resource === 'GOLD' ? '골드' : ITEM_TRANSLATIONS[resource] || resource}
+                            src={resource === 'BOUNDED_GOLD' ? '/images/items/GOLD.png' : `/images/items/${resource}.png`}
+                            alt={resource === 'GOLD' ? '골드' : resource === 'BOUNDED_GOLD' ? '귀속 골드' : ITEM_TRANSLATIONS[resource] || resource}
                             variant="rounded"
                             sx={{ width: 24, height: 24, mr: 1 }}
                         />
@@ -46,17 +48,17 @@ const ResourceRewards: React.FC<ResourceRewardsProps> = ({
                             variant="body2"
                             color="text.primary"
                             sx={{
-                                fontWeight: resource === 'GOLD' ? 'bold' : 'normal',
+                                fontWeight: resource === 'GOLD' || resource === 'BOUNDED_GOLD' ? 'bold' : 'normal',
                                 '& > span': {
-                                    color: resource === 'GOLD' ? theme.palette.primary.main : 'inherit',
+                                    color: resource === 'GOLD' || resource === 'BOUNDED_GOLD' ? theme.palette.primary.main : 'inherit',
                                 },
                             }}
                         >
-                            {resource === 'GOLD' ? '골드' : ITEM_TRANSLATIONS[resource] || resource}: <span>{Math.floor(count).toLocaleString()}</span>
-                            {resource !== 'GOLD' && (
+                            {resource === 'GOLD' ? '골드' : resource === 'BOUNDED_GOLD' ? '귀속 골드' : ITEM_TRANSLATIONS[resource] || resource}: <span>{Math.floor(count).toLocaleString()}</span>
+                            {(resource !== 'GOLD' && resource !== 'BOUNDED_GOLD') && (
                                 <span style={{ color: theme.palette.primary.main, marginLeft: 4 }}>
-                  {Math.floor(goldValue).toLocaleString()}G
-                </span>
+                                    {Math.floor(goldValue).toLocaleString()}G
+                                </span>
                             )}
                         </Typography>
                     </Box>

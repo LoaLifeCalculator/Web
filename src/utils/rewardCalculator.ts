@@ -9,6 +9,7 @@ export interface Reward {
   armorStones?: Record<string, number>;
   gems?: Record<string, number>;
   gold?: number;
+  boundedGold?: number;
 }
 
 // 시세 정보 예시: { DESTINY_SHARD: 0.2, ... }
@@ -208,6 +209,11 @@ export const calcRaidBoundGold = (reward: Reward | null, priceMap: Record<string
   if (!reward) return 0;
   
   let total = 0;
+
+  // 귀속 골드 (항상 귀속)
+  if (reward.boundedGold) {
+    total += reward.boundedGold;
+  }
 
   // 파편 (항상 귀속)
   if (reward.shards) {

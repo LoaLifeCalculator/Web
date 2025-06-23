@@ -107,7 +107,7 @@ const RewardCard: React.FC<RewardCardProps> = ({
                                         mb: 0.5
                                     }}
                                 >
-                                    더보기할 경우 재화 수급량
+                                    더보기 포함 재화 수급량
                                 </Typography>
                                 {formatReward(nonGoldReward).map((detail, detailIndex) => (
                                     <Box
