@@ -28,6 +28,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 38000,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 20},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1600},
             armorStones: {DESTINY_GUARDIAN_STONE: 3200},
             shards: {DESTINY_SHARD: 13000}
@@ -35,7 +36,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 131},
+            leapStones: {DESTINY_LEAPSTONE: 151},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 5650},
             armorStones: {DESTINY_GUARDIAN_STONE: 11300},
             shards: {DESTINY_SHARD: 46700}
@@ -46,6 +47,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 30500,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 15},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1340},
             armorStones: {DESTINY_GUARDIAN_STONE: 2680},
             shards: {DESTINY_SHARD: 10600}
@@ -53,7 +55,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 80},
+            leapStones: {DESTINY_LEAPSTONE: 95},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 3590},
             armorStones: {DESTINY_GUARDIAN_STONE: 7380},
             shards: {DESTINY_SHARD: 32600}
@@ -64,6 +66,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 28000,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 14},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1240},
             armorStones: {DESTINY_GUARDIAN_STONE: 2480},
             shards: {DESTINY_SHARD: 9800}
@@ -71,7 +74,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 64},
+            leapStones: {DESTINY_LEAPSTONE: 78},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 3200},
             armorStones: {DESTINY_GUARDIAN_STONE: 6400},
             shards: {DESTINY_SHARD: 27600}
@@ -82,6 +85,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 24500,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 13},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1240},
             armorStones: {DESTINY_GUARDIAN_STONE: 2480},
             shards: {DESTINY_SHARD: 9600}
@@ -89,7 +93,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 66},
+            leapStones: {DESTINY_LEAPSTONE: 72},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 3240},
             armorStones: {DESTINY_GUARDIAN_STONE: 6480},
             shards: {DESTINY_SHARD: 28100}
@@ -100,6 +104,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 21500,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 11},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1180},
             armorStones: {DESTINY_GUARDIAN_STONE: 2360},
             shards: {DESTINY_SHARD: 8600}
@@ -107,7 +112,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 48},
+            leapStones: {DESTINY_LEAPSTONE: 59},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 3030},
             armorStones: {DESTINY_GUARDIAN_STONE: 6060},
             shards: {DESTINY_SHARD: 26100}
@@ -118,6 +123,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 15500,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 9},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1060},
             armorStones: {DESTINY_GUARDIAN_STONE: 2120},
             shards: {DESTINY_SHARD: 8000}
@@ -125,7 +131,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 44},
+            leapStones: {DESTINY_LEAPSTONE: 38},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 2760},
             armorStones: {DESTINY_GUARDIAN_STONE: 5520},
             shards: {DESTINY_SHARD: 24000}
@@ -136,6 +142,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 8800,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 5},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 480},
             armorStones: {DESTINY_GUARDIAN_STONE: 960},
             shards: {DESTINY_SHARD: 7000}
@@ -143,7 +150,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 25},
+            leapStones: {DESTINY_LEAPSTONE: 24},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1500},
             armorStones: {DESTINY_GUARDIAN_STONE: 3000},
             shards: {DESTINY_SHARD: 13730}
@@ -154,6 +161,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 8800,
             boundedGold: 0,
+            leapStones: {DESTINY_LEAPSTONE: 5},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 460},
             armorStones: {DESTINY_GUARDIAN_STONE: 920},
             shards: {DESTINY_SHARD: 6500}
@@ -161,7 +169,7 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {DESTINY_LEAPSTONE: 22},
+            leapStones: {DESTINY_LEAPSTONE: 24},
             weaponStones: {DESTINY_DESTRUCTION_STONE: 1410},
             armorStones: {DESTINY_GUARDIAN_STONE: 2820},
             shards: {DESTINY_SHARD: 12960}
@@ -172,17 +180,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 6500,
             boundedGold: 6500,
-            weaponStones: {REFINED_OBLITERATION_STONE: 890},
-            armorStones: {REFINED_PROTECTION_STONE: 1780},
-            shards: {HONOR_SHARD: 13500}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 27},
+            weaponStones: {REFINED_OBLITERATION_STONE: 1140},
+            armorStones: {REFINED_PROTECTION_STONE: 2280},
+            shards: {HONOR_SHARD: 18300}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 68},
-            weaponStones: {REFINED_OBLITERATION_STONE: 2720},
-            armorStones: {REFINED_PROTECTION_STONE: 5440},
-            shards: {HONOR_SHARD: 32350}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 86},
+            weaponStones: {REFINED_OBLITERATION_STONE: 2710},
+            armorStones: {REFINED_PROTECTION_STONE: 5420},
+            shards: {HONOR_SHARD: 34070}
         }
     },
     {
@@ -190,17 +199,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 3650,
             boundedGold: 3650,
-            weaponStones: {REFINED_OBLITERATION_STONE: 380},
-            armorStones: {REFINED_PROTECTION_STONE: 760},
-            shards: {HONOR_SHARD: 7800}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 11},
+            weaponStones: {REFINED_OBLITERATION_STONE: 570},
+            armorStones: {REFINED_PROTECTION_STONE: 1140},
+            shards: {HONOR_SHARD: 11700}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 30},
-            weaponStones: {REFINED_OBLITERATION_STONE: 1210},
-            armorStones: {REFINED_PROTECTION_STONE: 2420},
-            shards: {HONOR_SHARD: 18430}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 43},
+            weaponStones: {REFINED_OBLITERATION_STONE: 1420},
+            armorStones: {REFINED_PROTECTION_STONE: 2840},
+            shards: {HONOR_SHARD: 22390}
         }
     },
     {
@@ -208,17 +218,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 3600,
             boundedGold: 3600,
-            weaponStones: {REFINED_OBLITERATION_STONE: 440},
-            armorStones: {REFINED_PROTECTION_STONE: 880},
-            shards: {HONOR_SHARD: 8400}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 13},
+            weaponStones: {REFINED_OBLITERATION_STONE: 800},
+            armorStones: {REFINED_PROTECTION_STONE: 1600},
+            shards: {HONOR_SHARD: 11900}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 14},
-            weaponStones: {REFINED_OBLITERATION_STONE: 1120},
-            armorStones: {REFINED_PROTECTION_STONE: 2240},
-            shards: {HONOR_SHARD: 17500}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 45},
+            weaponStones: {REFINED_OBLITERATION_STONE: 1430},
+            armorStones: {REFINED_PROTECTION_STONE: 2860},
+            shards: {HONOR_SHARD: 27700}
         }
     },
     {
@@ -226,17 +237,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 3200,
             boundedGold: 3200,
-            weaponStones: {REFINED_OBLITERATION_STONE: 370},
-            armorStones: {REFINED_PROTECTION_STONE: 740},
-            shards: {HONOR_SHARD: 7500}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 16},
+            weaponStones: {REFINED_OBLITERATION_STONE: 555},
+            armorStones: {REFINED_PROTECTION_STONE: 1110},
+            shards: {HONOR_SHARD: 11250}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 34},
-            weaponStones: {REFINED_OBLITERATION_STONE: 1350},
-            armorStones: {REFINED_PROTECTION_STONE: 2700},
-            shards: {HONOR_SHARD: 16910}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 50},
+            weaponStones: {REFINED_OBLITERATION_STONE: 1485},
+            armorStones: {REFINED_PROTECTION_STONE: 2970},
+            shards: {HONOR_SHARD: 20130}
         }
     },
     {
@@ -244,17 +256,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 2600,
             boundedGold: 2600,
-            weaponStones: {REFINED_OBLITERATION_STONE: 360},
-            armorStones: {REFINED_PROTECTION_STONE: 720},
-            shards: {HONOR_SHARD: 7000}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 10},
+            weaponStones: {REFINED_OBLITERATION_STONE: 660},
+            armorStones: {REFINED_PROTECTION_STONE: 1320},
+            shards: {HONOR_SHARD: 10500}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 10},
-            weaponStones: {REFINED_OBLITERATION_STONE: 920},
-            armorStones: {REFINED_PROTECTION_STONE: 1840},
-            shards: {HONOR_SHARD: 21500}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 37},
+            weaponStones: {REFINED_OBLITERATION_STONE: 1200},
+            armorStones: {REFINED_PROTECTION_STONE: 2400},
+            shards: {HONOR_SHARD: 23700}
         }
     },
     {
@@ -262,17 +275,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 3000,
             boundedGold: 3000,
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 10},
             weaponStones: {REFINED_OBLITERATION_STONE: 700},
             armorStones: {REFINED_PROTECTION_STONE: 1400},
-            shards: {HONOR_SHARD: 8800}
+            shards: {HONOR_SHARD: 10800}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 39},
-            weaponStones: {REFINED_OBLITERATION_STONE: 1500},
-            armorStones: {REFINED_PROTECTION_STONE: 3000},
-            shards: {HONOR_SHARD: 22300}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 43},
+            weaponStones: {REFINED_OBLITERATION_STONE: 1350},
+            armorStones: {REFINED_PROTECTION_STONE: 2700},
+            shards: {HONOR_SHARD: 21600}
         }
     },
     {
@@ -280,17 +294,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 2350,
             boundedGold: 2350,
-            weaponStones: {REFINED_OBLITERATION_STONE: 520},
-            armorStones: {REFINED_PROTECTION_STONE: 1040},
-            shards: {HONOR_SHARD: 5600}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 7},
+            weaponStones: {REFINED_OBLITERATION_STONE: 580},
+            armorStones: {REFINED_PROTECTION_STONE: 1160},
+            shards: {HONOR_SHARD: 9600}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 13},
-            weaponStones: {REFINED_OBLITERATION_STONE: 800},
-            armorStones: {REFINED_PROTECTION_STONE: 1600},
-            shards: {HONOR_SHARD: 11600}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 33},
+            weaponStones: {REFINED_OBLITERATION_STONE: 1110},
+            armorStones: {REFINED_PROTECTION_STONE: 2220},
+            shards: {HONOR_SHARD: 21740}
         }
     },
     {
@@ -298,6 +313,7 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 2150,
             boundedGold: 2150,
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 7},
             weaponStones: {REFINED_OBLITERATION_STONE: 350},
             armorStones: {REFINED_PROTECTION_STONE: 700},
             shards: {HONOR_SHARD: 11000}
@@ -305,10 +321,10 @@ export const raidRewards: RaidReward[] = [
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {RADIANT_HONOR_LEAPSTONE: 25},
-            weaponStones: {REFINED_OBLITERATION_STONE: 1040},
-            armorStones: {REFINED_PROTECTION_STONE: 2080},
-            shards: {HONOR_SHARD: 15800}
+            leapStones: {RADIANT_HONOR_LEAPSTONE: 20},
+            weaponStones: {REFINED_OBLITERATION_STONE: 610},
+            armorStones: {REFINED_PROTECTION_STONE: 1220},
+            shards: {HONOR_SHARD: 22900}
         }
     },
     {
@@ -316,17 +332,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 1650,
             boundedGold: 1650,
-            weaponStones: {OBLITERATION_STONE: 880},
-            armorStones: {PROTECTION_STONE: 1760},
-            shards: {HONOR_SHARD: 8500}
+            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 10},
+            weaponStones: {OBLITERATION_STONE: 960},
+            armorStones: {PROTECTION_STONE: 1920},
+            shards: {HONOR_SHARD: 8700}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 19},
-            weaponStones: {OBLITERATION_STONE: 1580},
-            armorStones: {PROTECTION_STONE: 3160},
-            shards: {HONOR_SHARD: 13000}
+            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 46},
+            weaponStones: {OBLITERATION_STONE: 1740},
+            armorStones: {PROTECTION_STONE: 3480},
+            shards: {HONOR_SHARD: 20290}
         }
     },
     {
@@ -334,17 +351,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 2800,
             boundedGold: 2800,
+            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 14},
             weaponStones: {OBLITERATION_STONE: 1800},
             armorStones: {PROTECTION_STONE: 3600},
             shards: {HONOR_SHARD: 14000}
         },
         nonGoldReward: {
-            gold: 2800,
-            boundedGold: 2800,
-            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 92},
+            gold: 0,
+            boundedGold: 0,
+            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 106},
             weaponStones: {OBLITERATION_STONE: 4120},
             armorStones: {PROTECTION_STONE: 8240},
-            shards: {HONOR_SHARD: 22200}
+            shards: {HONOR_SHARD: 36200}
         }
     },
     {
@@ -352,17 +370,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 2300,
             boundedGold: 2300,
-            weaponStones: {OBLITERATION_STONE: 720},
-            armorStones: {PROTECTION_STONE: 1440},
-            shards: {HONOR_SHARD: 6700}
+            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 10},
+            weaponStones: {OBLITERATION_STONE: 800},
+            armorStones: {PROTECTION_STONE: 1600},
+            shards: {HONOR_SHARD: 7000}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 56},
-            weaponStones: {OBLITERATION_STONE: 1920},
-            armorStones: {PROTECTION_STONE: 3840},
-            shards: {HONOR_SHARD: 21900}
+            leapStones: {MARVELOUS_HONOR_LEAPSTONE: 72},
+            weaponStones: {OBLITERATION_STONE: 2000},
+            armorStones: {PROTECTION_STONE: 4000},
+            shards: {HONOR_SHARD: 24000}
         }
     },
     {
@@ -370,17 +389,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 1500,
             boundedGold: 1500,
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 680},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 1360},
-            shards: {HONOR_SHARD: 2400}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 15},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 760},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 1520},
+            shards: {HONOR_SHARD: 3000}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {GREAT_HONOR_LEAPSTONE: 36},
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1940},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 3880},
-            shards: {HONOR_SHARD: 6600}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 57},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 2200},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 4400},
+            shards: {HONOR_SHARD: 10000}
         }
     },
     {
@@ -388,17 +408,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 1200,
             boundedGold: 1200,
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 520},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 1040},
-            shards: {HONOR_SHARD: 1500}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 14},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 620},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 1240},
+            shards: {HONOR_SHARD: 2000}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {GREAT_HONOR_LEAPSTONE: 24},
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1490},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 2980},
-            shards: {HONOR_SHARD: 5100}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 38},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1590},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 3180},
+            shards: {HONOR_SHARD: 5600}
         }
     },
     {
@@ -406,17 +427,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 900,
             boundedGold: 900,
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 440},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 880},
-            shards: {HONOR_SHARD: 1200}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 12},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 530},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 1060},
+            shards: {HONOR_SHARD: 1850}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {GREAT_HONOR_LEAPSTONE: 20},
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1280},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 2560},
-            shards: {HONOR_SHARD: 3500}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 32},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1370},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 2740},
+            shards: {HONOR_SHARD: 4750}
         }
     },
     {
@@ -424,17 +446,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 800,
             boundedGold: 800,
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 350},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 700},
-            shards: {HONOR_SHARD: 1200}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 12},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 520},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 1040},
+            shards: {HONOR_SHARD: 1800}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {GREAT_HONOR_LEAPSTONE: 16},
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1010},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 2020},
-            shards: {HONOR_SHARD: 2900}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 31},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1280},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 2560},
+            shards: {HONOR_SHARD: 3800}
         }
     },
     {
@@ -442,17 +465,18 @@ export const raidRewards: RaidReward[] = [
         goldReward: {
             gold: 600,
             boundedGold: 600,
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 350},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 700},
-            shards: {HONOR_SHARD: 1000}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 10},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 440},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 880},
+            shards: {HONOR_SHARD: 1500}
         },
         nonGoldReward: {
             gold: 0,
             boundedGold: 0,
-            leapStones: {GREAT_HONOR_LEAPSTONE: 13},
-            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 890},
-            armorStones: {GUARDIAN_STONE_CRYSTAL: 1780},
-            shards: {HONOR_SHARD: 2100}
+            leapStones: {GREAT_HONOR_LEAPSTONE: 25},
+            weaponStones: {DESTRUCTION_STONE_CRYSTAL: 1080},
+            armorStones: {GUARDIAN_STONE_CRYSTAL: 2160},
+            shards: {HONOR_SHARD: 3000}
         }
     },
     {
